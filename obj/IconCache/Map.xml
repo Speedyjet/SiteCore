@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ItemIconCache>
+  <Item ItemPath="/sitecore/content" ItemIcon="/temp/IconCache/People/16x16/cubes_blue.png" />
+  <Item ItemPath="/sitecore/Forms" ItemIcon="/temp/IconCache/Apps/32x32/Forms (1).png" />
+  <Item ItemPath="/sitecore/layout" ItemIcon="/temp/IconCache/Applications/16x16/windows.png" />
+  <Item ItemPath="/sitecore/media library" ItemIcon="/temp/IconCache/Applications/16x16/photo_scenery.png" />
+  <Item ItemPath="/sitecore/system" ItemIcon="/temp/IconCache/People/16x16/workstation1.png" />
+  <Item ItemPath="/sitecore/templates" ItemIcon="/temp/IconCache/Applications/16x16/form_blue.png" />
+</ItemIconCache>

@@ -1,0 +1,14 @@
+---
+ID: "c130fa36-5950-4e76-a9da-45108fc1ad95"
+Parent: "47e2fff3-3900-4d32-8c70-8c76b8efa66a"
+Template: "9c0dac28-08aa-4b44-bc21-53363206f6a5"
+Path: /sitecore/media library/Base Themes/StickyNotes/Styles
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160621T122818Z

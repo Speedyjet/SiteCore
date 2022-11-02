@@ -1,0 +1,36 @@
+---
+ID: "53bdaf49-b151-4f42-a1e7-043c397123d9"
+Parent: "d91ff0b6-14d9-44a7-816b-0adc66354c83"
+Template: "292ccfcd-7790-4692-856b-76014b8038e7"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Search/Search Site Setup
+DB: master
+SharedFields:
+- ID: "11488836-d40f-40d4-beb4-1d31da7b1470"
+  Hint: IncludeByDefault
+  Type: Checkbox
+  Value: 1
+- ID: "40deee2f-7595-40bd-b2c9-51f9e2346100"
+  Hint: Dependencies
+  Type: Treelist
+  Value: |
+    {D132F62B-B14B-4A66-867B-E6CB9C65E990}
+    {8753CA0C-8A7D-4E80-8088-5B099E69AFFC}
+    {924EA53C-93E5-4571-B205-04B798FB34E3}
+    {BDF83718-907A-435B-B1BA-64139E07983F}
+    {AA02811B-A073-4CFD-84AF-F9147BEE4B33}
+    {A4BBDCDC-1AE5-4145-99E2-18A9E19B0BDB}
+Languages:
+- Language: en
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: Search Site Setup
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160707T072919Z
+    - ID: "c202067e-7fab-4606-afb4-e76df2185ddc"
+      Hint: Name
+      Value: Search renderings

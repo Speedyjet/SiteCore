@@ -1,0 +1,88 @@
+---
+ID: "d5b1ab3c-0b91-4da8-bcc3-29eb60ec9a38"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Change Redirect Maps root item template"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 11202
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-UniqueItem
+    Import-Function Select-SingleItemFromEachGroup
+    Import-Function Get-AllSxaSite
+    Import-Function Get-SettingsItem
+    Import-Function Get-ItemByIdSafe
+    Import-Function Invoke-SiteAction
+    
+    [Sitecore.Data.ID]$redirectMapsTemplateID = "{C2DC4690-AF44-48C7-BB21-90D1AD246732}"
+    
+    function ShouldRun () {
+        [Item[]]$sites = Get-SitesWithoutInsertOption
+        $sites.Length -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Get-SitesWithoutInsertOption() {
+        Get-AllSxaSite | % {
+            $settingsItem = Get-SettingsItem $_
+            [Sitecore.Data.ID]$redirectMapGroupID = "{E1CF805E-7F49-4EC9-A25A-182DC798CB5F}"
+            $redirectsRoot = $settingsItem.Children | ? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_).InheritsFrom($redirectMapGroupID) } | Select-Object -First 1
+            $isNewTemplate = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($redirectsRoot).InheritsFrom($redirectMapsTemplateID)
+            if($redirectsRoot -ne $null -and $isNewTemplate -eq $false){
+                $redirectsRoot
+            }
+        }
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            $arguments
+        )
+        
+        process {
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                Get-SitesWithoutInsertOption | % {
+                    if ($pscmdlet.ShouldProcess("$($_.Name)", "Change template of Redirects item")) {
+                        Write-Host "Changing Redirects item template for '$($_.Paths.Path)'"
+                        $redirectMapsTemplate = Get-Item master: -ID $redirectMapsTemplateID
+                        $_.ChangeTemplate($redirectMapsTemplate)
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 11102
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20210427T145053Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Change Redirect Maps root item template
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Changes template of Redirect Maps root item under Settings item.

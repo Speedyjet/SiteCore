@@ -1,0 +1,194 @@
+---
+ID: "7d37f852-8ae4-483c-bf0d-ac39cf0f548f"
+Parent: "7d8d6e32-75e6-4822-8491-f3c0a7a1577f"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/JSS SXA/Scaffolding/Functions/New-JSSSite"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function New-JSSSite {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            [Sitecore.XA.JSS.Foundation.Scaffolding.Models.CreateNewJSSSiteModel]$Model
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet New-JSSSite - Begin"
+            Import-Function Invoke-SiteAction
+            Import-Function Get-SiteMediaItem
+            Import-Function New-MappingString
+    		Import-Function Get-SortedSetupItemsCollection
+    		Import-Function Get-TenantItem
+    		Import-Function Get-DataItem
+    		Import-Function Get-TenantTemplate
+    		Import-Function Set-TenantTemplate
+    		Import-Function Invoke-PostSetupStep
+    		Import-Function Get-SettingsItem
+    		Import-Function Get-Action
+    		Import-Function Test-ItemIsSiteDefinition
+    		Import-Function Add-SiteMediaLibrary
+    		Import-Function Get-ItemByIdSafe
+    		Import-Function Get-ProjectTemplateBasedOnBaseTemplate
+        }
+    
+        process {
+            Write-Verbose "Cmdlet New-JSSSite - Process"
+            New-UsingBlock (New-Object Sitecore.Data.BulkUpdateContext) {
+                if ($Model.SiteName -and $Model.DefinitionItems) {
+                    [string]$SiteName = $Model.SiteName
+                    [Item[]]$DefinitionItems = Get-SortedSetupItemsCollection $Model.DefinitionItems
+                    [string]$language = $Model.Language
+                    [string]$hostName = $Model.HostName
+                    [string]$virtualFolder = $Model.VirtualFolder
+                    [Item]$SiteLocation = $Model.SiteLocation
+    
+                    Write-Verbose "Cmdlet Add-Site - Process"
+                    Write-Verbose "Creating site ($SiteName) under: $($SiteLocation.Paths.Path)"
+                    Write-Verbose "Definitions items count: $($DefinitionItems.Length)"
+                    $siteBranch = "Branches/Foundation/JSS Experience Accelerator/Scaffolding/JSS Site"
+    
+                    Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewSite)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::GettingTenantItem)) -PercentComplete 0
+                    $tenant = Get-TenantItem $SiteLocation
+                    $tenantTemplatesRootID = $tenant.Fields['Templates'].Value
+                    $tenantTemplatesRoot = Get-Item -Path master: -ID $tenantTemplatesRootID
+                    
+                    Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewSite)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::GettingTenantTemplates)) -PercentComplete 10
+                    $tenantTemplates = Get-TenantTemplate $tenantTemplatesRoot
+                    $site = New-Item -Parent $SiteLocation -Name $SiteName -ItemType $siteBranch -Language $language
+                    
+                    Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewSite)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::SettingTenantTemplatesLocation)) -PercentComplete 15
+                    Set-TenantTemplate $site $tenantTemplates
+                    
+                    Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewSite)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingSiteMediaLibrary)) -PercentComplete 20
+                    $siteMediaLibrary = Add-SiteMediaLibrary $Site
+                    $site.SiteMediaLibrary = $siteMediaLibrary.ID
+                    (Get-SiteMediaItem $Site).AdditionalChildren = $siteMediaLibrary.ID
+                    
+                    $settingsItem = Get-SettingsItem $Site
+                    $settingsItem.LayoutPath = Get-ItemByIdSafe "{96E5F4BA-A2CF-4A4C-A4E7-64DA88226362}"
+                    $settingsItem.RenderingsPath = Get-ItemByIdSafe $tenant.RenderingsFolder
+                    $settingsItem.PlaceholdersPath = Get-ItemByIdSafe $tenant.PlaceholderSettingsFolder
+                    $settingsItem.AppDatasourcesPath = Get-DataItem $site
+                    $settingsItem.DictionaryPath = $site.Children["Dictionary"]
+                    $settingsItem.DictionaryDomain = $site.Children["Dictionary"]
+                    [Sitecore.Data.ID]$jssPageTemplateID = [Sitecore.XA.JSS.Foundation.Multisite.Templates+JSSPage]::ID
+                    [Sitecore.Data.ID]$jssSiteTemplateID = [Sitecore.XA.JSS.Foundation.Multisite.Templates+JSSSite]::ID
+                    $settingsItem.AppTemplate = Get-ProjectTemplateBasedOnBaseTemplate $TenantTemplates $jssSiteTemplateID | Select-Object -First 1
+                    $settingsItem.FilesystemPath = "/dist/$SiteName"
+                    $settingsItem.Templates = $tenant.Templates
+                    $settingsItem.Editing.BeginEdit()
+    				$Model.SiteSettings.AllKeys | %{
+    					$settingsItem.Fields[$_].Value = $Model.SiteSettings[$_]
+    				}
+    				$settingsItem.Editing.EndEdit() > $null
+    				$settingsItem.GraphQLEndpoint = "/api/$SiteName"
+    
+                    $percentage_start = 35
+                    $percentage_end = 85
+                    $percentage_diff = $percentage_end - $percentage_start
+                    $Items = Get-ChildItem -Path $site.Paths.Path -Recurse
+                    foreach ($definitionItem in $DefinitionItems) {
+                        $currentIndex = $DefinitionItems.IndexOf($definitionItem)
+                        $percentComplete = ($percentage_start + 1.0 * $percentage_diff * ($currentIndex) / ($DefinitionItems.Count))
+                        $currentOperation = $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::InstallingFeature)) -f $definitionItem._Name
+                        Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewSite)) -CurrentOperation ($currentOperation) -PercentComplete $percentComplete
+                        $actions = $definitionItem | Get-Action
+                        foreach ($actionItem in $actions) {
+                            Invoke-SiteAction $site $actionItem -EditingTheme $editingTheme -language $language
+                        }
+                    }
+    
+                    Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewSite)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::SettingDefaultValues)) -PercentComplete 90
+                    
+                    $defaultDeviceID = "{FE5D7FDF-89C0-4D99-9AA3-B5FBD009C9F3}"
+                    
+    
+                    Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewSite)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::ConfiguringSiteDefinitionItem)) -PercentComplete 93
+                    $siteDefinitionItem = Get-ChildItem -Recurse -Path ($settingsItem.Paths.Path) | ? { (Test-ItemIsSiteDefinition $_) -eq $true } | Select-Object -First 1
+                
+                    $siteDefinitionItem.HostName = $hostName
+                    $siteDefinitionItem.VirtualFolder = $virtualFolder
+    
+                    if ([string]::IsNullOrWhiteSpace($siteDefinitionItem.SiteName) -or ("`$name" -eq $siteDefinitionItem.SiteName)) {
+                        $siteDefinitionItem.SiteName = $siteDefinitionItem.Name
+                    }
+                
+                    if ([string]::IsNullOrWhiteSpace($siteDefinitionItem.Environment)) {
+                        $siteDefinitionItem.Environment = "*"
+                    }
+                    
+                    Get-ProjectTemplateBasedOnBaseTemplate $TenantTemplates ($jssPageTemplateID.ToString()) | ? {
+                        $appRouteTemplate = $_
+                        $homeItem = Get-ChildItem -Path ($Site.Paths.Path) | ? { $_.TemplateID -eq $appRouteTemplate.ID } | Select-Object -First 1
+                        $homeItem -ne $null
+                    } > $null
+                    
+                    if ($homeItem) {
+                        $siteDefinitionItem.StartItem = $homeItem.ID    
+                    }
+                    
+                    Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewSite)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::SettingTenantTemplatesLocation)) -PercentComplete 99
+                    Set-TenantTemplate $site $tenantTemplates
+                
+                    $site = $site.Database.GetItem($site.ID) | Wrap-Item
+                    $site.Modules = $DefinitionItems.ID -join "|"            
+    
+                    Invoke-PostSetupStep $Model.DefinitionItems $Model
+                }
+                else {
+                    Write-Error "Could not create site. Site name or module definitions is undefined"
+                }
+            }
+        }
+        end {
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::YourSiteHasBeenCreated)) -CurrentOperation "" -PercentComplete 100
+            Write-Verbose "Cmdlet New-JSSSite - End"
+        }
+    }
+    
+    
+    
+    function Add-JSSSiteFolder {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Site,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Item]$Tenant,
+    
+            [Parameter(Mandatory = $true, Position = 2 )]
+            [Item]$Parent,
+    
+            [Parameter(Mandatory = $true, Position = 3 )]
+            [string]$Template
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Add-JSSSiteFolder - Begin"
+            Import-Function Add-FolderStructure
+        }
+    
+        process {
+            if($Parent){
+                $siteTail = $Site.Paths.Path.Replace($Tenant.Paths.Path, "")
+                $path = $Parent.Paths.Path + $siteTail
+                Add-FolderStructure $path $Template
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Add-JSSSiteFolder - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181113T133355Z

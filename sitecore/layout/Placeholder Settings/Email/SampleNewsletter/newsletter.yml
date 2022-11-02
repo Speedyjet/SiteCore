@@ -1,0 +1,40 @@
+---
+ID: "5b28b45a-4394-472a-a6f8-661febb4ab7c"
+Parent: "abad07d7-0f4a-45c7-9193-18a2e1177a62"
+Template: "5c547d4e-7111-4995-95b0-6b561751bf2e"
+Path: /sitecore/layout/Placeholder Settings/Email/SampleNewsletter/newsletter
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: Business/32x32/table_sql_delete.png
+- ID: "7256bdab-1fd2-49dd-b205-cb4873d2917c"
+  Hint: Placeholder Key
+  Value: newsletter
+- ID: "e391b526-d0c5-439d-803e-17512eae6222"
+  Hint: Allowed Controls
+  Type: TreelistEx
+  Value: |
+    {F7539AE8-F96C-4D93-87A4-CEBA02E6B14F}
+    {75CF2D93-EFF1-46E6-8DBA-575656A62955}
+    {13D138CA-D979-4CF0-A664-F647B1E2187D}
+    {1BB68678-1954-4315-A063-392BE3F84C7A}
+    {66F89B1A-C696-4089-A50F-C2B11A09D874}
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20101203T045311Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "0d80deb3-e824-40ea-962a-1e510a66c02e"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20200401T080244Z

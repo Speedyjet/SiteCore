@@ -1,0 +1,29 @@
+---
+ID: "9fa8f3cb-40ca-49a6-8d76-6e7d47ba4c68"
+Parent: "8c92d3c1-2c38-4e8a-92d1-9590e17cce89"
+Template: "6ea02006-b973-4826-bdfc-c8122c7b865a"
+Path: /sitecore/system/Settings/Analytics/Marketing Automation/Activity Types/Campaign Entry/Parameters
+DB: master
+BranchID: "922570a5-c76a-424a-9e2c-e2d7c2d7ec0e"
+SharedFields:
+- ID: "f6d8a61c-2f84-4401-bd24-52d2068172bc"
+  Hint: __Originator
+  Value: "{F9952D92-6CE6-43FF-A322-186650462DF6}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170124T030638Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "730563e3-9451-4c52-9a3e-638c42b7b652"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20170124T030638Z

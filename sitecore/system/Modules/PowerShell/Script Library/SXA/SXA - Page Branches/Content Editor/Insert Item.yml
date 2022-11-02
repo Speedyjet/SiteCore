@@ -1,0 +1,14 @@
+---
+ID: "2273f3c4-739d-4351-ad2d-145addd47b0a"
+Parent: "9270dd81-63c3-418b-b784-bbf5c07b8247"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Page Branches/Content Editor/Insert Item"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20201006T102612Z

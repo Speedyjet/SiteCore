@@ -1,0 +1,26 @@
+---
+ID: "6de1f4e9-815d-491d-923d-d5038100dbee"
+Parent: "13eb9595-13a0-4ce1-bf5d-52dc3f281755"
+Template: "f036b5e0-37fb-4537-9d36-ef84e5bd41b7"
+Path: /sitecore/system/Settings/Foundation/JSS Experience Accelerator/Scaffolding/Scaffolding Tenant Setup
+DB: master
+SharedFields:
+- ID: "06d2c562-9229-4779-8807-e2a5fd2990d4"
+  Hint: IsSystemModule
+  Type: Checkbox
+  Value: 1
+- ID: "11488836-d40f-40d4-beb4-1d31da7b1470"
+  Hint: IncludeByDefault
+  Type: Checkbox
+  Value: 1
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181113T103505Z
+    - ID: "c202067e-7fab-4606-afb4-e76df2185ddc"
+      Hint: Name
+      Value: Scaffolding

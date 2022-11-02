@@ -1,0 +1,23 @@
+---
+ID: "cb0ea850-b08e-4a65-a378-c5dd0cf5eca5"
+Parent: "5aa7ca08-cb8f-4c52-b11e-a7169514486c"
+Template: "a87a00b1-e6db-45ab-8b54-636fec3b5523"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Stylelabs/Transformations
+DB: master
+SharedFields:
+- ID: "1172f251-dad4-4efb-a329-0c63500e4f1e"
+  Hint: __Masters
+  Type: TreelistEx
+  Value: "{4546A0A8-59EC-44BD-9C3F-1EF4A36ED62D}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190220T112922Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

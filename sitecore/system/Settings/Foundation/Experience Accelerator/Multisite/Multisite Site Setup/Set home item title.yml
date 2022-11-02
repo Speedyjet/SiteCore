@@ -1,0 +1,26 @@
+---
+ID: "cbc125ff-e877-4e2d-b8c6-c85d5668d491"
+Parent: "8fb3468d-247d-4297-928f-1b38ff270ca2"
+Template: "3d4e4577-ab33-4ca6-ae43-b98d1ec6472f"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Multisite/Multisite Site Setup/Set home item title
+DB: master
+SharedFields:
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 200
+- ID: "ceda3e7f-7406-40d0-a154-7cf7e3e7e85b"
+  Hint: Script
+  Type: Treelist
+  Value: "{3C44A261-8E65-45CE-AC1C-F7224ECDF160}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160712T062256Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

@@ -1,0 +1,40 @@
+---
+ID: "32908ae1-59a4-490f-8365-5b1aa3ae76d4"
+Parent: "74ac6db3-58c5-4bf9-aa9f-26940029fd49"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Cmdlets/Get-UniqueItem"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-UniqueItem {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
+            [Item[]]$Items
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-UniqueItem - Begin"
+            Import-Function Select-SingleItemFromEachGroup
+        }
+    
+        process {
+            if($Items){
+                $Items |  Group-Object ID | Select-SingleItemFromEachGroup | Wrap-Item
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Get-UniqueItem - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181114T100454Z

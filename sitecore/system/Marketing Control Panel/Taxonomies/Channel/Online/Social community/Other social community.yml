@@ -1,0 +1,39 @@
+---
+ID: "1da15267-b0db-4be1-b44f-e57c2eeb8a6b"
+Parent: "b869646e-f584-412f-8dc4-fc613451ca19"
+Template: "3b4fde65-16a8-491d-bf15-99ce83cf3506"
+Path: /sitecore/system/Marketing Control Panel/Taxonomies/Channel/Online/Social community/Other social community
+DB: master
+SharedFields:
+- ID: "8fb875eb-3ad3-44ff-87e1-998370cc3199"
+  Hint: Code
+  Value: 99
+- ID: "a4f985d9-98b3-4b52-aaaf-4344f6e747c6"
+  Hint: __Workflow
+  Value: 
+Languages:
+- Language: en
+  Fields:
+  - ID: "8bdee96a-e8f5-446a-a1d2-568c3018c98e"
+    Hint: Image
+    Value: |
+      <image mediaid="{53C13607-D632-4354-8777-5ADF3E07BE92}" />
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20141115T114818Z
+    - ID: "3e431de1-525e-47a3-b6b0-1ccbec3a8c98"
+      Hint: __Workflow state
+      Value: 
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "05a9dca5-a1d4-49d7-b266-105b0a0a0aae"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20150123T105712:635576074329809654Z"

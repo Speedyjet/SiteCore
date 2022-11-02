@@ -1,0 +1,273 @@
+---
+ID: "97aee847-eeb2-48b4-a1c1-d164328298ba"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/New-Site Unit Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function New-Tenant
+    Import-Function New-Site
+    Import-Function Remove-TenantFolder
+    Import-Function Get-ValidSiteSetupDefinition
+    Import-Function Clear-ContentTree
+    Import-Function Get-NewTestTenantModel
+    Import-Function Get-NewTestSiteModel
+    
+    function CheckMetaPartialDesignRendering ($renderingId, $expectedPh) {
+        Test-Path "$sitePath\Presentation\Partial Designs\Metadata" | Should BeExactly $true
+        $metadataPartialDesign = Get-Item -Path "$sitePath\Presentation\Partial Designs\Metadata"
+                
+        $deviceDefinition = [Sitecore.Layouts.LayoutDefinition]::Parse($metadataPartialDesign."__Renderings").Devices | ? { $_.ID -eq "{FE5D7FDF-89C0-4D99-9AA3-B5FBD009C9F3}" } | Select-Object -First 1
+        $rendering = $deviceDefinition.Renderings | ? { 
+            $idAttribtue = $_.DynamicProperties | ? { $_.ToString() -eq "id" } | Select-Object -First 1
+            $idAttribtue.Value -eq $renderingId 
+        }
+        $rendering | Should Not BeNullOrEmpty
+        $placeholder = $rendering.DynamicProperties | ? { $_.ToString() -eq "ph" } | Select-Object -First 1 | % { $_.Value }
+        $placeholder | Should BeExactly $expectedPh
+    }
+    
+    function CheckIfContainsJsonDevice($svPath){
+        $standarValuesItem = Get-Item -Path $svPath
+        $standarValuesItem | Should Not BeNullOrEmpty
+        [Sitecore.Layouts.LayoutDefinition]::Parse($standarValuesItem."__Renderings").Devices | ? { $_.ID -eq "{0B4A31C9-712D-4578-A396-2DDC0F34B63A}" } | Select-Object -First 1 | Should Not BeNullOrEmpty
+    }
+    
+    function ValidateDependency($tenantSetup, $siteSetup){
+        $SiteLocation = Get-Item -Path "$contentPath\$tenantName"
+        [Item[]]$allDefinitions = Get-SiteDefinitions "*"
+        $filteredlDefinitions = Get-ValidSiteSetupDefinition $SiteLocation $allDefinitions
+        
+        $tenantSetup.IsSystemModule | Should Be $false
+        $allDefinitions.ID -contains $siteSetup.Id | Should Be $true
+        $filteredlDefinitions.ID -contains $siteSetup.Id | Should Be $false
+    }
+    
+    Describe "New-Site" {
+        Mock Run-SiteManager {}
+        BeforeEach {
+            $tenantName = "T"
+            $siteName = "S"
+            $contentPath = "master:\content\Unit Tests"
+            $tenantPath = "$contentPath\$tenantName"
+            $sitePath = "$tenantPath\$siteName"
+            $mediaLibraryPath = "master:\media library\Project\Unit Tests"
+            $themesPath = "master:\media library\Themes\Unit Tests"
+            $templatesPath = "master:\templates\Project\Unit Tests"
+            $gridSetupPath = "master:\system\Settings\Feature\Experience Accelerator\Foundation\Grid Setup"        
+        }
+        Context "Create site with default settings" {
+            It "clean the content tree" {
+                Clear-ContentTree $contentPath
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                
+                New-Tenant $model
+                Test-Path -Path "$contentPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$themesPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }
+            It "create site with all default settings" {
+                $model = Get-NewTestSiteModel $siteName "$contentPath\$tenantName" $gridSetupPath
+                New-Site $model
+            }
+            It "check content location" {
+                Test-Path $sitePath | Should BeExactly $true
+            }
+            It "check media library location" {
+                Test-Path "$mediaLibraryPath\$tenantName\$siteName" | Should BeExactly $true
+    
+                $siteItem = Get-Item -Path $sitePath
+                $siteMediaLibraryItem = Get-Item -Path "$mediaLibraryPath\$tenantName\$siteName"
+                $siteMediaLibraryItem.ID | Should BeExactly $siteItem.SiteMediaLibrary
+            }
+            It "check themes location" {
+                Test-Path "$themesPath\$tenantName\$siteName" | Should BeExactly $true
+    
+                $siteItem = Get-Item -Path $sitePath
+                $themesRootItem = Get-Item -Path "$themesPath\$tenantName\$siteName"
+                $themesRootItem.ID | Should BeExactly $siteItem.ThemesFolder
+            }
+            It "check default site item field values" {
+                $siteItem = Get-Item -Path $sitePath
+                $siteItem.RoleDomain | Should BeNullOrEmpty
+            }
+            It "check modules field" {
+                $siteItem = Get-Item -Path $sitePath
+                [Sitecore.Data.Fields.MultilistField]$field = $siteItem.Fields["Modules"]
+                        
+                $field.Count | Should Not Be 0
+                        
+                Import-Function Get-Modules
+                $api = Get-Modules $siteItem
+                $field.Count | Should Be $api.Count
+            }            
+            It "check scaffolding script step: AddBrowserTitle" {
+                CheckMetaPartialDesignRendering "{3EA2AA92-8885-4C28-9C5D-37E94721A481}" "head"
+            }
+            It "check scaffolding script step: AddFavicon" {
+                CheckMetaPartialDesignRendering "{E3E3F484-0C27-42CC-9F36-E2D33430C8CD}" "head"
+            }
+            It "check scaffolding script step: AddOpenGraphMetadata" {
+                CheckMetaPartialDesignRendering "{B07712AD-28B9-4B93-A524-D8BD29CA9D8D}" "head"            
+            }
+            It "check scaffolding script step: AddTwitterMetadata" {
+                CheckMetaPartialDesignRendering "{0A6935A8-3AC2-4977-8677-1F4360B212EE}" "head"            
+            }
+            It "check scaffolding script step: AddSeoMetadata" {
+                CheckMetaPartialDesignRendering "{CA9D504B-B04F-4327-BCEB-A789BA5C3865}" "head"                        
+            }
+            It "check scaffolding script step: AddViewport" {
+                CheckMetaPartialDesignRendering "{3B138D20-BB25-449D-898A-670997743402}" "head"                        
+            }
+            It "check scaffolding script step: AddCookieWarning" {
+                CheckMetaPartialDesignRendering "{3A91FC31-BA4C-4BC7-B6E4-29B4BB768736}" "body-bottom"                        
+            }
+            It "check scaffolding script step: AddCustomMetadata" {
+                CheckMetaPartialDesignRendering "{B9EE29F7-2CCE-4172-9E51-D65DB818E3FA}" "head"                        
+            }
+            It "check scaffolding script step: Home base template" {
+                $homeItem = Get-Item -Path "$sitePath\Home"
+                $homeTemplate = Get-Item -Path "$templatesPath\$tenantName\Home"
+                $homeItem.Template.InnerItem.Paths.Path | Should BeExactly $homeTemplate.Paths.Path
+            }
+            It "check scaffolding script step: Add Content Fields" {
+                $titleField = "$templatesPath\$tenantName\Page\Content\Title"
+                $contentField = "$templatesPath\$tenantName\Page\Content\Content"
+                $titleFieldItem = Get-Item -Path $titleField
+                $contentFieldItem = Get-Item -Path $contentField
+                
+                $titleFieldItem | Should Not BeNullOrEmpty
+                $contentFieldItem | Should Not BeNullOrEmpty
+                
+                $titleFieldItem.Type | Should BeExactly "Single-Line Text"
+                $contentFieldItem.Type | Should BeExactly "Rich Text"
+            }
+            It "check scaffolding script step: Set start item" {
+                $homeItem = Get-Item -Path "$sitePath\Home"
+                $siteDefinitionItem = Get-Item -Path "$sitePath\Settings\Site Grouping\$siteName"
+                $siteDefinitionItem.StartItem | Should BeExactly $homeItem.ID
+            }
+            It "check scaffolding script step: Set home item title" {
+                $homeItem = Get-Item -Path "$sitePath\Home"
+                $homeItem.Title | Should BeExactly $siteName
+            }
+            It "check scaffolding script step: Resolve File Storage Desitnation" {
+                $fileStorageItem = Get-Item -Path "$sitePath\Settings\Creative Exchange Storages\Folder on server"
+                $fileStorageItem."Destination Path" | Should BeExactly "`$(creativeExchangeFolder)/FileStorage/$siteName"
+            }
+            It "check scaffolding script step: Add JSON Layout" {
+                CheckIfContainsJsonDevice "$templatesPath\$tenantName\Page\__Standard Values"
+                CheckIfContainsJsonDevice "$templatesPath\$tenantName\Page Design\__Standard Values"
+                CheckIfContainsJsonDevice "$templatesPath\$tenantName\Partial Design\__Standard Values"
+            }
+            It "check scaffolding script step: Set default sorting facet" {
+                $titleAscSort = Get-Item -Path "$sitePath\Data\Search\Sort Results\Default\Title Asc"
+                $titleFacet = Get-Item -Path "$sitePath\Settings\Facets\Title"
+                $titleAscSort.Facet | Should BeExactly $titleFacet.ID
+            }
+            It "check scaffolding script step: Update sites management item" {
+                $siteDefinitionItem = Get-Item -Path "$sitePath\Settings\Site Grouping\$siteName"
+                Import-Function Get-SxaSiteManagementItem
+                $siteManagementItem = Get-SxaSiteManagementItem
+                $siteManagementItem.Order.Split("|") -contains ($siteDefinitionItem.ID.ToString()) | Should BeExactly $true
+            }
+            It "check if items uses tenant templates" {
+                $pathsToChek = "$sitePath", `
+                    "$sitePath\Home", `
+                    "$sitePath\Presentation\Page Designs", `
+                    "$sitePath\Presentation\Partial Designs", `
+                    "$sitePath\Presentation\Page Designs\Default", `
+                    "$sitePath\Presentation\Partial Designs\Empty", `
+                    "$sitePath\Settings"
+                
+                $pathsToChek | % {
+                    $item = Get-Item -Path $_
+                    $templateRoot = Get-Item -Path "$templatesPath\$tenantName"
+                    
+                    $templateItem = $item.Template.InnerItem
+                    $templateItem.Paths.Path | Should BeExactly "$($templateRoot.Paths.Path)/$($templateItem.Name)"                
+                }
+            }
+        }
+        
+        Context "Create site with limited features" {
+            It "clean the content tree" {
+                Clear-ContentTree $contentPath
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                $model.DefinitionItems = $model.DefinitionItems | ? { $_.IsSystemModule -eq '1' }
+                
+                New-Tenant $model
+                Test-Path -Path "$contentPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$themesPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }
+            It "check features dependency: SiteMetadata" {
+                $tenantSetup = Get-Item -Path . -ID "{FDD99388-9902-4151-A15B-052B0CE5D6FE}"
+                $siteSetup = Get-Item -Path . -ID "{04555E86-CC1F-4380-8839-EC7108A4997F}"
+                ValidateDependency $tenantSetup $siteSetup
+            }
+            It "check features dependency: Taxonomy" {
+                $tenantSetup = Get-Item -Path . -ID "{9C329327-2146-4A96-B750-7383A1F8ABE7}"
+                $siteSetup = Get-Item -Path . -ID "{4E3A13D1-DF8F-4C7F-9405-AC74AF29C47B}"
+                ValidateDependency $tenantSetup $siteSetup
+            }
+            It "check features dependency: JSON" {
+                $tenantSetup = Get-Item -Path . -ID "{0654C821-048F-4EFB-A5CF-89A0DC09BCF9}"
+                $siteSetup = Get-Item -Path . -ID "{A2645EB7-6CCC-4D72-9EC1-A2509046BBA2}"
+                ValidateDependency $tenantSetup $siteSetup
+            }
+            It "check features dependency: Navigation" {
+                $tenantSetup = Get-Item -Path . -ID "{E0F12983-A9EC-4BC6-8BC5-DD0CAB19A520}"
+                $siteSetup = Get-Item -Path . -ID "{86927699-40A5-44FB-A2FA-73AFDC852C79}"
+                ValidateDependency $tenantSetup $siteSetup
+            }
+            It "check features dependency: Search" {
+                $tenantSetup = Get-Item -Path . -ID "{AE70DC8C-28D3-4E4C-A2B4-415EC889F6EB}"
+                $siteSetup = Get-Item -Path . -ID "{0C1915EB-D09A-4D49-A900-EC09346BB025}"
+                ValidateDependency $tenantSetup $siteSetup
+                $siteSetup = Get-Item -Path . -ID "{53BDAF49-B151-4F42-A1E7-043C397123D9}"
+                ValidateDependency $tenantSetup $siteSetup
+            }
+            It "check features dependency: Sticky Notes" {
+                $tenantSetup = Get-Item -Path . -ID "{F3F8091D-4948-4F3C-A679-5C6EBBA1389B}"
+                $siteSetup = Get-Item -Path . -ID "{1278161D-E86B-413C-8046-E4ABD565D6FB}"
+                ValidateDependency $tenantSetup $siteSetup
+            }
+            It "check features dependency: Composites" {
+                $tenantSetup = Get-Item -Path . -ID "{85C5F396-A8AB-44CE-A4EA-DFC39CC885ED}"
+                $siteSetup = Get-Item -Path . -ID "{631D6C11-B901-42F7-96DA-E8DA836E876C}"
+                ValidateDependency $tenantSetup $siteSetup
+            }
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170714T115610Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

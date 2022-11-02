@@ -1,0 +1,39 @@
+---
+ID: "ee2a2d50-eefb-4c64-a36e-36331a34b011"
+Parent: "4493f3c7-1405-4f73-86ee-fa85b2d38177"
+Template: "3b4fde65-16a8-491d-bf15-99ce83cf3506"
+Path: /sitecore/system/Marketing Control Panel/Taxonomies/Channel/Offline/Sales/Inbound phone call
+DB: master
+SharedFields:
+- ID: "8fb875eb-3ad3-44ff-87e1-998370cc3199"
+  Hint: Code
+  Value: 01
+- ID: "a4f985d9-98b3-4b52-aaaf-4344f6e747c6"
+  Hint: __Workflow
+  Value: 
+Languages:
+- Language: en
+  Fields:
+  - ID: "8bdee96a-e8f5-446a-a1d2-568c3018c98e"
+    Hint: Image
+    Value: |
+      <image mediaid="{39D9B2EE-B56C-4BB4-A8BD-16A92DB3CC29}" />
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20141115T104550Z
+    - ID: "3e431de1-525e-47a3-b6b0-1ccbec3a8c98"
+      Hint: __Workflow state
+      Value: 
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "2a196477-5594-41fc-bbde-74c80976caac"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20150123T105713:635576074332499654Z"

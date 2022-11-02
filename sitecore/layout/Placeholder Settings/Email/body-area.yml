@@ -1,0 +1,51 @@
+---
+ID: "3b733a70-540b-43a8-852f-d8bf0c71360c"
+Parent: "fafa53ae-289f-48fa-86f5-0b41f89aa60d"
+Template: "5c547d4e-7111-4995-95b0-6b561751bf2e"
+Path: "/sitecore/layout/Placeholder Settings/Email/body-area"
+DB: master
+SharedFields:
+- ID: "39c4902e-9960-4469-aeef-e878e9c8218f"
+  Hint: __Hidden
+  Type: Checkbox
+  Value: 1
+- ID: "7256bdab-1fd2-49dd-b205-cb4873d2917c"
+  Hint: Placeholder Key
+  Value: "body-area"
+- ID: "e391b526-d0c5-439d-803e-17512eae6222"
+  Hint: Allowed Controls
+  Type: TreelistEx
+  Value: |
+    {2A517EBD-B1B9-4887-9FE5-5D0773F7B2C7}
+    {027661AA-FEE2-4401-9D9A-207A3FCED8E8}
+    {D8A321E7-B69D-4441-B967-E35B0698082F}
+    {7A484A27-1FAB-440F-A5F6-4330A024520E}
+    {7C38B48C-9107-41A0-A9C8-F45A89659C84}
+    {426365ED-7CB5-4DF3-8CA9-000276E5ACC5}
+    {B0694405-76FC-4A7A-95D2-C9E71F4F0269}
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20200226T130436Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "cc4993e0-83bf-4a9e-99b7-1bdb88e7cb0b"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20200727T100341Z

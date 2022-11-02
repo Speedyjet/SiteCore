@@ -1,0 +1,21 @@
+---
+ID: "8e080626-ddc3-4ef4-a1d1-f0be4a200254"
+Parent: "d9e44555-02a6-407a-b4fc-96b9026caadd"
+Template: "e130c748-c13b-40d5-b6c6-4b150dc3fab3"
+Path: /sitecore/system/Publishing targets/Internet
+DB: master
+SharedFields:
+- ID: "39ecfd90-55d2-49d8-b513-99d15573de41"
+  Hint: Target database
+  Value: web
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "07A39B24-6D4F-47C9-830F-514A61B0DD38"
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20050401T000000

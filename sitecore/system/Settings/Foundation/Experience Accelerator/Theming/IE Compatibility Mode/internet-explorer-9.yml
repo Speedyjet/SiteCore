@@ -1,0 +1,25 @@
+---
+ID: "423c822b-f56b-4409-bd84-0697ae205055"
+Parent: "6d45b2e6-0165-423b-b6ce-f218b5c30af5"
+Template: "f2620263-cd63-4013-9cf9-171fdf2d7ecc"
+Path: "/sitecore/system/Settings/Foundation/Experience Accelerator/Theming/IE Compatibility Mode/internet-explorer-9"
+DB: master
+SharedFields:
+- ID: "3dd612c4-3aa7-48a9-9f46-fd8de9ae3aca"
+  Hint: Value
+  Value: IE=9
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 300
+Languages:
+- Language: en
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: Internet Explorer 9
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20120928T170317:634844485979010234"

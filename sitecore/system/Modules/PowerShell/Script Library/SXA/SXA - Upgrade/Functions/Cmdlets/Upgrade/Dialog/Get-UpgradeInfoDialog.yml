@@ -1,0 +1,68 @@
+---
+ID: "3af8dff2-66d5-437b-beaa-76bc8fc8a24c"
+Parent: "3784b98a-2b3a-48cf-bdbe-8aeb702ee4fc"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Cmdlets/Upgrade/Dialog/Get-UpgradeInfoDialog"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-UpgradeInfoDialog {
+    	[CmdletBinding()]
+        param(
+    	    [Parameter(Mandatory=$true, Position=0 )]
+    		[Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepInfo]$migrationInfo
+        )
+    
+    	begin {
+    		Write-Verbose "Cmdlet Get-UpgradeInfoDialog - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Get-UpgradeInfoDialog - Process"
+    
+            if ($migrationInfo.DryRunSupported -eq $true) {
+                $migrationInfo.DialogParameters.Insert(0, @{ Name = "DryRun"; Title=[Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::DryRun); Value=$false })
+                $migrationInfo.DialogParameters.Insert(1, @{ Name = "Description"; Title=""; Value="<span style='position: relative; top: -20px; left: 15px;'>"+[Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::DryRunNoChangesWillBePerformed) +"</span>"; editor="info";})
+            } else {
+                $migrationInfo.DialogParameters.Insert(0, @{ Name = "Description"; Title=[Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::Description); Value=$migrationInfo.Description; editor="info";})
+            }
+    
+            $result = Read-Variable -Parameters $migrationInfo.DialogParameters `
+                -Title $migrationInfo.Title  -Width 500 -Height 50 `
+                -OkButtonName "Proceed" -CancelButtonName "Abort"
+    
+            # map dialog values to DialogParameters
+            foreach($p in $migrationInfo.DialogParameters){
+                $key = $p.Name
+                $value = $(Get-Variable $key -ErrorAction SilentlyContinue).Value
+                $migrationInfo.SetDialogParameter($key, $value)
+                $migrationInfo.SetDialogParameter("DryRun", $DryRun)
+            }
+    
+    
+            if($result -ne "ok"){
+                Close-Window
+                Exit
+            }
+    
+            $migrationInfo
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Get-UpgradeInfoDialog - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170109T140818Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

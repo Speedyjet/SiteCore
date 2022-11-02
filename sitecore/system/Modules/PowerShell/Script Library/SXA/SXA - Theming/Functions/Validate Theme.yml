@@ -1,0 +1,55 @@
+---
+ID: "40101ba1-cc91-4aa1-815c-fdfe6bb2705f"
+Parent: "48358d62-f2e0-4fe0-be8e-bd9a0e84c7b1"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Theming/Functions/Validate Theme"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Invoke-Validation {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Sitecore.XA.Foundation.Scaffolding.Models.CreateNewSiteModel]$Model
+        )
+        begin {
+            Write-Verbose "Cmdlet Invoke-Validation - Begin"
+        }
+        process {
+            Write-Verbose "Cmdlet Invoke-Validation - Process"    
+            $result = $true
+            [Item[]]$ValidThemes = $Model.ValidThemes
+            if ($ValidThemes.length -eq 0 -and $Model.CreateSiteTheme -eq $false) {
+                $msg1 = "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::YouDidNotAssignAnyThemeToThisSite))"
+                $msg2 = "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::YouWillNotBeAbleToStyleYourSite))"
+                $msgConfirm = "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::DoYouWantToContinueWithoutSiteTheme))"
+                    
+                $dialogParmeters = @()
+                $dialogParmeters += @{ Name = "Info0"; Title = ""; Value = "<font size='3'><center>$msg1<br>$msg2</center></font>"; editor = "info" }
+                $dialogParmeters += @{ Name = "Info1"; Title = ""; Value = "<font size='3'><center>$msgConfirm</center></font>"; editor = "info" }
+                    
+                $dialogResult = Read-Variable -Parameters $dialogParmeters `
+                    -Description " " `
+                    -Width 660 -Height 50 `
+                    -Title ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::TheSiteHasNoThemeAssigned)) `
+                    -OkButtonName $([Sitecore.Globalization.Translate]::Text("Yes")) -CancelButtonName $([Sitecore.Globalization.Translate]::Text("No"))             
+                if ($dialogResult -ne "ok") {
+                    $result = $false
+                }
+            }
+            $result
+        }
+        end {
+            Write-Verbose "Cmdlet Invoke-Validation - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180607T100447Z

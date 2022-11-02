@@ -1,0 +1,39 @@
+---
+ID: "24a3a1c0-ccbf-4aba-ada4-b6874bd3b4fc"
+Parent: "df698a60-1c55-4536-98f8-58ba5b1f2156"
+Template: "0a1a6dce-078a-4ece-9fce-71cade57c7b8"
+Path: /sitecore/system/Settings/Forms/Validations/Date Validator
+DB: master
+SharedFields:
+- ID: "0cfa025b-c124-41de-9dc5-2cd5841553fe"
+  Hint: Type
+  Value: Sitecore.ExperienceForms.Mvc.Models.Validation.DateValidation,Sitecore.ExperienceForms.Mvc
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20161114T100330Z
+    - ID: "2ce7436e-2b14-47e8-9103-7d2ea2f31159"
+      Hint: Message
+      Value: "The date in {0} must be between {1} and {2}."
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "140adcbb-caa0-4828-a221-78831c66257d"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20170629T104640Z

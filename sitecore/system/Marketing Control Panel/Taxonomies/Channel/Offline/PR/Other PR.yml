@@ -1,0 +1,39 @@
+---
+ID: "72e98124-d531-4ef7-97e2-390e547838b2"
+Parent: "201ba481-157b-4f31-bc2c-a8d493b25bb4"
+Template: "3b4fde65-16a8-491d-bf15-99ce83cf3506"
+Path: /sitecore/system/Marketing Control Panel/Taxonomies/Channel/Offline/PR/Other PR
+DB: master
+SharedFields:
+- ID: "8fb875eb-3ad3-44ff-87e1-998370cc3199"
+  Hint: Code
+  Value: 99
+- ID: "a4f985d9-98b3-4b52-aaaf-4344f6e747c6"
+  Hint: __Workflow
+  Value: 
+Languages:
+- Language: en
+  Fields:
+  - ID: "8bdee96a-e8f5-446a-a1d2-568c3018c98e"
+    Hint: Image
+    Value: |
+      <image mediaid="{04079C95-89FD-4200-B1B4-A618DF8113FF}" />
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20141115T103958Z
+    - ID: "3e431de1-525e-47a3-b6b0-1ccbec3a8c98"
+      Hint: __Workflow state
+      Value: 
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "f7996023-2e81-4722-8c21-6737d4308792"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20150123T150332:635576222128684162Z"

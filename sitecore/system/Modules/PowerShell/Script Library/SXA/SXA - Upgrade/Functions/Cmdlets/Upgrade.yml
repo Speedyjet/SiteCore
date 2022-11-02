@@ -1,0 +1,18 @@
+---
+ID: "37bdbcb6-101c-4956-aa1f-993ba5fc6fbf"
+Parent: "4743bc38-3115-4cd5-ab41-82f47bb34886"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Cmdlets/Upgrade"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170109T135237Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

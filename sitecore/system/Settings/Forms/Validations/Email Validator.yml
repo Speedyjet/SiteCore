@@ -1,0 +1,43 @@
+---
+ID: "9bae3e9a-d89f-4f93-9577-68b5e9d44a38"
+Parent: "df698a60-1c55-4536-98f8-58ba5b1f2156"
+Template: "0a1a6dce-078a-4ece-9fce-71cade57c7b8"
+Path: /sitecore/system/Settings/Forms/Validations/Email Validator
+DB: master
+SharedFields:
+- ID: "0c58c584-7d0c-42e8-a6b9-17d9cfa74299"
+  Hint: Parameters
+  Value: |
+    {"regularExpression":"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,17}$"}
+- ID: "0cfa025b-c124-41de-9dc5-2cd5841553fe"
+  Hint: Type
+  Value: Sitecore.ExperienceForms.Mvc.Models.Validation.RegularExpressionValidation,Sitecore.ExperienceForms.Mvc
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20161114T100330Z
+    - ID: "2ce7436e-2b14-47e8-9103-7d2ea2f31159"
+      Hint: Message
+      Value: "{0} contains an invalid email address."
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "b449d2c0-4151-40b0-936e-5c82ed9165fd"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20170802T120632Z

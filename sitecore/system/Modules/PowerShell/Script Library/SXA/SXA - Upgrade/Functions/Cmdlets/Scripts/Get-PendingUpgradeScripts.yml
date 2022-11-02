@@ -1,0 +1,50 @@
+---
+ID: "b7c26d82-ca41-4f21-8993-b5903c89d76d"
+Parent: "b944510a-cf87-46a8-82e5-e1d7ddedd1d2"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Cmdlets/Scripts/Get-PendingUpgradeScripts"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-PendingUpgradeScripts {
+    	[CmdletBinding()]
+        param()
+    
+    	begin {
+    		Write-Verbose "Cmdlet Get-PendingUpgradeScripts - Begin"
+    		Import-Function Get-RequiredSxaVersion
+    		Import-Function Get-CurrentSxaVersion
+    		Import-Function Get-AllUpgradeScripts
+    		Import-Function Test-ValidUpgradeScripts
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Get-PendingUpgradeScripts - Process"
+    		[int]$required = Get-RequiredSxaVersion
+    		[int]$current = Get-CurrentSxaVersion
+    
+    		$allScripts = Get-AllUpgradeScripts
+    		Write-Log "#SXA-Upgrade - Getting all upgrade scripts. Found $($allScripts.Count) scripts"
+    		$pendingScripts = $allScripts  | Where-Object{ (Test-ValidUpgradeScripts $_ $current $required) -eq $true }
+    		Write-Log "#SXA-Upgrade - Getting pending scripts. Found $($pendingScripts.Count) pending scripts"
+            $pendingScripts | Sort-Object { [int]($_."TargetVersion") }
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Get-PendingUpgradeScripts - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170109T122134Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

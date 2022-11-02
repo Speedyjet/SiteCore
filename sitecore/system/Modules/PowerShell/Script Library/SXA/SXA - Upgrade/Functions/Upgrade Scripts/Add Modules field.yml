@@ -1,0 +1,169 @@
+---
+ID: "5cbfd410-93b6-4d1d-8ddb-b32ee58451c1"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Add Modules field"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1406
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-TenantTemplate
+    Import-Function New-Site
+    Import-Function Get-InvokedSiteFeature
+    Import-Function Get-InvokedTenantFeature
+    Import-Function Test-ItemIsTenant
+    Import-Function Test-ItemIsSite
+    Import-Function Get-AllSxaTenant
+    
+    function Test-ItemIsFeatureEnabled {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0 )]
+            [Item]$Item
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Test-ItemIsFeatureEnabled - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Test-ItemIsFeatureEnabled - Process"
+            [Sitecore.Data.ID]$baseTemplate = [Sitecore.XA.Foundation.Scaffolding.Templates+_Modules]::ID
+            [Sitecore.Data.Managers.TemplateManager]::GetTemplate($Item).InheritsFrom($baseTemplate)
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Test-ItemIsFeatureEnabled - End"
+        }
+    }
+    
+    function Get-AffectedTenantTemplatesRoots {
+        [CmdletBinding()]
+        param()
+    
+        begin {
+            Write-Verbose "Cmdlet Get-AffectedTenantTemplatesRoots - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-AffectedTenantTemplatesRoots - Process"
+            $tenants = Get-AllSxaTenant | ? { (Test-ItemIsFeatureEnabled $_) -eq $false}
+            $tenants
+        }
+        end {
+            Write-Verbose "Cmdlet Get-AffectedTenantTemplatesRoots - End"
+        }   
+    }
+    
+    function Add-FeaturesField {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0 )]
+            [Item]$tenant
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Add-FeaturesField - Begin"
+            Import-Function Invoke-TenantAction
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Add-FeaturesField - Process"
+            
+            $siteActionItem = Get-Item -Path . -ID "{DFA4FB3D-84C0-40D7-9FF9-692684FBF36E}"
+            $tenantActionItem = Get-Item -Path . -ID "{06B98716-0E6E-4A18-83ED-1A0BC6FF3368}"
+            Invoke-TenantAction $tenant $siteActionItem
+            Invoke-TenantAction $tenant $tenantActionItem
+        }
+        end {
+            Write-Verbose "Cmdlet Add-FeaturesField - End"
+        }   
+    }
+    
+    function ShouldRun () {
+        $outdatedTemplates = Get-AffectedTenantTemplatesRoots
+        $outdatedTemplates.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $arguments
+        )
+    
+        process {
+            Write-Verbose "Getting affected tenant templats roots . . ."
+            $affectedTenants = Get-AffectedTenantTemplatesRoots
+            
+            Write-Verbose "Found $($affectedTenants.Count) projects without 'Modules' field"
+    
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $affectedTenants | % { 
+                    $currentItemPath = $($_.Paths.Path)
+                    Write-Verbose "Processing '$($_.Name)' tenant [$($_.ID)]"
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Adding missing Modules field")) {
+                        Add-FeaturesField $_ 
+                    }
+                }            
+    
+                $affectedTenants | % { 
+                    $tenant = $_.Database.GetItem($_.ID) | Wrap-Item
+                    $currentItemPath = $tenant.Paths.Path
+                    Write-Verbose "Processing '$($_.Name)' tenant [$($_.ID)]"
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Setting Features field value with enabled Tenant modules")) {
+                        $tenant.Modules = (Get-InvokedTenantFeature $tenant).ID -join "|"
+                    }
+                }
+    
+                $affectedTenants | % {
+                    $tenant = $_ | Wrap-Item
+                    $sites = Get-ChildItem -Path $tenant.Paths.Path -Recurse | ? { Test-ItemIsSite $_ }                                
+                    $sites | % {
+                        $site = $_
+                        $currentItemPath = $site.Paths.Path
+                        Write-Verbose "Processing '$($_.Name)' tenant [$($_.ID)]"
+                        if ($pscmdlet.ShouldProcess($currentItemPath, "Setting Features field value with enabled Site modules")) {
+                            $site.Modules = (Get-InvokedSiteFeature $site).ID -join "|"
+                        }
+                    }
+                }
+    
+    
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1406
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170203T091206Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Add Modules field
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Ensures that every site and tenant contain Modules field which is filled with enabled modules.

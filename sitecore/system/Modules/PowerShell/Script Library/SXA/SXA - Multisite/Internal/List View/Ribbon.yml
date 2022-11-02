@@ -1,0 +1,14 @@
+---
+ID: "565b8676-e031-48da-a026-f048a7e0e190"
+Parent: "cfe727de-c560-4ea9-8afd-58743ea61834"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Multisite/Internal/List View/Ribbon"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180528T100643Z

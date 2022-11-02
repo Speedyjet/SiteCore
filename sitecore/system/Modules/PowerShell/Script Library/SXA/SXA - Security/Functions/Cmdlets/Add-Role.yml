@@ -1,0 +1,50 @@
+---
+ID: "32555fce-c0df-44d7-abe5-2e1d8ea7856c"
+Parent: "df608d21-2980-49da-9804-7f818c8624d3"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Security/Functions/Cmdlets/Add-Role"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Add-Role {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [string]$RoleName,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [string]$DomainName
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Add-Role - Begin"
+            Import-Function Get-RoleIdentity
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Add-Role - Process"
+            $domainRole = Get-RoleIdentity $RoleName $DomainName
+            if ([Sitecore.Security.Accounts.Role]::Exists($domainRole) -ne $true) {
+                [System.Web.Security.Roles]::CreateRole($domainRole);
+            }
+            return [Sitecore.Security.Accounts.Role]::FromName($domainRole);
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Add-Role - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170405T095025Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

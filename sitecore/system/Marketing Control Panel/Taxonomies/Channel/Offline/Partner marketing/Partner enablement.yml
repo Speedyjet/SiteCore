@@ -1,0 +1,39 @@
+---
+ID: "78409153-12c5-40c2-872b-f542ceb717eb"
+Parent: "e9a4b259-9c85-48e4-b6e6-a2962d189b2b"
+Template: "3b4fde65-16a8-491d-bf15-99ce83cf3506"
+Path: /sitecore/system/Marketing Control Panel/Taxonomies/Channel/Offline/Partner marketing/Partner enablement
+DB: master
+SharedFields:
+- ID: "8fb875eb-3ad3-44ff-87e1-998370cc3199"
+  Hint: Code
+  Value: 02
+- ID: "a4f985d9-98b3-4b52-aaaf-4344f6e747c6"
+  Hint: __Workflow
+  Value: 
+Languages:
+- Language: en
+  Fields:
+  - ID: "8bdee96a-e8f5-446a-a1d2-568c3018c98e"
+    Hint: Image
+    Value: |
+      <image mediaid="{249D0372-501C-4778-AD93-3D68429CB857}" />
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20141115T103736Z
+    - ID: "3e431de1-525e-47a3-b6b0-1ccbec3a8c98"
+      Hint: __Workflow state
+      Value: 
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "510c172e-ed7b-4a2b-9662-6feae47f48cb"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20150123T150057:635576220573394162Z"

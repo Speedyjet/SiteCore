@@ -1,0 +1,76 @@
+---
+ID: "f2c21fd3-22c5-4f32-92ac-443984d06fc7"
+Parent: "26a24057-3cd9-403a-83f5-f457f60d7cae"
+Template: "1a0c1fe0-7956-4020-981b-4cea3c4f114a"
+Path: /sitecore/system/Marketing Control Panel/Path Analyzer/Obsoleted maps/Default maps/Site maps/website/Page maps/First visits
+DB: master
+SharedFields:
+- ID: "0a6277ff-b5ba-490b-8441-986b4f519fbf"
+  Hint: Rule
+  Type: Rules
+  Value: |
+    <ruleset>
+      <rule
+        uid="{7D817E34-4960-478E-86E8-EE52B57BEC0C}">
+        <conditions>
+          <condition
+            id="{DA68EF47-8C61-4F87-8055-A75D7994E25D}"
+            uid="2142CE8A69E544AC85E50D68E2A61F9E"
+            Comparison="is equal to"
+            Number="1"
+            TimeUnit="Seconds" />
+        </conditions>
+      </rule>
+    </ruleset>
+- ID: "9c6106ea-7a5a-48e2-8cad-f0f693b1e2d4"
+  Hint: __Read Only
+  Type: Checkbox
+  Value: 1
+- ID: "a4f985d9-98b3-4b52-aaaf-4344f6e747c6"
+  Hint: __Workflow
+  Value: "{B879D176-4226-4C74-9ED4-6E61E813CBF7}"
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 75
+Languages:
+- Language: en
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: 
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "001dd393-96c5-490b-924a-b0f25cd9efd8"
+      Hint: __Lock
+      Value: <r />
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20140401T225231Z
+    - ID: "31fcbeb2-376a-481f-bb44-ef52301f33ca"
+      Hint: Description
+      Value: <p>This map shows only first visit experience.</p>
+    - ID: "3e431de1-525e-47a3-b6b0-1ccbec3a8c98"
+      Hint: __Workflow state
+      Value: "{03A42A18-472E-4FDC-A5BC-8D836336F0F4}"
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "ee051022-7558-449d-8751-50c666130ec4"
+    - ID: "a44d8693-f962-4f76-8fb8-62525ce67ba1"
+      Hint: Name
+      Value: First visits map
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20190731T062428Z

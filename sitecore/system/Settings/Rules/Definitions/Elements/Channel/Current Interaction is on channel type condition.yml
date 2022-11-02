@@ -1,0 +1,39 @@
+---
+ID: "222980a0-4a46-4edd-a0a1-bdd6b3fa78d5"
+Parent: "ce1d85c9-8616-45f0-99a6-033b74bea775"
+Template: "f0d16eee-3a05-4e43-a082-795a32b873c0"
+Path: /sitecore/system/Settings/Rules/Definitions/Elements/Channel/Current Interaction is on channel type condition
+DB: master
+SharedFields:
+- ID: "ab51c8b2-f0e1-4471-9aae-cc080d774923"
+  Hint: Type
+  Value: Sitecore.Analytics.OmniChannel.Conditions.Channel.CurrentInteractionIsOnChannelTypeCondition,Sitecore.Analytics.OmniChannel
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20141117T084219Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "66ad2112-a858-4a90-bf4f-0fa875ae6499"
+    - ID: "af321234-4eb9-4ef5-9197-65903351939c"
+      Hint: Text
+      Value: "when the current interaction is on a channel in the [ChannelType,Tree,root=/sitecore/system/Marketing Control Panel/Taxonomies/Channel&selection=System/Analytics/Marketing Taxonomy/Channel/Channel Type,specified] channel type"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20150630T100008:635712552081606838Z"

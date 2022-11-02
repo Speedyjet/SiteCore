@@ -1,0 +1,22 @@
+---
+ID: "6de137c0-89b6-4f7a-bb53-6544d12278ce"
+Parent: "1e77bfef-ca34-4f3a-9646-3937d0f20dad"
+Template: "e379ca4e-ec5d-4001-9489-c0a7ceca4c94"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Search/Item Queries/Siblings
+DB: master
+SharedFields:
+- ID: "e9657877-584c-4ccf-8300-dc9246c8c80b"
+  Hint: Query
+  Value: "query:../*"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160630T132308Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

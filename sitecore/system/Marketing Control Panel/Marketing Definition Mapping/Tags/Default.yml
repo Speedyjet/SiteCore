@@ -1,0 +1,32 @@
+---
+ID: "5382db30-280c-414d-a780-409a484578da"
+Parent: "17fd6d71-8a3c-47d8-bf1d-ee186ff7e316"
+Template: "854ba861-63ea-4a0c-8c7b-541e9a7ec4c1"
+Path: /sitecore/system/Marketing Control Panel/Marketing Definition Mapping/Tags/Default
+DB: master
+SharedFields:
+- ID: "42f77151-098f-496a-94cf-590b7edeeabe"
+  Hint: Tags
+  Type: Multilist
+  Value: |
+    {D8933FCB-48F3-468E-8FB6-8F2B5CFAF404}
+    {B4FDC694-B733-4D90-AE37-1B426A95400E}
+    {227800E8-19C7-424E-A11E-D5CB1228CA60}
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20200205T111812Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "12728a19-de0e-4cb9-802c-c5b47a02bf3f"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20200924T161627Z

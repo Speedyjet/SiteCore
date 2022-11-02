@@ -1,0 +1,14 @@
+---
+ID: "dd12c928-120c-418f-b91b-a7d6242b7352"
+Parent: "e0596fee-731d-4703-a597-dfb79d30ee69"
+Template: "0a92feee-0e15-4e81-b044-2ad901b88ddd"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Navigation/Enums/Navigation Level
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160629T130542Z

@@ -1,0 +1,42 @@
+---
+ID: "847c4c79-c7ce-46d6-8597-57fafe3a5178"
+Parent: "ec1cccfa-b1d2-4265-bf03-b2f841335090"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Rendering/Folders/Get-SettingsFolderForFeature"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-SettingsFolderForFeature {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$RenderingsFolder
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-SettingsFolderForFeature - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-SettingsFolderForFeature - Process"
+            $path = "/sitecore/system/settings/Feature/" + $RenderingsFolder.Paths.Path.TrimEnd("/").Replace("/sitecore/layout/Renderings/Feature", "")
+            $item = $RenderingsFolder.Database.GetItem($path)
+            if ($item) {
+                $item | Wrap-Item
+            }        
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Get-SettingsFolderForFeature - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171109T144247Z

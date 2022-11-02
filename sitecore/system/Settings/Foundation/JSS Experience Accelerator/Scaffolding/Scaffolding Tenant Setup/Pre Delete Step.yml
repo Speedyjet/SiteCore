@@ -1,0 +1,23 @@
+---
+ID: "27e61602-e5c2-4a4f-ad91-b7cdd15d4098"
+Parent: "6de1f4e9-815d-491d-923d-d5038100dbee"
+Template: "adb13651-2eb9-494f-ada0-0dfda0b2ebbf"
+Path: /sitecore/system/Settings/Foundation/JSS Experience Accelerator/Scaffolding/Scaffolding Tenant Setup/Pre Delete Step
+DB: master
+SharedFields:
+- ID: "c0a5bd91-e658-46ce-b631-77ce337d8e6e"
+  Hint: Script
+  Type: Treelist
+  Value: "{4B392B91-58C7-4C8B-AB16-497CDAF38277}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190111T131036Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

@@ -1,0 +1,53 @@
+---
+ID: "a08a7ae4-e640-41ef-bef8-5ad3a824d9dc"
+Parent: "f797cb0b-1281-4ff3-b1d0-fef6336351e7"
+Template: "b0bd1136-7f76-426c-8eae-4fb4998b4d2c"
+Path: /sitecore/system/Marketing Control Panel/Experience Analytics/Dimensions/System/System Dimension
+DB: master
+SharedFields:
+- ID: "39c4902e-9960-4469-aeef-e878e9c8218f"
+  Hint: __Hidden
+  Type: Checkbox
+  Value: 1
+- ID: "572b00c2-3d74-4d4f-976f-dcae76297a85"
+  Hint: Metrics
+  Type: Multilist
+  Value: |
+    {91228456-8921-42DF-959A-6D467B33D3E1}
+    {98685B4D-D185-42EC-8B36-5E15582473E6}
+    {9262BDDA-DECD-4A5E-BE54-4C2FFFE39660}
+    {B30BFC60-DDF7-426F-98D9-C109911F060F}
+- ID: "632e369b-3c22-4dd4-b6e9-0c6648a97ec3"
+  Hint: MetricType
+  Value: SystemMetrics
+- ID: "9c6106ea-7a5a-48e2-8cad-f0f693b1e2d4"
+  Hint: __Read Only
+  Type: Checkbox
+  Value: 1
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1450
+- ID: "dec8d2d5-e3cf-48b6-a653-8e69e2716641"
+  Hint: __Security
+  Value: "ar|Everyone|pe|-item:rename|-item:delete|-item:create|-item:admin|-item:write|-bucket:makebucket|-bucket:unmake|-item:read|!*|pd|-item:create|-item:delete|-item:admin|-item:write|-bucket:makebucket|-bucket:unmake|-item:read|!*|-item:rename|"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190624T101452Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "952aa81b-8c66-4b4b-b6a9-ec499830c3d1"
+    - ID: "a6302f86-e82b-4bda-ab63-639395e1b614"
+      Hint: Name
+      Value: System Dimension
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20190726T032712Z

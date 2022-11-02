@@ -1,0 +1,101 @@
+---
+ID: "d28c4a22-ba64-4ae8-9c54-b6fd2c863ff4"
+Parent: "bc125c24-64e2-44d9-8d77-0f9804bf091a"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Page Branches/Functions/Cmdlets/Get-CreateNewPageBranchDialog"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-CreateNewPageBranchDialog {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Location
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-CreateNewPageBranchDialog - Begin"
+            Import-Function Get-TenantItem
+            Import-Function Get-TenantTemplate
+            Import-Function Get-TenantTemplatesRoot
+            Import-Function Get-ItemByIdSafe
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-CreateNewPageBranchDialog - Process"
+    
+            $tenant = Get-TenantItem $Location
+            if ($tenant -eq $null) {
+                Write-Host "Couldn't find tenant"
+                exit
+            }
+            $tenantTemplatesRootID = $tenant.Fields['Templates'].Value
+            $tenantTemplatesRoot = Get-ItemByIdSafe $tenantTemplatesRootID
+    
+            $tenantTemplates = Get-TenantTemplate $tenantTemplatesRoot | ? { [Sitecore.XA.Foundation.SitecoreExtensions.Extensions.ItemExtensions]::DoesTemplateInheritFrom($_, [Sitecore.XA.Foundation.Multisite.Templates+Page]::ID) }        
+            $templatesOption = [ordered]@{}
+            $tenantTemplates | % {
+                $displayName = $_.Fields['Name'].Value
+                if ($displayName -and $displayName.length -gt 0) {
+                    $templatesOption[$displayName] = $_.ID
+                }
+                else {
+                    $templatesOption[$_.Name] = $_.ID
+                }
+            }
+            
+            $languages = [ordered]@{}
+            Get-ChildItem -Path "/sitecore/system/languages" | % { $languages[$_.Name] = $_.Name } > $null
+            
+            $language = "en"
+            $parameters = @()
+            $parameters += @{ Name = "PageBranchName"; Value = ""; Title = ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Feature.PageBranches.Texts]::CreatePageBranchDialogBranchName)); }
+            $parameters += @{ Name = "BranchTemplateID"; Options = $templatesOption; Title = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Feature.PageBranches.Texts]::CreatePageBranchDialogBranchTemplate); }
+            $parameters += @{ Name = "language"; Options = $languages; Title = [Sitecore.Globalization.Translate]::Text("Language"); }
+    
+            $result1 = Read-Variable -Parameters $parameters `
+                -Description ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Feature.PageBranches.Texts]::CreatePageBranchDialogBranchDescription)) `
+                -Title ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Feature.PageBranches.Texts]::CreatePageBranchDialogBranchTitle)) -Width 500 -Height 400 `
+                -OkButtonName $([Sitecore.Globalization.Translate]::Text("Ok")) -CancelButtonName $([Sitecore.Globalization.Translate]::Text("Cancel")) `
+                -Validator {
+                $PageBranchName = $variables.PageBranchName.Value;
+                $pattern = "^[\w][\w\s\-]*(\(\d{1,}\)){0,1}$"
+                if ($PageBranchName.Length -gt 100) {
+                    $variables.PageBranchName.Error = $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::ThelengthofthevalueistoolongPleasespecifyavalueoflesstha)) -f 100
+                    continue
+                }
+                if ([string]::IsNullOrWhiteSpace($PageBranchName)) {
+                    $variables.PageBranchName.Error = $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::IsNotAValidName)) -f $PageBranchName
+                    continue
+                }
+                if ([System.Text.RegularExpressions.Regex]::IsMatch($PageBranchName, $pattern, [System.Text.RegularExpressions.RegexOptions]::ECMAScript) -eq $false) {
+                    $variables.PageBranchName.Error = $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::IsNotAValidName)) -f $PageBranchName
+                    continue
+                }            
+            }
+    
+            if ($result1 -eq "cancel") {
+                exit
+            }
+            
+            $model = New-Object Sitecore.XA.Feature.PageBranches.Models.NewPageBranchModel
+            $model.BranchName = $PageBranchName
+            $model.BranchTemplateID = $BranchTemplateID
+            $model.Language = $language
+            $model        
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Get-CreateNewPageBranchDialog - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20201006T103051Z

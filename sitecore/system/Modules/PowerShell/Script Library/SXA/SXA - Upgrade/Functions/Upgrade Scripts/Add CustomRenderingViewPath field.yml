@@ -1,0 +1,133 @@
+---
+ID: "3be50471-a225-4601-96d3-c22fb822db6e"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Add CustomRenderingViewPath field"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1711
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Invoke-TenantAction
+    Import-Function Get-TenantTemplate
+    Import-Function Get-TenantTemplatesRoot
+    Import-Function Get-AllSxaTenant
+    Import-Function Get-AllSxaSite
+    Import-Function Get-TenantItem
+    Import-Function Get-UniqueItem
+    Import-Function Select-SingleItemFromEachGroup
+    import-function Get-ItemByIdSafe
+    
+    function Get-AffectedTenant {
+            [CmdletBinding()]
+            param()
+        
+            begin {
+                Write-Verbose "Cmdlet Get-AffectedTenant - Begin"
+                [Sitecore.Data.ID]$baseTemplate = '{46B0CB86-9B0F-4650-A06A-2E1CAC0F2ADC}'
+            }
+        
+            process {
+                Write-Verbose "Cmdlet Get-AffectedTenant - Process"
+                Get-AllSxaTenant | ? {
+                    $tenant = $_
+                    $root = Get-TenantTemplatesRoot $tenant
+                    $settingsItems = Get-TenantTemplate $root | `
+                        ? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_.ID, $_.Database).InheritsFrom([Sitecore.XA.Foundation.Multisite.Templates+Settings]::ID) } | `
+                        ? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_.ID, $_.Database).InheritsFrom($baseTemplate) -eq $false }
+                    $settingsItems.Count -gt 0
+                }     
+            }
+            end {
+                Write-Verbose "Cmdlet Get-AffectedTenant - End"
+            }   
+    }
+    
+    function Add-MissingBaseTemplate {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0 )]
+            [Item]$tenant
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Add-MissingBaseTemplate - Begin"        
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Add-MissingBaseTemplate - Process"
+                    
+            $tenantActionItem = Get-Item -Path . -ID "{34C45834-841E-4A90-8AB6-CC3761CA429A}"
+            Invoke-TenantAction $tenant $tenantActionItem
+        }
+        end {
+            Write-Verbose "Cmdlet Add-MissingBaseTemplate - End"
+        }   
+    }
+    
+    function ShouldRun () {
+        $tenants = Get-AffectedTenant
+        $tenants.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $arguments
+        )
+    
+        process {
+            Write-Verbose "Getting affected tenant templats roots . . ."
+            $affectedTenants = Get-AffectedTenant
+            
+            Write-Verbose "Found $($affectedTenants.Count) projects without '_CustomRenderingViewPath' field"
+    
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $affectedTenants | % { 
+                    $currentItemPath = $($_.Paths.Path)
+                    Write-Verbose "Processing '$($_.Name)' tenant [$($_.ID)]"
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Adding missing _CustomRenderingViewPath field")) {
+                        Add-MissingBaseTemplate $_ 
+                    }
+                }        
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1702
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180709T101837Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Add CustomRenderingViewPath field
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Ensures that every site setting item contains _CustomRenderingViewPath field.

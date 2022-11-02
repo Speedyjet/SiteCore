@@ -1,0 +1,29 @@
+---
+ID: "b1388c5d-ac2f-4cb4-b38d-8ba924b94863"
+Parent: "73b4f83b-825d-497a-b836-09125d178e8d"
+Template: "dbdf5dfd-f79b-4766-99b9-e29775d97328"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Grid960/Grid Setup
+DB: master
+SharedFields:
+- ID: "c1489cff-fc13-4cf7-9457-4e5870d647e2"
+  Hint: Grid Definition
+  Value: "{ABC7C743-51C7-43EF-B768-2A594B214D44}"
+Languages:
+- Language: en
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: Grid 960 Grid Setup
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170315T104222Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin
+    - ID: "c202067e-7fab-4606-afb4-e76df2185ddc"
+      Hint: Name
+      Value: Grid 960

@@ -1,0 +1,29 @@
+---
+ID: "aaf6452d-6b90-494c-9294-9e97b4685b96"
+Parent: "2e4f98b9-301b-465f-bf73-d38a55885aa8"
+Template: "8ea2cf67-4250-47a2-aeca-4f70fd200dc7"
+Path: "/sitecore/system/Settings/Rules/Federated Experience Manager - Page Matching/Rules"
+DB: master
+BranchID: "bdc41fdd-a3ac-4b69-a0ba-471c425cb083"
+SharedFields:
+- ID: "f6d8a61c-2f84-4401-bd24-52d2068172bc"
+  Hint: __Originator
+  Value: 
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20140403T090254
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "9d6e5178-0821-4dc4-ad49-b2fce6622950"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20140403T090254:635321125747190710"

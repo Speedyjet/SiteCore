@@ -1,0 +1,96 @@
+---
+ID: "f91eeedf-94ba-4c42-b705-3ed0f58486e4"
+Parent: "28082982-3a18-4772-bc96-f56d27f637dc"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - CELT/Web API/ChangeScriban"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    $form = [System.Web.HttpContext]::Current.Request.Form
+    $entries = New-Object System.Collections.Generic.List``1[Sitecore.XA.Feature.CreativeExchange.Storage.Import.ContentImportEntry]
+    
+    $exportInfoKey = "metadata"
+    $streamsKey = "streams"
+    
+    if ($form.AllKeys.Contains($streamsKey)) {
+        $deserializer = $form[$streamsKey] | ConvertFrom-Json
+        $deserializer | % {
+            $content = $_.content
+            $path = $_.path
+            $index = $path.IndexOf("-/scriban/")
+            $path = $path.Substring($index).Replace("\", "/")
+        
+            $decoded = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($content))
+            
+            $entry = New-Object Sitecore.XA.Feature.CreativeExchange.Storage.Import.ContentImportEntry
+            $entry.Path = $path
+            $entry.Content = $decoded
+            $entries.Add($entry)    
+        }    
+    }
+    
+    if ($form.AllKeys.Contains($exportInfoKey)) {
+        $outNull = $null
+        $metadata = $form[$exportInfoKey] | ConvertFrom-Json
+    
+        if (!$metadata.database) {
+            @{result = $false; Reason = "Incomplete metadata object. Could not find context database."; } | ConvertTo-Json;
+            return;
+        }
+        
+        if (!$metadata.siteId) {
+            @{result = $false; Reason = "Incomplete metadata object. Could not find site ID."; } | ConvertTo-Json;
+            return;
+        }
+        
+        if (![Sitecore.Data.ID]::TryParse($metadata.siteId, [ref]$outNull)) {
+            @{result = $false; Reason = "Incomplete metadata object. Invalid site ID."; } | ConvertTo-Json;
+            return;
+        }
+        
+        $containsDb = Get-Database * | ? { $_.Name -eq $metadata.database }
+        if (!$containsDb) {
+            @{result = $false; Reason = "Incomplete metadata object. Database doesn't exists."; } | ConvertTo-Json;
+            return;
+        }
+    }
+    else {
+        @{result = $false; Reason = "Metadata could not be found."; } | ConvertTo-Json;
+        return;    
+    }
+    
+    $instance = [Sitecore.DependencyInjection.ServiceLocator]::ServiceProvider
+    $storageService = $instance.GetType().GetMethod('GetService').Invoke($instance, [Sitecore.XA.Feature.CreativeExchange.Storage.IImportStorageFactory])
+    $storage = $storageService.GetStorage($entries)
+    
+    $importService = $instance.GetType().GetMethod('GetService').Invoke($instance, [Sitecore.XA.Feature.CreativeExchange.Services.Import.IRequestImportService])
+    $shellSite = [Sitecore.Configuration.Factory]::GetSite("shell");
+    
+    [Sitecore.Data.Database]$database = Get-Database $metadata.database
+    [Sitecore.Data.ID]$contexItemId = $metadata.siteId
+    
+    $siteContext = New-Object Sitecore.Sites.SiteContextSwitcher($shellSite)
+    $importContextArgs = New-Object -TypeName "Sitecore.XA.Feature.CreativeExchange.Pipelines.Import.Import.ImportArgs"
+    $importContextArgs.ImportContext = New-Object -TypeName "Sitecore.XA.Feature.CreativeExchange.Models.Import.ImportContext"
+    $importContextArgs.ImportContext.ContextItem = $database.GetItem($contexItemId);
+    
+    $importContextArgs.CreativeExchangeStorage = $storage
+    [Sitecore.Pipelines.CorePipeline]::Run("ceImport.import", $importContextArgs)
+    $siteContext.Dispose()
+    
+    @{result = $true; } | ConvertTo-Json;
+    return;
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170530T133131Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

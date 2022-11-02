@@ -1,0 +1,27 @@
+---
+ID: "59b831db-114c-47a7-ae5e-787d092c660f"
+Parent: "fbf255c0-72a2-4e76-a83d-633b852d82e7"
+Template: "b9ba5875-36c0-48d1-8b82-6df152b7aaa6"
+Path: /sitecore/system/Marketing Control Panel/Experience Analytics/Dimensions/Visits
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20140618T105857
+    - ID: "3e431de1-525e-47a3-b6b0-1ccbec3a8c98"
+      Hint: __Workflow state
+      Value: "{E39E0ADC-9487-4BA4-950D-1993D5614B8E}"
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "f2d071d9-e8b1-46c0-bfe4-e2f68a4fc498"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20141015T093043:635489622438989585Z"

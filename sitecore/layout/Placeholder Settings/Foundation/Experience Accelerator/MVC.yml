@@ -1,0 +1,18 @@
+---
+ID: "5b814f55-ce5b-46e4-9951-afcb6ed1dd60"
+Parent: "42dec84a-79a0-44be-a539-1598a6bd5420"
+Template: "a87a00b1-e6db-45ab-8b54-636fec3b5523"
+Path: /sitecore/layout/Placeholder Settings/Foundation/Experience Accelerator/MVC
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160413T084234Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

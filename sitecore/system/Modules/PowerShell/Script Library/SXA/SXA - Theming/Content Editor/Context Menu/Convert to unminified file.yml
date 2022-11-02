@@ -1,0 +1,59 @@
+---
+ID: "45bb5b56-aaef-48b0-b8c6-fbf12c732673"
+Parent: "40cfd3b6-9676-4df3-9870-b6fa52615bf7"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Theming/Content Editor/Context Menu/Convert to unminified file"
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: Office/32x32/document_json.png
+- ID: "1c76313e-3c8c-4807-a826-135d10c39299"
+  Hint: ShowRule
+  Type: Rules
+  Value: |
+    <ruleset>
+      <rule
+        uid="{0B867D16-96D5-4977-A3A2-5882FC437148}">
+        <conditions>
+          <and
+            uid="29F6A85BE85B4127A4EB7E5F50CD54F1">
+            <condition
+              id="{A4C74B82-8EBB-4BDA-BE23-B03C5BA43586}"
+              uid="57EDED419ADB48139297B4EB94BC9BEA"
+              value="styles"
+              operatorid="{537244C2-3A3F-4B81-A6ED-02AF494C0563}" />
+            <and
+              uid="4977EFC7FE4D41AAB64A0CFBBE809E06">
+              <condition
+                id="{D0810F9D-734C-452D-BBB6-4730368D68F1}"
+                uid="736F8D89E98946E38E97650B5514114C"
+                templateid="{962B53C4-F93B-4DF9-9821-415C867B8903}" />
+              <condition
+                id="{D0810F9D-734C-452D-BBB6-4730368D68F1}"
+                uid="7E9E181146DD41439AD51867944A5A7A"
+                templateid="{07F65D09-2920-4F05-9AF5-A77C590BEFDF}"
+                except="true" />
+            </and>
+          </and>
+        </conditions>
+      </rule>
+    </ruleset>
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    $contextItem = Get-Item .
+    $unminifiedFileTemplateItem = Get-Item master: -ID "{07F65D09-2920-4F05-9AF5-A77C590BEFDF}"
+    $contextItem.ChangeTemplate($unminifiedFileTemplateItem)
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170512T080810Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

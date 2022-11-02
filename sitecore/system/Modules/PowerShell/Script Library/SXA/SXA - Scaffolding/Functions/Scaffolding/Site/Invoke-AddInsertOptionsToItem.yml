@@ -1,0 +1,74 @@
+---
+ID: "5f481b0a-ae49-491a-937d-d528d87a95e8"
+Parent: "515fa3ce-65eb-4564-80c0-aa4a62eb2b60"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Site/Invoke-AddInsertOptionsToItem"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Invoke-AddInsertOptionsToItem {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$SiteItem,
+    
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Item]$ModuleDefinition
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Invoke-AddInsertOptionsToItem - Begin"
+            Import-Function Add-InsertOptionsToItem
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Invoke-AddInsertOptionsToItem - Process"
+            [Sitecore.Data.Items.TemplateItem]$baseTemplate = Get-Item -Path master: -ID ($ModuleDefinition.Fields['Template'].Value)
+            [Sitecore.Data.ID[]]$arguments = $ModuleDefinition.Fields['Arguments'].Value.Split('|')
+    
+            $template = Get-SiteItemBasedOnBaseTemplate $SiteItem $baseTemplate.InnerItem.Template.InnerItem.ID
+            if ($template) {
+                Write-Verbose "Adding isnert options to item $($template.Paths.Path) : $($arguments)"
+                Add-InsertOptionsToItem $template $arguments
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Invoke-AddInsertOptionsToItem - End"
+        }
+    }
+    
+    function Get-SiteItemBasedOnBaseTemplate {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$SiteItem,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Sitecore.Data.ID]$ID
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-SiteItemBasedOnBaseTemplate - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-SiteItemBasedOnBaseTemplate - Process"
+            $SiteItem.Axes.GetDescendants() | ? { ($_.Template.InnerItem.Fields['__Base template'].Value).Contains($ID) -or $_.Template.InnerItem.ID -eq $ID } | Select-Object -First 1 | Wrap-Item
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Get-SiteItemBasedOnBaseTemplate - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20181121T113114:636783966747803201Z"

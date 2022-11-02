@@ -1,0 +1,33 @@
+---
+ID: "41f66825-762b-4ba0-8a74-e7ebbb831856"
+Parent: "0c1915eb-d09a-4d49-a900-ec09346bb025"
+Template: "1773ecce-3f78-4201-8095-cae3574e8ede"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Search/Search Site Setup/Item Queries Insert Option
+DB: master
+SharedFields:
+- ID: "58aca5ca-742a-41bb-866f-cfa3764200c8"
+  Hint: Arguments
+  Type: Treelist
+  Value: "{5C76AD53-96CD-4B96-9690-DD9AF2650171}"
+- ID: "76691b61-8692-4d98-a4ff-115ba4208ab6"
+  Hint: EditType
+  Value: AddInsertOptions
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 500
+- ID: "e308b8ae-e98e-42b2-80e2-12e902e5e50e"
+  Hint: Template
+  Type: Treelist
+  Value: "{6A8A971B-01BC-4749-9EF5-10C69BBA73FE}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160824T063614Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

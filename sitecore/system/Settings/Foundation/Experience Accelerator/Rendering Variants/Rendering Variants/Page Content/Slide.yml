@@ -1,0 +1,19 @@
+---
+ID: "7c5fedfb-f002-4136-99b0-5ed23040938b"
+Parent: "6528bdf5-a864-48b5-bd1f-651ed84e3a45"
+Template: "fb3e3034-33f8-4ce8-be98-dd05010f4c22"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Rendering Variants/Rendering Variants/Page Content/Slide
+DB: master
+SharedFields:
+- ID: "696c70e2-eb4e-425d-81e4-802bab6a03cf"
+  Hint: AllowedInTemplates
+  Type: Multilist
+  Value: "{142E5FC1-EC62-4540-BAD9-CD88F337CD2E}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160718T091318Z

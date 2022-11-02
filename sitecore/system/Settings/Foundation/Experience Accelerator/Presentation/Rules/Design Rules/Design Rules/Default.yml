@@ -1,0 +1,24 @@
+---
+ID: "0064f154-2a46-431c-8a1c-e818f5baf4cd"
+Parent: "75a9cbce-209b-47d9-8aef-426c67c0756d"
+Template: "854ba861-63ea-4a0c-8c7b-541e9a7ec4c1"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Presentation/Rules/Design Rules/Design Rules/Default
+DB: master
+SharedFields:
+- ID: "42f77151-098f-496a-94cf-590b7edeeabe"
+  Hint: Tags
+  Type: Multilist
+  Value: |
+    {83E58187-D1E5-4FB8-953E-EE89816EC0B5}
+    {09340671-13CF-4181-A706-BE150B00D735}
+    {D8933FCB-48F3-468E-8FB6-8F2B5CFAF404}
+    {CCDEDBA3-3677-433E-BA09-64A3094808C9}
+    {7F74CAA6-EF77-42AA-AFAE-B52B8C4103DA}
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190218T102033Z

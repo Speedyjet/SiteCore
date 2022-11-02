@@ -1,0 +1,31 @@
+---
+ID: "b039ebe1-5813-4243-81ae-ea55b2352d80"
+Parent: "e18f4bc6-46a2-4842-898b-b6613733f06f"
+Template: "b6f7eeb4-e8d7-476f-8936-5ace6a76f20b"
+Path: /sitecore/layout/Devices/Mobile
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: People/32x32/pda2.png
+- ID: "160b90c2-4011-4e89-9c5e-c617ddfbc8c7"
+  Hint: Fallback device
+  Value: "{FE5D7FDF-89C0-4D99-9AA3-B5FBD009C9F3}"
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 20
+- ID: "e2e60cb8-afae-4465-8443-40d3a95eef0f"
+  Hint: Agent
+  Value: iphone|blackberry|webos|android|ipad|windows phone os 7
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20120221T170000
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

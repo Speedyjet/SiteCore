@@ -1,0 +1,397 @@
+---
+ID: "09e47617-6c69-47b8-b9f6-5835138c0efe"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Component Wizard Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Add-Component
+    Import-Function Add-Module
+    Import-Function Get-ModuleStartLocation
+    
+    $controllerRenderingTemplateID = "{2A3E91A0-7987-44B5-AB34-35C2D9DE83B9}"
+    $availableContainers = Get-ModuleStartLocation
+    $selectedContainers = $availableContainers.Values
+    $roots = New-Object System.Collections.Specialized.OrderedDictionary
+    $availableContainers.Keys | % { 
+        $roots.Add($_, $availableContainers[$_] -f $Layer + "/" + $moduleName)
+    }
+    
+    $Layer = "Feature"
+    $moduleName = "Component Wizard Tests"
+    
+    $modulePath = $availableContainers["Renderings"] -f $Layer
+    $expectedLocation = $modulePath + "/" + $moduleName
+    $componentName = "XYZ"
+    $componentPath =  $availableContainers["Renderings"] -f $Layer + "/" + $moduleName + "/" + $componentName
+    $templatesFolderPath = $availableContainers["Templates"] -f $Layer + "/" + $moduleName
+    $settingsFolderPath = $availableContainers["Settings"] -f $Layer + "/" + $moduleName
+    $branchesFolderPath = $availableContainers["Branches"] -f $Layer + "/" + $moduleName
+    $viewsPath = Join-Path $AppPath "Views"
+    
+    function Get-Model(){
+        $model = New-Object Sitecore.XA.Foundation.Scaffolding.Models.ComponentWizardModel
+        $model.ComponentName = $componentName
+        $model.TargetModule = Get-Item -Path $expectedLocation
+        $model
+    }
+    
+    Describe "Add-Component" {
+        BeforeEach {
+            $selectedContainers | % { $_ -f $Layer + "/" + $moduleName} | % { 
+                Get-Item -Path $_ | ? { $_ -ne $null } | Remove-Item -Recurse -Force
+            } 
+            $model = New-Object "Sitecore.XA.Foundation.Scaffolding.Models.NewModuleModel"
+            $model.Tail = ""
+            $model.Roots = $selectedContainers | % { $_ -f $Layer} | % { Get-Item -Path $_ }
+            $model.Name = $moduleName
+            $model.SetupItemTemplatesIds = @()
+            Add-Module $model
+        }
+        It "check module" {
+            $selectedContainers | % { $_ -f $Layer + "/" + $moduleName} | % { 
+                Test-Path -Path $_ | Should BeExactly $true
+            } 
+        }
+        It "prorperty:ComponentName" {
+            $model = Get-Model
+            Add-Component $model
+            
+            Test-Path -Path $componentPath | Should BeExactly $true
+        }    
+        It "property:Class" {
+            $className = "component-test-class"
+            $model = Get-Model
+            $model.Class = $className
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component.RenderingCssClass  | Should BeExactly $className
+        }
+        It "property:View" {
+            $viewPath = "~/Views/Test/Test.cshtml"
+            $model = Get-Model
+            $model.View = $viewPath
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component.RenderingViewPath  | Should BeExactly $viewPath
+        }
+        It "property:Controller" {
+            $controllerValue = "Controller"
+            $model = Get-Model
+            $model.RenderingTemplate = Get-Item master: -ID $controllerRenderingTemplateID
+            $model.Controller = $controllerValue
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component.Controller  | Should BeExactly $controllerValue
+        }
+        It "property:Controller:default" {
+            $expectedControllerValue = "Sitecore.XA.Foundation.Mvc.Controllers.StandardController,Sitecore.XA.Foundation.Mvc"
+            $model = Get-Model
+            $model.RenderingTemplate = Get-Item master: -ID $controllerRenderingTemplateID
+            $model.Controller = ""
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            
+            [Sitecore.Reflection.ReflectionUtil]::GetTypeInfo($expectedControllerValue) | Should Not Be $null
+            $component.Controller  | Should BeExactly $expectedControllerValue
+        }    
+        It "property:Controller:default+variants" {
+            $expectedControllerValue = "Sitecore.XA.Foundation.RenderingVariants.Controllers.VariantsController,Sitecore.XA.Foundation.RenderingVariants"
+            $model = Get-Model
+            $model.RenderingTemplate = Get-Item master: -ID $controllerRenderingTemplateID
+            $model.Controller = ""
+            $model.ComponentsVariantsSupport = $true
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            
+            [Sitecore.Reflection.ReflectionUtil]::GetTypeInfo($expectedControllerValue) | Should Not Be $null
+            $component.Controller  | Should BeExactly $expectedControllerValue
+        }    
+        It "property:Action" {
+            $actionValue = "Action"
+            $model = Get-Model
+            $model.Action = $actionValue
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component."Controller Action"  | Should BeExactly $actionValue
+        }       
+        It "property:CanSelectPages:true" {
+            $canSelect = $true
+            $model = Get-Model
+            $model.CanSelectPages = $canSelect
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component."Can select Page as a data source"  | Should BeExactly $canSelect
+        }
+        It "property:CanSelectPages:false" {
+            $canSelect = $false
+            $model = Get-Model
+            $model.CanSelectPages = $canSelect
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component."Can select Page as a data source"  | Should BeExactly $canSelect
+        }
+        It "property:CompatibleTemplates" {
+            $t1 = Get-Item -Path "/sitecore/templates/Common/Folder"
+            $t2 = Get-Item -Path "/sitecore/templates/Sample/Sample Item"
+            $fieldValue = "$($t1.ID)|$($t2.ID)"
+            $model = Get-Model
+            $model.CompatibleTemplates = $t1, $t2
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component."Additional compatible templates"  | Should BeExactly $fieldValue
+        }
+        It "property:OtherProperties" {
+            $prop = "IsRenderingsWithDynamicPlaceholders", "IsCompositeRendering"
+            $fieldValue = "IsRenderingsWithDynamicPlaceholders=true&IsCompositeRendering=true"
+            $model = Get-Model
+            $model.OtherProperties = $prop
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component."OtherProperties"  | Should BeExactly $fieldValue
+        }
+        It "Rendering Parameters" {
+            $model = Get-Model
+            $baseRenderingParametersTemplateID = "{98BA1330-4412-4FCB-8CD5-9818A781D3CC}"
+            $model.BaseRenderingParametersTemplates = Get-Item master: -ID $baseRenderingParametersTemplateID
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            
+            # RP field on rendering item filled
+            $component."Parameters Template"  | Should Not Be $null
+            # RP item exists
+            Test-Path "$templatesFolderPath/Rendering Parameters/$componentName"  | Should BeExactly $true
+            
+            $rpItem = Get-Item -Path "$templatesFolderPath/Rendering Parameters/$componentName"
+            
+            # RP item is properly mapped with rendering item
+            $rpItem.ID | Should BeExactly $component."Parameters Template"
+            # Check Base template of RP item
+            $rpItem."__Base template" | Should BeExactly $baseRenderingParametersTemplateID
+        }
+        It "Rendering Parameters - many" {
+            $model = Get-Model
+            $baseRenderingParametersTemplateID = "{98BA1330-4412-4FCB-8CD5-9818A781D3CC}"
+            $baseRenderingParametersTemplate2ID = "{D959F476-2A2C-40C6-81F5-FB75342BBFB9}"
+            $model.BaseRenderingParametersTemplates = @((Get-Item master: -ID $baseRenderingParametersTemplateID),(Get-Item master: -ID $baseRenderingParametersTemplate2ID))
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            
+            # RP field on rendering item filled
+            $component."Parameters Template"  | Should Not Be $null
+            # RP item exists
+            Test-Path "$templatesFolderPath/Rendering Parameters/$componentName"  | Should BeExactly $true
+            
+            $rpItem = Get-Item -Path "$templatesFolderPath/Rendering Parameters/$componentName"
+            
+            # RP item is properly mapped with rendering item
+            $rpItem.ID | Should BeExactly $component."Parameters Template"
+            # Check Base template of RP item
+            $rpItem."__Base template" | Should BeExactly "$baseRenderingParametersTemplateID|$baseRenderingParametersTemplate2ID"
+        }
+        It "Data Source - create" {
+            $model = Get-Model
+            $baseDataSourceTemplateID = "{04A95E7C-0D1C-411D-9D94-AD6AEAD0CDAE}"
+            $model.BaseDataSourceTemplate = Get-Item master: -ID $baseDataSourceTemplateID
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            
+            # DS field on rendering item filled
+            $component."Parameters Template"  | Should Not Be $null
+            # DS item exists
+            Test-Path "$templatesFolderPath/Data Source/$componentName"  | Should BeExactly $true
+            
+            $dsItem = Get-Item -Path "$templatesFolderPath/Data Source/$componentName"
+            
+            # DS item is properly mapped with rendering item
+            $dsItem.Paths.Path | Should BeExactly $component."Datasource Template"
+            # Check Base template of RP item
+            $dsItem."__Base template" | Should BeExactly $baseDataSourceTemplateID
+        } 
+        It "Data Source - do not create" {
+            $model = Get-Model
+            $baseDataSourceTemplateID = "{04A95E7C-0D1C-411D-9D94-AD6AEAD0CDAE}"
+            $model.BaseDataSourceTemplate = Get-Item master: -ID $baseDataSourceTemplateID
+            $model.DataSourceMode = [Sitecore.XA.Foundation.Scaffolding.Models.ComponentDataSourceMode]::CurrentPage
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            
+            # DS field on rendering item filled
+            $component."Parameters Template"  | Should Be ""
+            $component."Data Source"  | Should Be ""
+            # DS item exists
+            Test-Path "$templatesFolderPath/Data Source/$componentName"  | Should BeExactly $false
+        }
+        It "Data Source - BaseDataSourceTemplate & BackgroundImageSupport" {
+            $model = Get-Model
+            $baseDataSourceTemplateID = "{04A95E7C-0D1C-411D-9D94-AD6AEAD0CDAE}"
+            $baseTemplatesFieldValue = "$baseDataSourceTemplateID|{F09CFB6D-7E3D-4C65-8AA8-85281A59940E}|{A7837DE9-3266-46CB-A945-62C55DA45E9E}"
+            $model.BaseDataSourceTemplate = Get-Item master: -ID $baseDataSourceTemplateID
+            $model.CanSetDataSourceBehaviour = $true
+            $model.BackgroundImageSupport = $true
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            
+            # DS field on rendering item filled
+            $component."Parameters Template"  | Should Not Be $null
+            # DS item exists
+            Test-Path "$templatesFolderPath/Data Source/$componentName"  | Should BeExactly $true
+            
+            $dsItem = Get-Item -Path "$templatesFolderPath/Data Source/$componentName"
+            
+            # Check Base template of RP item
+            $dsItem."__Base template" | Should BeExactly $baseTemplatesFieldValue
+        }     
+        It "Rendering Template" {
+            $model = Get-Model
+            $renderingTemplateID = "{83E993C5-C0FC-4472-86A9-2F6CFED694E4}"
+            $model.RenderingTemplate = Get-Item master: -ID $renderingTemplateID
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component.TemplateID |  Should BeExactly $renderingTemplateID
+        }
+        It "Add Available Renderings" {
+            $model = Get-Model
+            $renderingTemplateID = "{83E993C5-C0FC-4472-86A9-2F6CFED694E4}"
+            $model.ComponentsVariantsSupport = $true
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            
+            $addAvailableRenderingsPath = "$settingsFolderPath/$moduleName Site Setup/Add Available Renderings"
+            $availableRenderingsBranchPath = "$branchesFolderPath/Available  Renderings"
+            
+            Test-Path $addAvailableRenderingsPath | Should BeExactly $true
+            Test-Path $availableRenderingsBranchPath | Should BeExactly $true
+            
+            $addAvailableRenderingsItem = Get-Item $addAvailableRenderingsPath | Wrap-Item
+            $availableRenderingsBranchItem = Get-Item $availableRenderingsBranchPath | Wrap-Item
+            
+            $addAvailableRenderingsItem."__Template" |  Should BeExactly $availableRenderingsBranchItem.ID
+            $addAvailableRenderingsItem."__Name" |  Should BeExactly $moduleName
+            $addAvailableRenderingsItem.Location |  Should BeExactly "{84179507-91A2-47EA-A424-9D338F64C953}"
+            
+            $child = $availableRenderingsBranchItem.Children | Select-Object -First 1 | Wrap-Item
+            $child.Renderings  |  Should BeExactly $component.ID
+        }     
+        It "Support:IComponentVariant" {
+            $model = Get-Model
+            $renderingTemplateID = "{83E993C5-C0FC-4472-86A9-2F6CFED694E4}"
+            $model.ComponentsVariantsSupport = $true
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            
+            $defaultVariantPath = "$branchesFolderPath/Default $componentName Variant"
+            $addActionPath = "$settingsFolderPath/$moduleName Site Setup/Rendering Variants/$componentName"
+            
+            Test-Path $addActionPath | Should BeExactly $true
+            Test-Path $defaultVariantPath | Should BeExactly $true
+            
+            $defaultVariantItem = Get-Item $defaultVariantPath | Wrap-Item
+            $addActionItem = Get-Item $addActionPath | Wrap-Item
+            
+            $addActionItem."__Template" |  Should BeExactly $defaultVariantItem.ID
+            $addActionItem."__Name" |  Should BeExactly $componentName
+            $addActionItem.Location |  Should BeExactly "{5CDC5EB2-F14F-4495-88E8-AA882DDFAA05}"
+        }      
+        It "View - Create" {
+            $className = "component-test-class"
+            $baseViewPath = "$viewsPath/$componentName/$componentName.cshtml"
+            if(Test-Path $baseViewPath){
+                Remove-Item $baseViewPath
+            }
+            
+            $model = Get-Model
+            $model.Class = $className
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component.RenderingCssClass  | Should BeExactly $className
+            
+            Test-Path $baseViewPath | Should BeExactly $true
+            (Get-Content $baseViewPath | Out-String).Contains("<div @Html.Sxa().Component(Model.Rendering.RenderingCssClass ?? `"$className`", Model.Attributes)>") | Should BeExactly $true
+            $component.RenderingViewPath | Should BeExactly "~/Views/$componentName/$componentName.cshtml"
+        }
+        It "View - Create - variants" {
+            $className = "component-test-class"
+            $baseViewPath = "$viewsPath/$componentName/$componentName.cshtml"
+            if(Test-Path $baseViewPath){
+                Remove-Item $baseViewPath
+            }
+            
+            $model = Get-Model
+            $model.Class = $className
+            $model.ComponentsVariantsSupport = $true
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component.RenderingCssClass  | Should BeExactly $className
+            
+            Test-Path $baseViewPath | Should BeExactly $true
+            (Get-Content $baseViewPath | Out-String).Contains("<div @Html.Sxa().Component(Model.Rendering.RenderingCssClass ?? `"$className`", Model.Attributes)>") | Should BeExactly $true
+            $component.RenderingViewPath | Should BeExactly "~/Views/$componentName/$componentName.cshtml"
+        }    
+        It "View - Don't create" {
+            $className = "component-test-class"
+            $baseViewPath = "$viewsPath/$componentName/$componentName.cshtml"
+            $renderingTemplateID = "{83E993C5-C0FC-4472-86A9-2F6CFED694E4}"
+            if(Test-Path $baseViewPath){
+                Remove-Item $baseViewPath
+            }
+            
+            $model = Get-Model
+            $model.Class = $className
+            $model.RenderingTemplate = Get-Item master: -ID $renderingTemplateID
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component.RenderingCssClass  | Should BeExactly $className
+            
+            Test-Path $baseViewPath | Should BeExactly $false
+        }
+        It "View - Don't create if specified" {
+            $baseViewPath = "$viewsPath/$componentName/$componentName.cshtml"
+            $viewPath = "~/Test/Tests.cshtml"
+            if(Test-Path $baseViewPath){
+                Remove-Item $baseViewPath
+            }
+            $model = Get-Model
+            $model.View = $viewPath
+            $model.RenderingTemplate = Get-Item master: -ID $controllerRenderingTemplateID
+            Add-Component $model
+            
+            $component = Get-Item -Path $componentPath
+            $component.RenderingViewPath  | Should BeExactly $viewPath
+            
+            Test-Path $baseViewPath | Should BeExactly $false
+        }    
+    }
+    
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181019T131131Z

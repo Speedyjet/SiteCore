@@ -1,0 +1,102 @@
+---
+ID: "42c88002-8ab0-491e-9b23-72ea5effbe51"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Add-SiteModule Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function New-Tenant
+    Import-Function New-Site
+    Import-Function Remove-TenantFolder
+    Import-Function Add-SiteModule
+    Import-Function Clear-ContentTree
+    Import-Function Get-NewTestTenantModel
+    Import-Function Get-NewTestSiteModel
+    
+    function GetSiteItem() {
+        Get-Item -Path $sitePath
+    }
+    
+    Describe "Add-SiteModule" {
+        Mock Run-SiteManager {}
+        BeforeEach {
+            $tenantName = "T"
+            $siteName = "S"
+            $contentPath = "master:\content\Unit Tests"
+            $tenantPath = "$contentPath\$tenantName"
+            $sitePath = "$tenantPath\$siteName"
+            $mediaLibraryPath = "master:\media library\Project\Unit Tests"
+            $themesPath = "master:\media library\Themes\Unit Tests"
+            $templatesPath = "master:\templates\Project\Unit Tests"
+            $gridSetupPath = "master:\system\Settings\Feature\Experience Accelerator\Foundation\Grid Setup"        
+        }
+        Context "Add site module to a site with default settings" {
+            It "clean the content tree" {
+                Clear-ContentTree $contentPath
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                
+                New-Tenant $model
+                Test-Path -Path "$contentPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$themesPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }
+            It "create site with system modules" {
+                $model = Get-NewTestSiteModel $siteName "$contentPath\$tenantName" $gridSetupPath
+                $model.DefinitionItems = $model.DefinitionItems | ? { $_.IsSystemModule -eq '1' }
+                $model.DefinitionItems.Add((Get-Item . -ID "{0C1915EB-D09A-4D49-A900-EC09346BB025}"))
+                New-Site $model            
+            }
+            It "check module is not installed" {        
+                $siteItem = GetSiteItem
+                $SearchSiteSetupId = "{53BDAF49-B151-4F42-A1E7-043C397123D9}"
+    
+                # validate status before
+                $siteItem.Modules -contains $SearchSiteSetupId | Should BeExactly $false
+                Test-Path -Path "$sitePath/Presentation/Available Renderings/Search" | Should BeExactly $false
+                Test-Path -Path "$sitePath/Data/Search" | Should BeExactly $false
+                Test-Path -Path "$sitePath/Presentation/Rendering Variants/Search Results" | Should BeExactly $false
+                Test-Path -Path "$sitePath/Presentation/Rendering Variants/Search Box" | Should BeExactly $false
+            }
+            It "check Add-SiteModule" {            
+                $siteItem = GetSiteItem
+                $SearchSiteSetupId = "{53BDAF49-B151-4F42-A1E7-043C397123D9}"
+    
+                # add search module
+                $definitionItems = New-Object System.Collections.ArrayList($null)
+                $SearchSiteSetup = Get-Item . -ID $SearchSiteSetupId
+                $definitionItems.Add($SearchSiteSetup)
+                Add-SiteModule $siteItem $definitionItems
+            }
+            It "check module installed" {
+                $siteItem = GetSiteItem
+                $SearchSiteSetupId = "{53BDAF49-B151-4F42-A1E7-043C397123D9}"
+    
+                # validate status after
+                $siteItem = GetSiteItem
+                $siteItem.Modules.Split("|") -contains $SearchSiteSetupId | Should BeExactly $true
+                Test-Path -Path "$sitePath/Presentation/Available Renderings/Search" | Should BeExactly $true
+                Test-Path -Path "$sitePath/Data/Search" | Should BeExactly $true
+                Test-Path -Path "$sitePath/Presentation/Rendering Variants/Search Results" | Should BeExactly $true
+                Test-Path -Path "$sitePath/Presentation/Rendering Variants/Search Box" | Should BeExactly $true
+            }
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180125T102357Z

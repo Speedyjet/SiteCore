@@ -1,0 +1,20 @@
+---
+ID: "200e98d7-39fb-4f38-9425-cde82419790d"
+Parent: "171dcedb-ddd8-445e-97db-a9072df74a5a"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Web API/Invoke-CleanupDatabase"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    $db = [Sitecore.Configuration.Factory]::GetDatabase("master")
+    $db.CleanupDatabase()
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190301T103749Z

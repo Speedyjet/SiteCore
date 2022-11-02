@@ -1,0 +1,110 @@
+---
+ID: "fba4c3a5-1829-4b91-83d1-81f42d3f0765"
+Parent: "631f575b-2446-4cd5-991a-9935ae5f83af"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Content Editor/Context Menu/Add Tenant Module"
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: Office/32x32/add.png
+- ID: "1c76313e-3c8c-4807-a826-135d10c39299"
+  Hint: ShowRule
+  Type: Rules
+  Value: |
+    <ruleset>
+      <rule
+        uid="{57C5E9DB-ADE4-4407-9FF3-C00DDA83653E}">
+        <conditions>
+          <condition
+            id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}"
+            uid="F16715E9FE474A0287C596ACEECF3779"
+            templateid="{78180355-F0A2-4161-A34C-3069A9E17539}" />
+        </conditions>
+      </rule>
+    </ruleset>
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-TenantModulesListForDialog
+    Import-Function Add-TenantModule
+    Import-Function Validate-PowerShell
+    
+    function Get-NonInstalledFeatures($TenantItem) {
+        $allFeatures = Get-TenantModulesListForDialog $TenantItem
+        $enabledFeatures = $TenantItem.Modules.Split("|") | ? { [guid]::TryParse($_, [ref][guid]::Empty) } | % { $_ }        
+        $installedKeys = $allFeatures.Keys | % { 
+            if ($enabledFeatures -and $enabledFeatures.Contains($allFeatures[$_].ToString())) {
+                $_
+            }
+        } 
+        $installedKeys | % { $allFeatures.Remove($_) }
+        $allFeatures    
+    }
+    
+    function Show-AddTenantFeatureDialog {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Tenant
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Show-AddTenantFeatureDialog - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Show-AddTenantFeatureDialog - Process"
+            $dialogOptions = Get-NonInstalledFeatures $Tenant
+            $preSelectedDefinitions = $dialogOptions.Values
+            
+            $dialogParmeters = @()
+            if ($dialogOptions.Count -eq 0) {                        
+                $dialogParmeters += @{ Name = "Info0"; Title = "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::NoUndeployedFeaturesFound))"; Value = "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::AllTenantFeatureInstalled))"; editor = "info" }
+            }
+            else {
+                $dialogParmeters += @{ Name = "preSelectedDefinitions"; Title = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::Features); Options = $dialogOptions; Editor = "checklist"; Tip = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::SelectTheFeaturesWhichShouldBeUsedInTenant); Height = "330px"}
+            }
+            $result = Read-Variable -Parameters $dialogParmeters `
+                -Description $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::AddTenantFeatureDescription) -f $Tenant.Name) `
+                -Title $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::AddTenantFeatureTitle) -f $Tenant.Name) -Width 500 -Height 600 `
+                -OkButtonName $([Sitecore.Globalization.Translate]::Text("OK")) -CancelButtonName $([Sitecore.Globalization.Translate]::Text("Cancel")) 
+    
+            if ($result -ne "ok" -or $dialogOptions.Count -eq 0) {
+                Close-Window
+                Exit
+            } 
+            $preSelectedDefinitions
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Show-AddTenantFeatureDialog - End"
+        }
+    }
+    
+    Test-PowerShell
+    
+    
+    Try
+    {
+        $TenantItem = Get-Item . -Language $SitecoreContextItem.Language.Name
+        $availableFeatures = Show-AddTenantFeatureDialog $TenantItem
+        
+        $DefinitionItems = $availableFeatures | % { $TenantItem.Database.GetItem($_) | Wrap-Item }
+        Add-TenantModule $TenantItem $DefinitionItems
+    }
+    Catch
+    {
+        $ErrorRecord=$Error[0]
+        Write-Log -Log Error $ErrorRecord
+        Show-Alert "Something went wrong. See SPE logs for more details."
+        Close-Window
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171123T102922Z

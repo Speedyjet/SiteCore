@@ -1,0 +1,75 @@
+---
+ID: "ac7d7283-6197-4442-8e35-97180d1030c4"
+Parent: "515fa3ce-65eb-4564-80c0-aa4a62eb2b60"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Site/Get-SortedSetupItemsCollection"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-SortedSetupItemsCollection {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [System.Collections.Generic.List[Item]]$allDefinitions
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-SortedSetupItemsCollection - Begin"
+            Import-Function Get-Action
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-SortedSetupItemsCollection - Process"
+            [System.Collections.Generic.List[Item]]$result = @()
+            if ($allDefinitions) {
+                $allDefinitions | ? { $_.Dependencies -eq ""} | % { $result.Add($_) }
+                $result | % { $allDefinitions.Remove($_) } > $null
+    
+                $index = 2
+                while ($index -gt 0) {
+                    [Item[]]$allActions = $allDefinitions | % { Get-Action $_ }
+                    $modulesWithSolvedDependencies = $allDefinitions | ? {
+                        [Sitecore.Data.ID[]]$currentDefinitionDependencies = $_.Dependencies.Split('|') | ? { [guid]::TryParse($_, [ref][guid]::Empty) }
+                        $dependenciesSolved = $true
+                        foreach ($dep in $currentDefinitionDependencies) {
+                            [Sitecore.Data.ID[]]$ids = $allActions.ID
+                            if ($ids.Contains($dep) -eq $true) {
+                                $dependenciesSolved = $false
+                            }
+                        }
+                        $dependenciesSolved
+                        if ($dependenciesSolved -eq $true) {
+                            $index = 2
+                        }
+                    }
+    
+                    $modulesWithSolvedDependencies | % {
+                        $result.Add($_)
+                        $allDefinitions.Remove($_)
+                    } > $null
+    
+                    $index-- > $null
+                }
+    
+                if ($allDefinitions.Count -gt 0) {
+                    Write-Error "Circular Dependency found: "
+                    $allDefinitions | ForEach-Object { Write-Error "$($_.ID)" }
+                }
+            }
+            return ,$result
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Get-SortedSetupItemsCollection - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20190829T115558:637026765588231340Z"

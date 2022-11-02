@@ -1,0 +1,45 @@
+---
+ID: "936b1bae-c09e-436c-80d8-e00a73bebe1d"
+Parent: "ee9125e5-1837-40a7-9442-387fcb75e070"
+Template: "a87ee256-044e-450d-a73c-9a464aa773ef"
+Path: /sitecore/system/Marketing Control Panel/Experience Analytics/Dimensions/Visits/By city/All visits by city
+DB: master
+SharedFields:
+- ID: "a4f985d9-98b3-4b52-aaaf-4344f6e747c6"
+  Hint: __Workflow
+  Value: "{933DFBF3-3D97-4FF7-9F5E-74579BD1A219}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "001dd393-96c5-490b-924a-b0f25cd9efd8"
+      Hint: __Lock
+      Value: <r />
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170328T035259Z
+    - ID: "3e431de1-525e-47a3-b6b0-1ccbec3a8c98"
+      Hint: __Workflow state
+      Value: "{3C70E8B1-D6D2-42CC-8E21-1AE8EC72A0FB}"
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "ed2e18ba-b5ae-4e6e-a075-64bbe98deb81"
+    - ID: "9b0413da-641e-46d9-8a2a-d8598479952c"
+      Hint: Name
+      Value: All visits by city
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20170328T035328Z

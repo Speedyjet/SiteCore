@@ -1,0 +1,14 @@
+---
+ID: "e6fb93e1-818e-4b4d-a88b-4ed76eb74924"
+Parent: "8ceabae4-74f9-443a-b77c-f6c36ad4e422"
+Template: "0a92feee-0e15-4e81-b044-2ad901b88ddd"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/SiteMetadata/Enums/Twitter Card Types
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160921T103129Z

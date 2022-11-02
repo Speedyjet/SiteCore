@@ -1,0 +1,88 @@
+---
+ID: "e4be6287-81c8-47da-9a1e-eee0683997d3"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/UpdateImageVariantFieldUsedAsLinkTarget"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 11203
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ItemByIdSafe
+    
+    function Get-ItemsPaths() {
+        $db = Get-Database "master"
+        $Template = [Sitecore.XA.Foundation.RenderingVariants.Templates+VariantDefinition]::ID.Guid
+        $linkField = [Sitecore.XA.Foundation.Variants.Abstractions.Templates+IVariantDefinition+Fields]::LinkField.Guid
+        $paths = $db.DataManager.DataSource.SelectIDs("Default", $Template, $linkField, "File", $false)  | % { Get-ItemByIdSafe $_ } | ? { $_.Paths.IsContentItem -and $_.Paths.Path.Contains("Image") } | % { $_.Paths.Path }
+        $paths
+    }
+    
+    function ShouldRun () { 
+        $paths = Get-ItemsPaths
+        $paths.Count -gt 0
+    } 
+    
+    function Get-DialogParameters () {
+    }
+     
+    function Invoke-UpgradeStep { 
+        [CmdletBinding(SupportsShouldProcess = $true)] 
+        param( 
+            [Parameter(Mandatory = $true, Position = 0 )] 
+            $arguments 
+        ) 
+     
+        process { 
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                Get-ItemsPaths | % {
+                    $defaultVariantItem = Get-Item $_
+                    [Sitecore.Data.ID]$linkField = [Sitecore.XA.Foundation.Variants.Abstractions.Templates+IVariantDefinition+Fields]::LinkField
+        
+                    if ($defaultVariantItem[$linkField] -eq "File") {
+                        if ($pscmdlet.ShouldProcess("$($defaultVariantItem.Paths.Path)", "Change value of 'Field used as link target' from 'File' to 'TargetUrl' to match proper field on Image rendering data source item")) {
+                            Write-Verbose "Updating item $($defaultVaraintItem.Paths.Path)"
+                            $defaultVariantItem.Editing.BeginEdit() | Out-Null
+                            $defaultVariantItem.Fields[$linkField].Value = "TargetUrl";
+                            $defaultVariantItem.Editing.EndEdit() | Out-Null
+                        }
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 11202
+Languages:
+- Language: en
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: Update image default variant field used as a link target
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20210512T143645Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Update image default variant field used as a link target
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: |
+        Updates "Field used as a link target" field of the Default rendering variant for the Image with "TargetUrl" instead of "File".

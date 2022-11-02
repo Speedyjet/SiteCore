@@ -1,0 +1,46 @@
+---
+ID: "6466b589-c74c-460c-8d10-6e27d0410a20"
+Parent: "00353ccb-b878-4298-b07e-1dbc47eebc89"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Component Wizard/Test-ValidComponentWizardTemplate"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Test-ValidComponentWizardTemplate {
+        param (
+            [Parameter(Mandatory = $false, Position = 0 )]
+            [Item]$Item,
+            [Parameter(Mandatory = $false, Position = 1 )]
+            [Sitecore.Data.ID]$BaseTemplate
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Test-ValidComponentWizardTemplate - Begin"
+        }
+    
+        process {
+            $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($Item.ID, $Item.Database)
+            if ($template -eq $null) {
+                [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::ComponentWizardErrorNotATemplate)
+            }
+            else {
+                if ($template.InheritsFrom($BaseTemplate) -eq $false) {                
+                    [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::ComponentWizardErrorTemplateInheritance) -f $BaseTemplate.ToString()
+                }
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Test-ValidComponentWizardTemplate - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181023T104051Z

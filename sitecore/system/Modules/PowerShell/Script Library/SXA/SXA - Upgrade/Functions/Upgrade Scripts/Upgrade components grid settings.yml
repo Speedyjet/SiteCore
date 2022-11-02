@@ -1,0 +1,222 @@
+---
+ID: "f0fff7c0-402e-4ffb-a701-6ddcc924aac1"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Upgrade components grid settings"
+DB: master
+SharedFields:
+- ID: "16cf2fe9-1576-456b-8ff3-0002d03efb0d"
+  Hint: Mode
+  Value: "{362C6AD7-4DBE-4268-B3B7-0DD80036549C}"
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1205
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Add-BaseTemplate
+    Import-Function Get-SettingsItem
+    Import-Function Get-ItemByIdSafe
+    
+    function Get-SitePagesWithLayout {
+    	[CmdletBinding(SupportsShouldProcess = $true)]
+    	param(
+    		[Parameter(Mandatory = $true,Position = 0)]
+    		[Item]$SiteItem
+    	)
+    
+    	begin {
+    		Write-Verbose "Get-SitePagesWithLayout - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Get-SitePagesWithLayout - Process"
+    
+    		if ($pscmdlet.ShouldProcess("$($SiteItem.Paths.Path)","Retrieve a list of site pages for processing")) {
+    			$db = Get-Database -Name "master"
+    			$path = $SiteItem.Paths.Path
+                $siteID = $SiteItem.ID
+                $db.DataManager.DataSource.SelectIDs($null, $null, [Sitecore.FieldIDs]::LayoutField, "*r*", $true) | % { Get-ItemByIdSafe $_ "*" } | ? { $_.Paths.LongID.Contains($siteID) }
+    		}
+    	}
+    
+    	end {
+    		Write-Verbose "Get-SitePagesWithLayout - End"
+    	}
+    }
+    
+    function Get-SiteItems () {
+        $siteTemplates = $db.DataManager.DataSource.SelectIDs("", [Sitecore.TemplateIDs]::Template) | `
+            % { Get-ItemByIdSafe $_ }  | `
+            ? { $_.Name -ne '__Standard Values' }  | `
+            ? { [Sitecore.XA.Foundation.SitecoreExtensions.Extensions.ItemExtensions]::DoesTemplateInheritFrom($_,[Sitecore.XA.Foundation.Multisite.Templates+Site]::ID) }
+    
+    	$siteTemplates | % {
+    	    $id = $_.ID
+    	    $db.DataManager.DataSource.SelectIDs("", $id) | % { Get-ItemByIdSafe $_ } | ? { $_.Paths.IsContentItem }
+    	}
+    }
+    
+    function Get-TargetGridDialog {
+    	[CmdletBinding()]
+    	param(
+    	)
+    
+    	begin {
+    		Write-Verbose "Get-TargetGridDialog - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Get-TargetGridDialog - Process"
+    		$dialogResult = Read-Variable -Parameters `
+     			@{ Name = "targetGrid"; Title = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::PickTargetGrid);
+    			Source = "query:/sitecore/system/Settings/Feature/#Experience Accelerator#//*[@@templatekey='grid definition']";
+    			editor = "droplist" } `
+     			-Description $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ChooseTargetGridDescription)) `
+     			-Title $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ChooseTargetGridTitle)) `
+     			-Width 500 -Height 340 -OkButtonName $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::Ok)) -CancelButtonName $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::Cancel)) -ShowHints
+    		if (($dialogResult -ne "ok") -or ($targetGrid -eq $null))
+    		{
+    			exit
+    		}
+    
+    		return $targetGrid
+    	}
+    
+    	end {
+    		Write-Verbose "Get-TargetGridDialog - End"
+    	}
+    }
+    
+    function Set-GridMapping {
+    	[CmdletBinding()]
+    	param(
+    		[Parameter(Mandatory = $true,Position = 0)]
+    		[Item]$settingsItem,
+    		[Parameter(Mandatory = $true,Position = 1)]
+    		[Item]$gridDefinitionItem
+    	)
+    
+    	begin {
+    		Write-Verbose "Set-GridMapping - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Set-GridMapping - Process"
+    
+    		$defaultDeviceId = "{FE5D7FDF-89C0-4D99-9AA3-B5FBD009C9F3}" # Default
+    		$gridTemplateId = "{9D81C61A-0341-4312-816D-E5204385EA3C}" # _Grid Mapping
+    		$gridTemplateItem = Get-Item master: -ID $gridTemplateId
+    		$gridMappingFieldId = "{AD84CC6B-32EF-49D8-9326-916976CB2520}"
+    		$gridMappingValue = "$defaultDeviceId=$($gridDefinitionItem.ID)"
+    		if ($settingsItem.Fields.Contains($gridMappingFieldId) -eq $false) #check for grid mapping field
+    		{
+    			$template = $settingsItem.Template | Wrap-Item
+    			Add-BaseTemplate $template $gridTemplateItem > $null
+    
+    			$standardValuesItem = $template.Children["__Standard Values"] | Wrap-Item #update standard values
+    			if ($standardValuesItem -ne $null) {
+    				$standardValuesItem."Grid Mapping" = $gridMappingValue
+    			}
+    		}
+    		$settingsItem = $settingsItem | Wrap-Item #re-wrap item to get new fields from added base templates
+    		if ([string]::IsNullOrWhiteSpace($settingsItem."Grid Mapping")) {
+    			$settingsItem."Grid Mapping" = $gridMappingValue
+    		}
+    	}
+    
+    	end {
+    		Write-Verbose "Set-GridMapping - End"
+    	}
+    }
+    
+    function ShouldRun () {
+    	$pages = Get-SiteItems
+    	$pages.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    
+    function Invoke-UpgradeStep {
+    	[CmdletBinding(SupportsShouldProcess = $true)]
+    	param(
+    		[Parameter(Mandatory = $true,Position = 0)]
+    		$arguments
+    	)
+    
+    	begin {
+    		Write-Verbose "Upgrade components grid settings - Begin"
+    	}
+    
+    	process {
+    		$result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+    		try {
+    			$updateComponentsService = New-Object Sitecore.XA.Foundation.Upgrade.Services.Custom.UpdateComponentsService
+    			$updateColumnSplitterService = New-Object Sitecore.XA.Foundation.Upgrade.Services.Custom.UpdateColumnSplitterService
+    
+    			$targetGridItem = Get-TargetGridDialog
+    
+    			Get-SiteItems | % {
+    				Write-Verbose "Processing site $($_.Paths.Path)"
+    
+    				$settingsItem = Get-SettingsItem $_
+    
+    				if ($pscmdlet.ShouldProcess("$($_.Paths.Path)","Set grid mapping for site")) {
+    					Set-GridMapping $settingsItem $targetGridItem
+    				}
+    
+    				Write-Verbose "Getting pages for processing . . ."
+    				$pages = Get-SitePagesWithLayout $_
+    				Write-Verbose "Found $($pages.Count) pages."
+    
+    				if ($pscmdlet.ShouldProcess("$($_.Paths.Path)", "Update components rendering parameters for all site pages")) {
+    					$pages | % {
+    						$currentItemPath = $($_.Paths.Path)
+    						Write-Verbose "Processing '$currentItemPath' ($($_.Language.Name)) page [$($_.ID)]"
+    
+    						if ($updateColumnSplitterService.ShouldUpdate($_)) {
+    							$updateColumnSplitterService.Update($_) > $null
+    						}
+    
+    						if ($updateComponentsService.ShouldUpdate($_)) {
+    							$updateComponentsService.Update($_) > $null
+    						}
+    					}
+    				}
+    			}
+    
+    			$result.Result = "Success"
+    		}
+    		catch {
+    			$result.Result = "Error"
+    			$result.Message = $Error[0]
+    			$result.ErrorObject = $Error[0]
+    		}
+    		finally {
+    			$result
+    		}
+    	}
+    
+    	end {
+    		Write-Verbose "Upgrade components grid settings - End"
+    	}
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1205
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170203T091206Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Grid system
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Adds grid system support to every rendering of every page.

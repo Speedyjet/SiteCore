@@ -1,0 +1,18 @@
+---
+ID: "8cafa8a1-72e1-44f7-a697-b0a16f78bcc9"
+Parent: "42dec84a-79a0-44be-a539-1598a6bd5420"
+Template: "a87a00b1-e6db-45ab-8b54-636fec3b5523"
+Path: /sitecore/layout/Placeholder Settings/Foundation/Experience Accelerator/Placeholder Settings
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180316T073933Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

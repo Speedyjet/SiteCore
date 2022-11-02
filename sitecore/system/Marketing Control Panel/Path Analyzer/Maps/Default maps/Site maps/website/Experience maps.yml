@@ -1,0 +1,58 @@
+---
+ID: "a35347de-592d-4203-b070-923f9f726744"
+Parent: "6681c7f1-a70c-4410-8263-eaa78bb06b15"
+Template: "98360c58-f51f-43a4-b057-9ef459c0ff10"
+Path: /sitecore/system/Marketing Control Panel/Path Analyzer/Maps/Default maps/Site maps/website/Experience maps
+DB: master
+SharedFields:
+- ID: "1172f251-dad4-4efb-a329-0c63500e4f1e"
+  Hint: __Masters
+  Type: TreelistEx
+  Value: |
+    {B99B5D85-64F1-4C19-8BFC-F96726BFE2E2}
+    {C5E5C40C-8BC7-47D8-94ED-E3B857D086C0}
+- ID: "5b9f5881-8542-4aca-967b-2ab8ce815d07"
+  Hint: Rule
+  Type: Rules
+  Value: |
+    <ruleset>
+      <rule
+        uid="{B5772885-5FC0-49B1-A7C8-110CD6C72A1D}">
+        <conditions>
+          <and
+            uid="D6FB1FE9FFE444DFA8687881B2B4DB38">
+            <condition
+              id="{5F804210-DC32-4EF1-9430-1D342189961E}"
+              uid="2B83D54183CA476D939646DAE0FBED69" />
+            <condition
+              id="{913A642D-9FE7-46BF-BE5C-DB31FB6C5602}"
+              uid="122EC4179DDC453CA148745D0B3089E6"
+              operatorid="{537244C2-3A3F-4B81-A6ED-02AF494C0563}"
+              value="website" />
+          </and>
+        </conditions>
+        <actions />
+      </rule>
+    </ruleset>
+- ID: "9c6106ea-7a5a-48e2-8cad-f0f693b1e2d4"
+  Hint: __Read Only
+  Type: Checkbox
+  Value: 1
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20150710T001000Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "331c99a3-17d4-46f7-a43c-eb38888e8ed2"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20170710T094029Z

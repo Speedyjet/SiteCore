@@ -1,0 +1,39 @@
+---
+ID: "3aa9bd9c-ce72-405a-b9d2-fdeb33e72ac8"
+Parent: "13d7e7c6-aff4-4f6b-a4f5-d15ddc6c6021"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Cmdlets/Test-HasPreDeleteStep"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Test-HasPreDeleteStep {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0 )]
+            [Item]$Module
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Test-HasPreDeleteStep - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Test-HasPreDeleteStep - Process"   
+            $actions = Get-ChildItem -Path $Module.Paths.Path -Recurse | ? { $_.TemplateName -eq "PreDeleteStep" } 
+            $actions.Count -gt 0
+        } 
+    
+        end {
+            Write-Verbose "Cmdlet Test-HasPreDeleteStep - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160708T072240Z

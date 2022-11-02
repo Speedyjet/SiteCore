@@ -1,0 +1,30 @@
+---
+ID: "185295b5-0c57-4f89-98af-c9b37c74f799"
+Parent: "39ef9c27-acf5-4035-a0bb-7b66b011b3bf"
+Template: "1773ecce-3f78-4201-8095-cae3574e8ede"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Redirects/Redirects Site Setup/Redirects Insert Option
+DB: master
+SharedFields:
+- ID: "58aca5ca-742a-41bb-866f-cfa3764200c8"
+  Hint: Arguments
+  Type: Treelist
+  Value: "{E1CF805E-7F49-4EC9-A25A-182DC798CB5F}"
+- ID: "76691b61-8692-4d98-a4ff-115ba4208ab6"
+  Hint: EditType
+  Value: AddInsertOptions
+- ID: "e308b8ae-e98e-42b2-80e2-12e902e5e50e"
+  Hint: Template
+  Type: Treelist
+  Value: "{6A8A971B-01BC-4749-9EF5-10C69BBA73FE}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160824T063134Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

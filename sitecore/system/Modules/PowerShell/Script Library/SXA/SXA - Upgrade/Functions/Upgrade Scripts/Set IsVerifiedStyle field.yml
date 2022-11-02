@@ -1,0 +1,79 @@
+---
+ID: "e307fbd6-27fc-4b06-8c99-6e7bf6aee8ed"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Set IsVerifiedStyle field"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1404
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ItemByIdSafe
+    
+    $isVerifiedStyleFieldId = "{95579875-484E-41F0-B9C2-804EAFAF3CCC}"
+    $styleTemplateId = "{6B8AABEF-D650-46E0-97D0-C0B04F7F016B}"
+    
+    function Get-StyleItem() {
+        $db = Get-Database "master"
+        $db.DataManager.DataSource.SelectIDs($null, $styleTemplateId, $isVerifiedStyleFieldId, "", $false) | % { Get-ItemByIdSafe $_ }   | ? { $_.Paths.IsContentItem -eq $true } | ? { $_.IsVerifiedStyle -eq "" } | ? { $_.BranchId -ne $null } | ? { $_.BranchId -eq "{5EDF676A-2FDD-418A-8C56-CB465EE16E20}" }
+    }
+    
+    function ShouldRun () {
+        $items = Get-StyleItem
+        $items.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            $arguments
+        )
+    
+        process {
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                Get-StyleItem | % {
+                    if ($pscmdlet.ShouldProcess($_.Paths.Path, "Settings `IsVerifiedStyle` field value to '1'")) {
+                        $_.IsVerifiedStyle = "1"
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1404
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170718T145901Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Mark existing system styles as verified
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Set IsVerifiedStyle field for existing system styles in order to protect them from removal by cleanup script.

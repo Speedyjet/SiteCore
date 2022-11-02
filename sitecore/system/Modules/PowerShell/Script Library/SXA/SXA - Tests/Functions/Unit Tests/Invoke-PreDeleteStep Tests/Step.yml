@@ -1,0 +1,23 @@
+---
+ID: "09c68f43-921f-4371-92b1-d213e74fe63e"
+Parent: "177d2257-52d2-4bb7-83ca-a61a59f86cb6"
+Template: "f0daf401-190f-4546-8bda-8568d08e161d"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Invoke-PreDeleteStep Tests/Step"
+DB: master
+SharedFields:
+- ID: "c0a5bd91-e658-46ce-b631-77ce337d8e6e"
+  Hint: Script
+  Type: Treelist
+  Value: "{7BA713E6-812A-4AC8-B2FB-74EDD42382BB}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180904T135055Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

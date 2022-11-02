@@ -1,0 +1,129 @@
+---
+ID: "4382565f-2685-4dbd-81c3-4bffa6eeaf40"
+Parent: "37bdbcb6-101c-4956-aa1f-993ba5fc6fbf"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Cmdlets/Upgrade/Invoke-UpgradeScript"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Invoke-UpgradeScript {
+    	[CmdletBinding()]
+        param(
+    	    [Parameter(Position=0, Mandatory=$true, ValueFromPipeline=$true	 )]
+    		[Item]$script,
+    
+    		[Parameter(Mandatory=$true, Position=1 )]
+    		[Sitecore.XA.Foundation.Upgrade.Model.Mode]$mode
+        )
+    
+    	begin {
+    		Write-Verbose "Cmdlet Invoke-UpgradeScript - Begin"
+    		Import-Function Get-UpgradeInfoDialog
+    		Import-Function Get-DialogDefaultValues
+    		Import-Function Handle-Response
+    		Import-Function Update-CurrentSxaVersion
+    		Import-Function Get-PendingUpgradeScripts
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Invoke-UpgradeScript - Process"
+    		Invoke-Script $script
+    		Write-Log "#SXA-Upgrade - Processing step: '$($script.Title)'"
+    		Write-Progress -Activity "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ProcessingStep)): '$($script.Title)'" -Status ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::CheckingWhetherStepsShouldBeExecuted))
+    		if(ShouldRun -eq $true){
+    			Write-Log "#SXA-Upgrade - Getting upgrade information"
+    			Write-Progress -Activity "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ProcessingStep)): '$($script.Title)'" -Status ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::GettingUpgradeInformation))
+    			[Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepInfo]$migrationInfo = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepInfo
+    			$migrationInfo.Title = $script.Title
+    			$migrationInfo.Description = $script.Description
+    			$migrationInfo.Mode = (Get-Item master: -ID $script.Mode).Value
+    			$migrationInfo.DryRunSupported = $script.DryRunSupported
+    			$migrationInfo.RequiredMinimalVersion = $script.RequiredMinimalVersion
+    			$migrationInfo.TargetVersion = $script.TargetVersion
+    			Get-DialogParameters | Where-Object { $_.GetType().Name -eq "Hashtable" } | ForEach-Object {$migrationInfo.DialogParameters.Add($_) }
+    
+    
+    			if($migrationInfo -ne $null){
+    				Write-Progress -Activity "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ProcessingStep)): '$($script.Title)'" -Status ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::GettingUpgradeStepDialogDefaultValues))
+    				if ($mode -eq "Manual") {
+    					$migrationInfo = Get-UpgradeInfoDialog $migrationInfo
+    				}else {
+    					$migrationInfo = Get-DialogDefaultValues $migrationInfo
+    				}
+    
+    				$Error.Clear()
+    				Clear-Host
+    				Write-Progress -Activity "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ProcessingStep)): '$($script.Title)'" -Status ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::InvokingUpgradeStep))
+    				try {
+    					if($migrationInfo.DryRunSupported -eq $true -and $migrationInfo.DialogParameters.DryRun -eq $true){
+    						Write-Log "#SXA-Upgrade - Invoke-UpgradeStep -WhatIf"
+    						$result = Invoke-UpgradeStep $migrationInfo -WhatIf
+    					}else {
+    						Write-Log "#SXA-Upgrade - Invoke-UpgradeStep"
+    						$result = Invoke-UpgradeStep $migrationInfo
+    					}
+    				}
+    				catch {
+    					Write-Log "#SXA-Upgrade - An error occured!"
+            			$result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+    					$result.Message = ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ErrorOccuredInUpgradeStep))
+    					$result.Result = "Error"
+    					$result.ErrorObject = $_
+    					$_
+    				}
+    
+    				if (($Error.Count -gt 0) -or ($migrationInfo.DryRunSupported -eq $true -and $migrationInfo.DialogParameters.DryRun -eq $true)) {
+    					Write-Progress -Activity "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ProcessingStep)): '$($script.Title)'" -Status ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ShowingUpgradeStepsResults))
+    					Show-Result -Text
+    				}
+    
+    				Write-Progress -Activity "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ProcessingStep)): '$($script.Title)'" -Status ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::HandlingResult))
+    				
+    				$resultTypeName = "Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult"
+    				if($result.GetType().FullName -ne $resultTypeName){
+    				    Write-Progress -Activity "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ProcessingStep)): '$($script.Title)'" -Status ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::SomeUpgradeStepsDidNotPerformSuccessfully))
+    				    throw [ArgumentException] "Upgrade step '$($script.Title)' returns incorrect result of type [$($result.GetType().FullName)]. But should be [$resultTypeName]"
+    				}
+    				
+    				$upgradeStepInfoTypeName = "Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepInfo"
+    				if($migrationInfo.GetType().FullName -ne $upgradeStepInfoTypeName){
+    				    Write-Progress -Activity "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ProcessingStep)): '$($script.Title)'" -Status ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::SomeUpgradeStepsDidNotPerformSuccessfully))
+    				    throw [ArgumentException] "Upgrade step info type is incorrect: [$($migrationInfo.GetType().FullName)] for script '$($script.Title)\'. Should be [$upgradeStepInfoTypeName]"
+    				}
+    				
+    				Handle-Response $script $result $migrationInfo $mode
+    			}
+    		}else{
+    			Write-Log "#SXA-Upgrade - Upgrade step will be skipped" -Log Info
+    			Update-CurrentSxaVersion $script.TargetVersion
+    		}
+    
+    		Write-Log "#SXA-Upgrade - Update pending steps list" -Log Info
+    		$migrationScripts = Get-PendingUpgradeScripts
+    
+            $modeMapping = $global:UpgradeStepModeMapping
+    		$migrationScripts | Update-ListView -InfoTitle "" `
+    			-Property `
+    				@{Label = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::Title); Expression = {$_.Title} },
+    				@{Label = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::Description); Expression = {$_.Description} },
+            		@{Label = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::Mode); Expression = {$modeMapping[$_.Mode] } }
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Invoke-UpgradeScript - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170109T135545Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

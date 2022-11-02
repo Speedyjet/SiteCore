@@ -1,0 +1,58 @@
+---
+ID: "96789d69-82ce-47ef-af01-6866f752c98b"
+Parent: "8ff2c9dc-e428-4a48-9583-ff4d04869e94"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Multisite/Functions/Set start item"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-SettingsItem
+    Import-Function Test-ItemIsSiteDefinition
+    
+    function Invoke-ModuleScriptBody {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Site,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Item[]]$TenantTemplates		
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Invoke-ModuleScriptBody - Begin"
+            Import-Function Get-ProjectTemplateBasedOnBaseTemplate
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Invoke-ModuleScriptBody - Process"
+            Write-Verbose "My site: $($Site.Paths.Path)"
+            Write-Verbose "My tenant templates: $($TenantTemplates | %{$_.ID})"
+    
+            $settingsItem = Get-SettingsItem $Site
+            Get-ProjectTemplateBasedOnBaseTemplate $TenantTemplates ([Sitecore.XA.Foundation.Multisite.Templates+Home]::ID.ToString()) | ? {
+                $homeTemplate = $_
+                $homeItem = Get-ChildItem -Path ($Site.Paths.Path) | ? { $_.TemplateID -eq $homeTemplate.ID } | Select-Object -First 1
+                $homeItem -ne $null
+            } > $null
+            
+            if($homeItem){
+                $siteDefinitionItem = Get-ChildItem -Recurse -Path ($settingsItem.Paths.Path) | ? { (Test-ItemIsSiteDefinition $_) -eq $true} | Select-Object -First 1
+                $siteDefinitionItem.StartItem = $homeItem.ID    
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Invoke-ModuleScriptBody - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160629T083907Z

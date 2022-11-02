@@ -1,0 +1,14 @@
+---
+ID: "0afe36d2-659d-4173-a2de-07f456b8641c"
+Parent: "6eb06cf5-ceae-4cbd-a3ad-d569d263c1f3"
+Template: "0a92feee-0e15-4e81-b044-2ad901b88ddd"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Theming/Enums/Component Theme Priority
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160701T063125Z

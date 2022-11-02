@@ -1,0 +1,22 @@
+---
+ID: "b1d2ebe4-45a6-4517-b559-bc702ba82e5b"
+Parent: "0be97661-c152-46c2-89ff-c50fea66e78b"
+Template: "b4d19d07-b3eb-4f7d-98ec-8bcb41ccc58e"
+Path: /sitecore/system/Settings/Insert Rules/Foundation/Experience Accelerator/Rendering Variants/Variant Field Insert Options
+DB: master
+SharedFields:
+- ID: "4a6dfa44-4706-4b98-8c88-ada44f8fdb7c"
+  Hint: Type
+  Value: Sitecore.XA.Foundation.RenderingVariants.Rules.VariantFieldInsertRule,Sitecore.XA.Foundation.RenderingVariants
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20141020T111707Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

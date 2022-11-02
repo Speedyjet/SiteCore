@@ -1,0 +1,53 @@
+---
+ID: "beed9ffa-4c47-4273-90c0-765f913a4f23"
+Parent: "df608d21-2980-49da-9804-7f818c8624d3"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Security/Functions/Cmdlets/Test-AllRolesExist"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Test-AllRolesExist {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $RolesCollection
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Test-AllRolesExist - Begin"
+            Import-Function Get-RoleSafe
+            Import-Function Get-RoleIdentity
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Test-AllRolesExist - Process"
+            $allRolesExist = $true
+            $RolesCollection | ForEach-Object {
+                $r = $_
+                $roleIdentity = Get-RoleIdentity $r.RoleName $r.RoleDomain
+                Write-Verbose "Checking role definition item: $($r.RoleItem.Paths.Path)"
+                if (-not (Get-RoleSafe -Identity $roleIdentity)) {
+                    $allRolesExist = $false
+                }
+            }
+            $allRolesExist
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Test-AllRolesExist - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170405T105504Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

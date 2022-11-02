@@ -1,0 +1,41 @@
+---
+ID: "dc733b57-707c-4303-bf55-2c80ea0aba7b"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Default variant for Event List"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1318
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-SitesWithoutRenderingVariant
+    Import-Function Invoke-SiteAction
+    Import-Function Invoke-AddDefaultVariantBase
+    
+    function Get-ActionItem () {
+        Get-Item -Path . -ID "{2D66CA26-8560-43BA-85D2-2A8AB16B03F2}"
+    }
+    
+    function Get-RenderingItem () {
+        Get-Item -Path "/sitecore/layout/Renderings/Feature/Experience Accelerator/Events/Event List"
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1318
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170608T134551Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Add default rendering variant for Event List
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Adds a default rendering variant for the Event List rendering if not present.

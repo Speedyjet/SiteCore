@@ -1,0 +1,128 @@
+---
+ID: "d29d2d89-b5c7-4eab-ad63-281893fd2e3f"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Fix Jss Sites Dictionary"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 11001
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-AllJSSSite;
+    
+    
+    $dictionaryOldTemplateId="{A87A00B1-E6DB-45AB-8B54-636FEC3B5523}";
+    $dictionaryNewTemplateId="{0A2847E6-9885-450B-B61E-F9E6528480EF}";
+    $jssSiteSettingItemTemplateId="{EC848505-D30C-4BDC-A0AA-7CC9D320085E}";
+    $dictionaryDomainSettingFieldID= "{0129DA3F-8C86-4591-AE32-6EC923413923}"
+    
+    function ShouldRun () {
+        $jssSites = Get-AllJSSSite
+        $jssSites.Count -gt 0
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            $arguments
+        )
+            
+        process {
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+    
+            try {
+                 $jssSites = Get-AllJSSSite
+                 Write-Verbose "Found $($jssSites.Count) jss sites"
+            
+                 $settingsItems= $jssSites | ForEach-Object{ Get-JssSiteSettingItem $_ $jssSiteSettingItemTemplateId }
+          
+                 $dictionaryItems= $jssSites | ForEach-Object{ Get-JssSiteDictionaryItem $_ $jssSiteSettingItemTemplateId}
+                 Write-Verbose "Found $($dictionaryItems.Count) dictionary items"
+            
+                 $dictionaryDomainSettingField = Get-Item $dictionaryDomainSettingFieldID
+            
+               if($dictionaryItems.Count -gt 0){
+                   $targetTemplate = Get-Item $dictionaryNewTemplateId
+                   $dictionaryItems | ForEach-Object{
+                     if ($pscmdlet.ShouldProcess($_, "Changing dictionary template $_ to Dictionary Domain")) {
+                        Change-DictionaryTemplate $_ $targetTemplate 
+                      }
+                   }
+               }
+               if($dictionaryDomainSettingField){
+                    if ($pscmdlet.ShouldProcess($_, "Changing Dictionary Domain field type from Single-Line Text to Droptree")) {
+                                    $dictionaryDomainSettingField.Editing.BeginEdit()
+                                    $dictionaryDomainSettingField.Fields["Type"].Value="Droptree"
+                                    $dictionaryDomainSettingField.Editing.EndEdit()
+                      }
+               }
+               if($dictionaryItems.Count -gt 0){
+                        $settingsItems| ForEach-Object{
+                            if ($pscmdlet.ShouldProcess($_, "Copy value from Dictionary Path to Dictionary Domain")) {
+                                $_.Editing.BeginEdit()
+                                $fieldValue = $_.Fields["DictionaryPath"].Value
+                                $_.Fields["DictionaryDomain"].Value = $fieldValue;
+                                $_.Editing.EndEdit()
+                            }
+                  }
+              }
+        
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+    
+    
+    function Get-JssSiteDictionaryItem($site, $templateId) {
+       $settingItem= Get-JssSiteSettingItem $site $templateId
+       if($settingItem){
+          $dictionaryItem= Get-Item  $settingItem.Fields["DictionaryPath"].Value 
+         }
+        $dictionaryItem
+    }
+    function Change-DictionaryTemplate($dictionaryItem,$targetTemplate) {
+        if($targetTemplate)
+        {
+          $dictionaryItem.ChangeTemplate($targetTemplate);
+        }
+    }
+    function Get-JssSiteSettingItem($site,$jssSiteSettingItemTemplateId) {
+      
+        $settingItem = $site.Children | ? {
+        [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_).InheritsFrom($jssSiteSettingItemTemplateId)} | Select-Object -First 1
+        $settingItem
+    }
+    
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1904
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20200506T095543Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Fix Jss Sites Dictionary
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Changes template of Dictionary Item of Jss Site to Dictionary Domain , changes filed type of  Dictionary Domain field to Drop Tree in Setting template , copies value from Dictionary Path to Dictionary Domain

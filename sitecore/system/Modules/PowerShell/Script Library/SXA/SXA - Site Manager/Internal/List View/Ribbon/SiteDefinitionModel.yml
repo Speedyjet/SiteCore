@@ -1,0 +1,18 @@
+---
+ID: "bf9afffc-3d5a-4eac-ace2-9a17c9bc4e5f"
+Parent: "dad915e1-c869-4a28-935d-6f5a0948ab19"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Site Manager/Internal/List View/Ribbon/SiteDefinitionModel"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170523T063051Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

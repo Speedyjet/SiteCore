@@ -1,0 +1,31 @@
+---
+ID: "174a8965-55e8-4202-9edb-68d6303c50b5"
+Parent: "b859911e-c885-428f-b0e8-a4482f0094a6"
+Template: "c38aa55a-ec75-4498-9eb6-13269c07fdb5"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/SXA/SXA Author
+DB: master
+SharedFields:
+- ID: "2f325664-bba1-4eac-8d8f-c365d2f40245"
+  Hint: RoleDomain
+  Value: SXA
+- ID: "359b28a0-9fac-4f93-b0f6-db957cbe5ce9"
+  Hint: MemberOf
+  Type: Treelist
+  Value: |
+    {8742C93A-E0FB-4113-A267-10380089E836}
+    {7E9F3F20-B3DF-480B-81F4-1BC80685593E}
+- ID: "5382bfde-8e39-4571-a1c5-eb3c43d5bce3"
+  Hint: RoleName
+  Value: Author
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170404T112534Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

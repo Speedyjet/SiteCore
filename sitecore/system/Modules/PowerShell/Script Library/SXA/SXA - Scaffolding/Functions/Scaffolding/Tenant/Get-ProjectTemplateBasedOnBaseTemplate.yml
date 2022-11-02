@@ -1,0 +1,41 @@
+---
+ID: "fab16d1e-617d-41a3-bf14-291f57492855"
+Parent: "14e40e94-118e-45f9-9a6c-ce969678bb2e"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Tenant/Get-ProjectTemplateBasedOnBaseTemplate"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-ProjectTemplateBasedOnBaseTemplate {
+    	[CmdletBinding()]
+        param(
+    	    [Parameter(Mandatory=$true, Position=0 )]
+            [Item[]]$TenantTemplates,
+    
+    	    [Parameter(Mandatory=$true, Position=1 )]
+            [Sitecore.Data.ID]$ID
+        )
+    
+    	begin {
+    		Write-Verbose "Cmdlet Get-ProjectTemplateBasedOnBaseTemplate - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Get-ProjectTemplateBasedOnBaseTemplate - Process"
+    		$TenantTemplates | ? { $_.Fields['__Base template'].Value.Contains($ID) }
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Get-ProjectTemplateBasedOnBaseTemplate - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20181218T152041:636807432410942655Z"

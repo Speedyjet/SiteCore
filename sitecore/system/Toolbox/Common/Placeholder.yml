@@ -1,0 +1,57 @@
+---
+ID: "69f03a2e-53e6-48c1-ab0e-dc6e178d4a69"
+Parent: "1d27aa4b-e73b-4a3b-9219-d3d1fea727fa"
+Template: "1dde3f02-0bd7-4779-867a-dc578adf91ea"
+Path: /sitecore/system/Toolbox/Common/Placeholder
+DB: master
+BranchID: "00e66e02-df20-4f3a-b8aa-5239108dc2bb"
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: Software/16x16/element_selection.png
+- ID: "1f424eb0-6138-4bc4-93b0-bd45ec6b1cb2"
+  Hint: Namespace
+  Value: Sitecore.Web.UI.WebControls
+- ID: "a4f985d9-98b3-4b52-aaaf-4344f6e747c6"
+  Hint: __Workflow
+  Value: 
+- ID: "b8979e80-7623-4b3a-bfd2-3f3f05883d58"
+  Hint: Tag
+  Value: Placeholder
+- ID: "c50b1f5b-26da-476a-aac6-9b734975971c"
+  Hint: Assembly
+  Value: Sitecore.Kernel
+- ID: "e2abdec6-83a6-4b68-97d1-b3cd79f10a8e"
+  Hint: TagPrefix
+  Value: sc
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "001dd393-96c5-490b-924a-b0f25cd9efd8"
+      Hint: __Lock
+      Value: <r />
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20051108T110953
+    - ID: "3e431de1-525e-47a3-b6b0-1ccbec3a8c98"
+      Hint: __Workflow state
+      Value: 
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "778db264-0ef0-478c-8704-c83a47079e8b"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "c8f93afe-bfd4-4e8f-9c61-152559854661"
+      Hint: __Valid from
+      Value: 20051108T110953
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20071116T003728

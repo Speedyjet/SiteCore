@@ -1,0 +1,75 @@
+---
+ID: "3c8350a5-0ce7-439e-891f-e79cd3c1d574"
+Parent: "883896ff-bb23-4a3e-831e-f583d402d4f7"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Module/Install-SiteModule"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Install-SiteModule {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$siteSetup,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Item[]]$sites
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Install-SiteModule - Begin"
+            Import-Function Test-CanInstallModuleSoft
+            Import-Function Test-CanInstallSiteModuleHard
+            Import-Function Add-SiteModule
+            Import-Function Show-SiteSelectionDialog
+            Import-Function Get-ItemWithoutModuleInstalled
+        }
+    
+        process {
+            $sitesWithoutModule = Get-ItemWithoutModuleInstalled $sites $siteSetup
+    
+            [Sitecore.Data.ID[]]$dependencies = $siteSetup.Dependencies.Split('|') | ? { [guid]::TryParse($_, [ref][guid]::Empty) }
+            $validatedSites = $sitesWithoutModule | ? { Test-CanInstallModuleSoft $_ $siteSetup }
+    
+            if ($validatedSites.Count -eq 0) {
+                Show-Alert ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::ThereAreNoSitesWithoutThisModule))
+                Exit
+            }
+    
+            $dTitle = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::AddSiteModuleTitle)
+            $dDescription = ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::AddSiteModuleDescription) -f $siteSetup.Fields["Name"].Value)
+            $validatedSites = Show-SiteSelectionDialog $validatedSites -DialogTitle $dTitle -DialogDescription $dDescription
+    
+            $percentage_start = 0
+            $percentage_end = 100
+            $percentage_diff = $percentage_end - $percentage_start
+            $currentIndex = 0
+            $validatedSites | % {
+                $site = $_
+                Write-Host "Extending '$($site.Name)' site modules"
+                $percentComplete = ($percentage_start + 1.0 * $percentage_diff * ($currentIndex++) / ($validatedSites.Count))
+                Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::AddSiteModuleValidation) -f $site.Name) -PercentComplete $percentComplete
+                $result = Test-CanInstallSiteModuleHard -Site $_ -DefinitionItems $siteSetup
+                if ($result) {
+                    Add-SiteModule $site $siteSetup
+                }
+                else {
+                    Write-Host "Could not install module for '$($site.Name)' site because there are missing actions."
+                }
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Install-SiteModule - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181120T080104Z

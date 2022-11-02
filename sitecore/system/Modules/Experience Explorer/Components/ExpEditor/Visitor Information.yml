@@ -1,0 +1,27 @@
+---
+ID: "27586b75-a6fd-43cf-924f-5a07824e9716"
+Parent: "79ee759b-c563-4e3f-89c3-71071bd8aa5c"
+Template: "00a60c7a-2373-4e30-8197-920b8374509e"
+Path: /sitecore/system/Modules/Experience Explorer/Components/ExpEditor/Visitor Information
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20130401T224117
+    - ID: "4882658b-7490-4f7a-a16f-080bb4ae9e99"
+      Hint: Accordion Name
+      Value: Visitor Information
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "aa150cec-56b2-4a6d-9eac-8153227dce29"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20130401T224117:635004528773170759"

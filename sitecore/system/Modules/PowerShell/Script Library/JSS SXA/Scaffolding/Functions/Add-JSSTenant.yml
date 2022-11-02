@@ -1,0 +1,184 @@
+---
+ID: "718dc8e2-ca6c-47f5-9858-21a7d912f9a0"
+Parent: "7d8d6e32-75e6-4822-8491-f3c0a7a1577f"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/JSS SXA/Scaffolding/Functions/Add-JSSTenant"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Add-JSSTenant {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$TenantLocation,
+    
+            [Parameter(Mandatory = $true, Position = 1)]
+            [string]$TenantName,
+    
+            [Parameter(Mandatory = $true, Position = 2 )]
+            [Item[]]$DefinitionItems,
+            
+            [Parameter(Mandatory = $false, Position = 3 )]
+            [string]$Language = "en"	        
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Add-JSSTenant - Begin"
+            Import-Function Set-TenantTemplate
+            Import-Function Invoke-TenantAction
+            Import-Function Get-Action
+            Import-Function Add-TenantTemplateRoot
+            Import-Function Add-TenantTemplate
+            Import-Function Set-InsertOptionsForTenantTemplate
+            Import-Function Add-TenantMediaLibrary
+            Import-Function Get-ItemByIdSafe
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Add-JSSTenant - Process"
+    
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::SearchingItemsRoots)) -PercentComplete 0
+            $_Project_Templates = Get-ItemByIdSafe "{825B30B4-B40B-422E-9920-23A1B6BDA89C}"
+            $_Project_Media = Get-ItemByIdSafe "{90AE357F-6171-4EA9-808C-5600B678F726}"
+            $_Project_PlaceholderSettings = Get-ItemByIdSafe "{F5F0FBE3-61AD-4967-A5D8-8D760331D6A1}" # /sitecore/layout/Placeholder Settings/Project
+            $_Project_Renderings = Get-ItemByIdSafe "{1995806F-0A84-42B5-93B0-88F0E2FF872C}" # /sitecore/layout/Renderings/Project
+    
+            $tenantBranch = Get-ItemByIdSafe "{2D3805B9-3089-44F3-B952-D45C44ADD7F8}"
+    
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::GettingScafofldingActions)) -PercentComplete 5
+            $actions = $DefinitionItems | Get-Action
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingTenantTemplatesRoot)) -PercentComplete 10
+            $tenantTemplatesRoot = Add-TenantTemplateRoot $TenantLocation $TenantName $_Project_Templates
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::AddingTenantTemplates)) -PercentComplete 15
+            $tenantTemplates = New-Object System.Collections.ArrayList($null)
+            [Item[]]$tenantTemplatesFromDefinitionItems = Add-TenantTemplate $tenantTemplatesRoot $DefinitionItems
+            [Item[]]$commonTenantTemplates = Add-CommonTenantTemplate $tenantTemplatesRoot $tenantTemplatesFromDefinitionItems
+            $tenantTemplates.AddRange($tenantTemplatesFromDefinitionItems)
+            if ($commonTenantTemplates.Count -gt 0) {
+                $tenantTemplates.AddRange($commonTenantTemplates)
+            }
+    
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingTenantItem)) -PercentComplete 20
+            $tenant = New-Item -Parent $TenantLocation -Name $TenantName -ItemType $tenantBranch.Paths.FullPath -Language $Language
+    
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingTenantMediaLibrary)) -PercentComplete 25
+            $tenantMediaLibrary = Add-TenantMediaLibrary $tenant $_Project_Media
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingSharedMediaLibrary)) -PercentComplete 31
+            $sharedMediaLibrary = New-Item -Parent $tenantMediaLibrary -Name "shared" -ItemType "/System/Media/Media folder"
+    
+            $tenant.PlaceholderSettingsFolder = Add-JSSTenantFolder $tenant $_Project_PlaceholderSettings "System/Layout/Placeholder Settings Folder"
+            $tenant.RenderingsFolder = Add-JSSTenantFolder $tenant $_Project_Renderings "System/Layout/Renderings/Rendering Folder"
+    
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::UpdatingTenantSettings)) -PercentComplete 33
+            $tenant.Templates = $tenantTemplatesRoot.ID
+            $tenant.MediaLibrary = $tenantMediaLibrary.ID
+            $tenant.SharedMediaLibrary = $sharedMediaLibrary.ID
+    
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::UpdatingInsertOptionsForTenantTemplates)) -PercentComplete 35
+            Set-InsertOptionsForTenantTemplate $tenantTemplates
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::EditingTenantTemplates)) -PercentComplete 40
+            $percentage_start = 40
+            $percentage_end = 70
+            $percentage_diff = $percentage_end - $percentage_start        
+            [Item[]]$editTemplateActions = $actions | ? { $_.TemplateName -eq "EditTenantTemplate" }
+            foreach ($actionItem in $editTemplateActions) {
+                $currentIndex = $editTemplateActions.IndexOf($actionItem)
+                $percentComplete = ($percentage_start + 1.0 * $percentage_diff * ($currentIndex) / ($editTemplateActions.Count))
+                $currentOperation = $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::EditingTemplate)) -f $actionItem.Name
+                Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ($currentOperation) -PercentComplete $percentComplete
+                Invoke-TenantAction  $tenant $actionItem
+            }
+            
+            #rename template name so that it will match JSS application one
+            $baseAppRouteTemplate = Get-ChildItem -Path $tenantTemplatesRoot.Paths.FullPath | ? { $_.Name -eq "Base App Route" }
+            Rename-Item -Path $baseAppRouteTemplate.Paths.Path -NewName "App Route"
+    
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::ApplyingTenantTemplatesToItems)) -PercentComplete 70
+            Set-TenantTemplate $tenant $tenantTemplates
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::AddingItemsFromScaffoldingActions)) -PercentComplete 80
+            $actions | ? { $_.TemplateName -eq "AddItem" }               | % { Invoke-TenantAction   $tenant $_  $tenant.Language.Name}
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::InvokingScriptsFromScaffoldingActions)) -PercentComplete 90
+            $actions | ? { $_.TemplateName -eq "ExecuteScript" }         | % { Invoke-TenantAction   $tenant $_ }
+            $tenant = $tenant.Database.GetItem($tenant.ID) | Wrap-Item
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text("Finishing")) -PercentComplete 100
+            $tenant.Modules = $DefinitionItems.ID -join "|"
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation "" -PercentComplete 100
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Add-JSSTenant - End"
+        }
+    }
+    
+    function Add-CommonTenantTemplate {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$TenantTemplateLocation,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Item[]]$TenantTemplates
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Add-CommonTenantTemplate - Begin"
+            Import-Function New-TenantTemplate
+            Import-Function Get-ProjectTemplateBasedOnBaseTemplate
+        }
+    
+        process {
+            [Sitecore.Data.ID[]]$staticSourceTemplates = @(
+                [Sitecore.XA.JSS.Foundation.Multisite.Templates+JSSPage]::ID
+            )
+            $staticSourceTemplates | % {
+                $template = $_
+                $existing = Get-ProjectTemplateBasedOnBaseTemplate $TenantTemplates $template
+                if ($existing -eq $null) {
+                    New-TenantTemplate $TenantTemplateLocation $template
+                }
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Add-CommonTenantTemplate - End"
+        }
+    }
+    
+    function Add-JSSTenantFolder {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Tenant,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Item]$Parent,
+    
+            [Parameter(Mandatory = $true, Position = 2 )]
+            [string]$Template
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Add-JSSTenantFolder - Begin"
+            Import-Function Add-FolderStructure
+        }
+    
+        process {
+            $tenantTail = $Tenant.Paths.Path.Substring(("/sitecore/content").Length)
+            $path = $Parent.Paths.Path + $tenantTail
+            Add-FolderStructure $path $Template
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Add-JSSTenantFolder - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181113T133430Z

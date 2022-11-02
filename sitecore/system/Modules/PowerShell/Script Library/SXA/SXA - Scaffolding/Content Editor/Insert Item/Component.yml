@@ -1,0 +1,65 @@
+---
+ID: "92068be2-5711-4acb-96d4-0cf723e78519"
+Parent: "7bfc37a7-7817-48a4-afea-b4c1c631b93a"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Content Editor/Insert Item/Component"
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: office/32x32/magic_wand.png
+- ID: "1c76313e-3c8c-4807-a826-135d10c39299"
+  Hint: ShowRule
+  Type: Rules
+  Value: |
+    <ruleset>
+      <rule
+        uid="{5BE0104A-1C45-4E97-91E6-DBC25218252C}">
+        <conditions>
+          <and
+            uid="C7E186071BEA4F03A5E633070B07692F">
+            <condition
+              id="{7D5DA661-BEF9-441C-B1F7-D80DE3E0972F}"
+              uid="766F2B9D90214B6C974879AFF5463693"
+              itemid="{DA61AD50-8FDB-4252-A68F-B4470B1C9FE8}" />
+            <condition
+              id="{D0810F9D-734C-452D-BBB6-4730368D68F1}"
+              uid="BEE993F4C3D04E8E829A3302BC688577"
+              templateid="{7EE0975B-0698-493E-B3A2-0B2EF33D0522}" />
+          </and>
+        </conditions>
+      </rule>
+      <rule
+        uid="{3A7D75CF-A390-48DF-821F-730F28CAF064}">
+        <conditions>
+          <and
+            uid="8796B650C280431B96E34306176D9778">
+            <condition
+              id="{7D5DA661-BEF9-441C-B1F7-D80DE3E0972F}"
+              uid="986FBBFC7DD64A2284294BFB904892D6"
+              itemid="{180D4942-2B10-4375-BC06-E0D94220A68F}" />
+            <condition
+              id="{D0810F9D-734C-452D-BBB6-4730368D68F1}"
+              uid="5359EE845E3F4D68BD2A1264466AD2DE"
+              templateid="{7EE0975B-0698-493E-B3A2-0B2EF33D0522}" />
+          </and>
+        </conditions>
+      </rule>
+    </ruleset>
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ComponentWizardDialog
+    Import-Function Add-Component
+    
+    $CurrentItem = Get-Item .
+    $model = Get-ComponentWizardDialog $CurrentItem
+    Add-Component $model
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171124T110703Z

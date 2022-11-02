@@ -1,0 +1,44 @@
+---
+ID: "6f193581-8104-49ce-b6c0-3dc9343e9edc"
+Parent: "515fa3ce-65eb-4564-80c0-aa4a62eb2b60"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Site/Add-SiteMediaLibrary"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Add-SiteMediaLibrary {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Site
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Add-SiteMediaLibrary - Begin"
+            Import-Function Get-TenantItem
+            Import-Function Get-TenantMediaLibraryRoot
+            Import-Function Add-FolderStructure
+        }
+    
+        process {
+            $tenantItem = Get-TenantItem $Site
+            $TenantMediaLibraryRoot = Get-TenantMediaLibraryRoot $site
+            $siteTail = $Site.Paths.Path.Replace($tenantItem.Paths.Path, "")
+            $path = $TenantMediaLibraryRoot.Paths.Path + $siteTail
+            Add-FolderStructure $path
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Add-SiteMediaLibrary - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181130T102818Z

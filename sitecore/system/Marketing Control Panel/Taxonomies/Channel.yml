@@ -1,0 +1,32 @@
+---
+ID: "f575d5e6-74de-49b6-a866-e2256d213d83"
+Parent: "f0265697-7e06-4c39-81a6-a1cb98a41972"
+Template: "13f11e7d-0dbc-4dfa-b809-358e75a6e332"
+Path: /sitecore/system/Marketing Control Panel/Taxonomies/Channel
+DB: master
+SharedFields:
+- ID: "9c6106ea-7a5a-48e2-8cad-f0f693b1e2d4"
+  Hint: __Read Only
+  Type: Checkbox
+  Value: 1
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 200
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20141029T205753Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "79720118-970b-43ae-bfdd-c3e84d37bd3c"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20141104T195715:635507278350240109Z"

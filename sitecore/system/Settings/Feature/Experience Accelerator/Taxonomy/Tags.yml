@@ -1,0 +1,19 @@
+---
+ID: "9e295c0e-fdba-4e0d-836b-9f5973931c0c"
+Parent: "c974ece9-2aac-4283-a21d-dffdfa909904"
+Template: "25a6b824-672f-4c15-9b98-0b231c80f81c"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Taxonomy/Tags
+DB: master
+SharedFields:
+- ID: "1172f251-dad4-4efb-a329-0c63500e4f1e"
+  Hint: __Masters
+  Type: TreelistEx
+  Value: "{6B40E84C-8785-49FC-8A10-6BCA862FF7EA}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20140806T121802Z

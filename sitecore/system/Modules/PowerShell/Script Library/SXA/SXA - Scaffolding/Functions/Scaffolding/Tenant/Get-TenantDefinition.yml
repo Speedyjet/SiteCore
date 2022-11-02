@@ -1,0 +1,44 @@
+---
+ID: "1a35cd0e-9ea3-4cd2-8b8a-e50390c4f9fd"
+Parent: "14e40e94-118e-45f9-9a6c-ce969678bb2e"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Tenant/Get-TenantDefinition"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-TenantDefinition {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [string]$Layer
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-TenantDefinition - Begin"
+    		Import-Function Select-SingleItemFromEachGroup
+    		Import-Function Get-ModuleDefinition
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-TenantDefinition - Process"
+    		Get-ModuleDefinition $Layer "TenantSetupRoot"
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Get-TenantDefinition - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170522T113816Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

@@ -1,0 +1,18 @@
+---
+ID: "1c2878d9-80a6-4760-b7eb-dbade16ae8c8"
+Parent: "ce035141-aa9b-4bdf-98c7-262d5f3b1cac"
+Template: "d2923fee-da4e-49be-830c-e27764dfa269"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/SiteMetadata/Enums/SitemapChangeFrequency/do not include
+DB: master
+SharedFields:
+- ID: "f917c951-1f75-4d62-b14a-bc6888d7eeca"
+  Hint: Value
+  Value: DoNotInclude
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160415T132243Z

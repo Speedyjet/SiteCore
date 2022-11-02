@@ -1,0 +1,54 @@
+---
+ID: "59e99425-0c59-4254-b1c3-1adec46e3f1d"
+Parent: "173817d0-0245-4ce8-b227-06dc98213e39"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Cmdlets/Bulk Installer/Test-CanInstallSiteModuleHard"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Test-CanInstallSiteModuleHard {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Site,
+                
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Item[]]$DefinitionItems
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Test-CanInstallSiteModuleHard - Begin"
+            Import-Function Get-InvokedSiteAction
+            Import-Function Get-InvokedTenantAction
+            Import-Function Get-TenantTemplatesRoot
+            Import-Function Get-TenantTemplate
+            Import-Function Get-TenantItem
+            Import-Function Test-ActionIntegrity
+        }
+    
+        process {        
+            $tenantTemplateRoot = Get-TenantTemplatesRoot $Site
+            $tenantTemplates = Get-TenantTemplate $tenantTemplateRoot      
+            $tenant = Get-TenantItem $Site
+    
+            $invokedSiteActions = Get-InvokedSiteAction $tenantTemplates $Site
+            $invokedTenantActions = Get-InvokedTenantAction $tenantTemplates $tenant
+            $invokedActions = $invokedTenantActions + $invokedSiteActions
+            
+            Test-ActionIntegrity $Site $DefinitionItems $invokedActions
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Test-CanInstallSiteModuleHard - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20200721T225931:637309691718977884Z"

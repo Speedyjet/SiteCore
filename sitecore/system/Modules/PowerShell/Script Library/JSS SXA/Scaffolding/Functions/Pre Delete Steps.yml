@@ -1,0 +1,14 @@
+---
+ID: "7ee5e27b-5d84-4b3c-a289-e0f4973d6760"
+Parent: "7d8d6e32-75e6-4822-8491-f3c0a7a1577f"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: /sitecore/system/Modules/PowerShell/Script Library/JSS SXA/Scaffolding/Functions/Pre Delete Steps
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190111T131327Z

@@ -1,0 +1,18 @@
+---
+ID: "61bd64d6-809e-40ae-9297-2724a19329b3"
+Parent: "a687fc32-297a-4a0a-acc8-c80e84ad9745"
+Template: "966b041f-d956-4f71-a40a-68869a7ba6b9"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Navigation/Navigation Filters/Footer Navigation
+DB: master
+SharedFields:
+- ID: "ee62cfbf-5b46-4f64-8334-207b9bd3ff96"
+  Hint: Key
+  Value: footer
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160629T124629Z

@@ -1,0 +1,18 @@
+---
+ID: "e7738a58-42d2-4b9b-9d29-a1ccea5e927e"
+Parent: "e0c97f51-39b0-4f12-a4be-1fe8878d0281"
+Template: "5c547d4e-7111-4995-95b0-6b561751bf2e"
+Path: /sitecore/layout/Placeholder Settings/Feature/Experience Accelerator/Page Content/fieldeditor
+DB: master
+SharedFields:
+- ID: "7256bdab-1fd2-49dd-b205-cb4873d2917c"
+  Hint: Placeholder Key
+  Value: fieldeditor*
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160901T083705Z

@@ -1,0 +1,32 @@
+---
+ID: "6f8b24f8-d2e9-4da5-9c07-820a20129a51"
+Parent: "bba8b015-fc5f-467f-b59e-1b9e45157aca"
+Template: "8749f3d5-3eb9-43d8-8ac5-dfdcaec19489"
+Path: /sitecore/system/Marketing Control Panel/Analytics Filters/Report Filters/State/Missouri
+DB: master
+SharedFields:
+- ID: "2e4b2131-01a5-43c9-b423-90f30e458a07"
+  Hint: Value
+  Value: MO
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20110517T151426
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "b6415725-d86a-4c73-b952-f18ad086de2d"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20110517T151426:634412420666219182"

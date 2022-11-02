@@ -1,0 +1,24 @@
+---
+ID: "37a585de-e4b7-49a1-9385-e31e2713d444"
+Parent: "2df0885c-7154-470d-b5cf-275b84b24248"
+Template: "3d1a6238-15db-4f10-804e-5a90997df783"
+Path: /sitecore/system/Settings/Analytics/Marketing Automation/Activity Types/Taxonomies
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20161226T104708Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "536ed003-339d-4285-9b46-3d2f250ae6a9"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20161226T104708Z

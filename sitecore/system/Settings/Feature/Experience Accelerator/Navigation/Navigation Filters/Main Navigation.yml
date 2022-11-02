@@ -1,0 +1,18 @@
+---
+ID: "d063e9d1-c7b5-4b1e-b31e-69886c9c59f5"
+Parent: "a687fc32-297a-4a0a-acc8-c80e84ad9745"
+Template: "966b041f-d956-4f71-a40a-68869a7ba6b9"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Navigation/Navigation Filters/Main Navigation
+DB: master
+SharedFields:
+- ID: "ee62cfbf-5b46-4f64-8334-207b9bd3ff96"
+  Hint: Key
+  Value: main
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160629T124544Z

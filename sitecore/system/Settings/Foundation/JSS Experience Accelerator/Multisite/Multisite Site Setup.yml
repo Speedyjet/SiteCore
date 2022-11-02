@@ -1,0 +1,23 @@
+---
+ID: "ae5d1384-bb75-4c6b-a8b5-4b008c2ac5da"
+Parent: "e2dc5b07-f9d7-4e80-884c-9de35f538917"
+Template: "bed31d6f-d968-45a9-b54e-12d7f977d861"
+Path: /sitecore/system/Settings/Foundation/JSS Experience Accelerator/Multisite/Multisite Site Setup
+DB: master
+SharedFields:
+- ID: "06d2c562-9229-4779-8807-e2a5fd2990d4"
+  Hint: IsSystemModule
+  Type: Checkbox
+  Value: 1
+- ID: "11488836-d40f-40d4-beb4-1d31da7b1470"
+  Hint: IncludeByDefault
+  Type: Checkbox
+  Value: 1
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190211T135510Z

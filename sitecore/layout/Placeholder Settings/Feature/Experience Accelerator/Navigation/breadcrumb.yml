@@ -1,0 +1,18 @@
+---
+ID: "a0d407e3-ece6-4cc3-8ba3-34e6faf8c52a"
+Parent: "1b8aab12-754e-4793-8254-5eb58efa65e1"
+Template: "5c547d4e-7111-4995-95b0-6b561751bf2e"
+Path: /sitecore/layout/Placeholder Settings/Feature/Experience Accelerator/Navigation/breadcrumb
+DB: master
+SharedFields:
+- ID: "7256bdab-1fd2-49dd-b205-cb4873d2917c"
+  Hint: Placeholder Key
+  Value: breadcrumb*
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160901T083705Z

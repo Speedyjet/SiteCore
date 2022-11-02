@@ -1,0 +1,33 @@
+---
+ID: "a7f7d146-5bc7-4f69-a8c8-9e3a837ccda3"
+Parent: "d912c30c-7a98-4a8d-a094-611d9af9605d"
+Template: "88752f77-9109-424c-b1d8-af91e6369a2e"
+Path: /sitecore/system/Settings/Foundation/JSS Experience Accelerator/Presentation/Presentation Settings Tenant Setup/Page Design Folder
+DB: master
+SharedFields:
+- ID: "614f52cf-d54b-47d1-a242-d9a7d42860f4"
+  Hint: EditType
+  Value: AddTenantTemplatesToInsertOptions
+- ID: "67b6641e-309d-4c1e-8e97-63965c7e2c5f"
+  Hint: Template
+  Type: Treelist
+  Value: "{A8D0928F-FC6C-4097-854D-5FC276CEFE73}"
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 200
+- ID: "e830af53-210b-4981-b6a8-f8939f587eb1"
+  Hint: Arguments
+  Type: Treelist
+  Value: "{1105B8F8-1E00-426B-BF1F-C840742D827B}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190121T115239Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

@@ -1,0 +1,14 @@
+---
+ID: "b57d8616-e3f3-470c-ad8f-5577accbfa2e"
+Parent: "74ac6db3-58c5-4bf9-aa9f-26940029fd49"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Cmdlets/ThemingContext"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171123T123207Z

@@ -1,0 +1,18 @@
+---
+ID: "e3b9598a-1c29-42bf-8310-32f3874a0374"
+Parent: "bf63e2e4-6c04-4f76-92a5-02576764f5d9"
+Template: "96c8e5dd-63c3-496b-a97c-a3e37e1dacba"
+Path: "/sitecore/system/Settings/Rules/Definitions/Elements/SXA - PageBranches/Tags"
+DB: master
+SharedFields:
+- ID: "f6d8a61c-2f84-4401-bd24-52d2068172bc"
+  Hint: __Originator
+  Value: "{FD4268C6-E588-4C19-B141-B1AAD488887D}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190218T102921Z

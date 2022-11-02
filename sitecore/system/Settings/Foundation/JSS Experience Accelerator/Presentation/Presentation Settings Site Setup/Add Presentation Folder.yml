@@ -1,0 +1,33 @@
+---
+ID: "6e4a4f22-42d8-415a-9d17-80272777d6eb"
+Parent: "ca502dcf-20d2-4618-a735-e4fcb6d5e114"
+Template: "3aea335c-d06d-45b1-841a-cbc8d2d1ce40"
+Path: /sitecore/system/Settings/Foundation/JSS Experience Accelerator/Presentation/Presentation Settings Site Setup/Add Presentation Folder
+DB: master
+SharedFields:
+- ID: "52c91c75-6698-4701-a8a2-242ace59a8d6"
+  Hint: Location
+  Type: Treelist
+  Value: "{4BE9F770-6717-4AF4-932B-039AE6E372C8}"
+- ID: "7868e6bc-525c-4fce-ab8a-77da3e09b171"
+  Hint: Name
+  Value: Presentation
+- ID: "ad0e8de7-f6c1-49fa-b2c4-87e10fbdaa52"
+  Hint: Fields
+  Value: __Sortorder=1900
+- ID: "e62c28f0-9d3b-46e2-8bec-a5e120542499"
+  Hint: Template
+  Type: Treelist
+  Value: "{04362EFE-D807-40F2-AA73-3E896466933F}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190121T094326Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

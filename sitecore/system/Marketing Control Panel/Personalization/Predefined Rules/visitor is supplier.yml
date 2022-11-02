@@ -1,0 +1,55 @@
+---
+ID: "755140bb-91a9-462b-9b87-b184dd4630f9"
+Parent: "055634ef-74f9-4b13-a282-f1d1bbb4c0cf"
+Template: "550b5cef-242c-463f-8ed5-983922a39863"
+Path: /sitecore/system/Marketing Control Panel/Personalization/Predefined Rules/visitor is supplier
+DB: master
+SharedFields:
+- ID: "5c29555e-6565-4984-a692-115b49c047a0"
+  Hint: Rule
+  Type: Rules
+  Value: |
+    <ruleset>
+      <rule
+        uid="{C0421D5F-EFE6-4585-B242-4BC4688F104E}">
+        <conditions>
+          <condition
+            id="{A21BB2BF-0D28-4BFC-846E-4E6DED5F5666}"
+            uid="756EA687FBF64B9CBABA126DCC323B84"
+            operatorid="{066602E2-ED1D-44C2-A698-7ED27FD3A2CC}"
+            VisitorIdentification="50" />
+        </conditions>
+      </rule>
+    </ruleset>
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "001dd393-96c5-490b-924a-b0f25cd9efd8"
+      Hint: __Lock
+      Value: <r />
+    - ID: "062041c0-682e-4bd3-a778-85451ea11956"
+      Hint: Name
+      Value: visitor is human
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20090202T184744
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "efcf659a-d9f9-42d3-a585-01c41a7d95a1"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20110408T110531:634378575311044662"

@@ -1,0 +1,47 @@
+---
+ID: "af89bdff-13f8-4d5e-b6c3-ebc4cf0887d3"
+Parent: "c33ddd15-2016-4766-b54a-c150ee9b832e"
+Template: "d4d43c33-3661-4630-af63-0754cab7b110"
+Path: "/sitecore/system/Marketing Control Panel/Marketing Automation Templates/af89bdff-13f8-4d5e-b6c3-ebc4cf0887d3"
+DB: master
+SharedFields:
+- ID: "1766652d-080b-409c-abbf-3a90e0f801f5"
+  Hint: Start Date
+  Value: 00010101T000000Z
+- ID: "2c41a32f-86a9-4f43-8550-bf0af266e3f2"
+  Hint: End Date
+  Value: 00010101T000000Z
+- ID: "394d49b2-b579-43aa-ab32-b4010b18fd07"
+  Hint: Marketing Theme
+  Value: "{4C986C34-C7B8-41EA-BCA6-FBC6A1097717}"
+- ID: "3fb918c8-08ec-4879-8062-088bbf71ee72"
+  Hint: Plan Data
+  Value: |
+    {"ReentryMode":1,"ContextKeyFactoryType":null,"EntryActivityId":"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac","NewEnrollmentRegulatorType":null,"NewEnrollmentRegulatorParameters":null,"Alias":"af89bdff-13f8-4d5e-b6c3-ebc4cf0887d3","IgnoreIsActiveProperty":true,"Activities":{"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac":{"Paths":{"default":"83f242c4-b4b2-356b-851b-1619d745997b"},"Id":"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac","ActivityTypeId":"8c92d3c1-2c38-4e8a-92d1-9590e17cce89","Parameters":{"EventIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":[]},"GoalIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":[]},"OutcomeIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["9016e456-95cb-42e9-ad58-997d6d77ae83"]},"TestOperation":0,"UseCondition":false}},"83f242c4-b4b2-356b-851b-1619d745997b":{"Paths":{"default":"4b378f0a-c8a4-2161-58a5-53b4cdf2a70d"},"Id":"83f242c4-b4b2-356b-851b-1619d745997b","ActivityTypeId":"9046a4aa-07d9-4377-8a6e-1db27765b2ba","Parameters":{"Name":"14 Days","ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"14.00:00:00","WaitUntil":null}}},"4b378f0a-c8a4-2161-58a5-53b4cdf2a70d":{"Paths":{"default":"0821da75-53c3-ce18-1c5d-3e3d5e36fc97"},"Id":"4b378f0a-c8a4-2161-58a5-53b4cdf2a70d","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"0821da75-53c3-ce18-1c5d-3e3d5e36fc97":{"Paths":{"false":"30014143-af35-3bef-2875-be6c7700b784","true":"993d78c2-ebf2-6cdb-42b6-dcbf8e6c2592"},"Id":"0821da75-53c3-ce18-1c5d-3e3d5e36fc97","ActivityTypeId":"7fca5e5b-4796-4d7e-abec-28f376e4d7e2","Parameters":{"Condition":{"$type":"Sitecore.Marketing.Rules.Rule[], Sitecore.Marketing","$values":[{"Id":"e2cf0315-c9af-4932-baf6-caff6803e9e3","Name":" ","ConditionType":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","_condition":{"$type":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing","Id":"7a9da3a9-47fb-4c9e-9ccf-abac88e3d1ff","DescriptorId":"9805a980-2ee4-4b15-9910-4e449e05fedf","Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib"}}}]},"ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"7.00:00:00","WaitUntil":null},"Name":"Completed Review"}},"30014143-af35-3bef-2875-be6c7700b784":{"Paths":{"default":"26b3cc9f-09c7-e3ea-beb3-a74d89fa642e"},"Id":"30014143-af35-3bef-2875-be6c7700b784","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"26b3cc9f-09c7-e3ea-beb3-a74d89fa642e":{"Paths":{"false":"b74b034b-ea6d-505c-45b7-182f4039d6a0","true":"98677baa-b501-41d2-2c4e-5a31ee3aa1b2"},"Id":"26b3cc9f-09c7-e3ea-beb3-a74d89fa642e","ActivityTypeId":"7fca5e5b-4796-4d7e-abec-28f376e4d7e2","Parameters":{"Condition":{"$type":"Sitecore.Marketing.Rules.Rule[], Sitecore.Marketing","$values":[{"Id":"62e66391-c58c-437b-bb82-df675144572e","Name":" ","ConditionType":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","_condition":{"$type":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing","Id":"db0df9da-5d64-4023-b3f8-87d1330b55c4","DescriptorId":"9805a980-2ee4-4b15-9910-4e449e05fedf","Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib"}}}]},"ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"7.00:00:00","WaitUntil":null},"Name":"Completed Review"}},"b74b034b-ea6d-505c-45b7-182f4039d6a0":{"Paths":{"default":"3fc641c5-2382-2a1a-6772-89859b10613e"},"Id":"b74b034b-ea6d-505c-45b7-182f4039d6a0","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"3fc641c5-2382-2a1a-6772-89859b10613e":{"Paths":{"default":"e242f143-bded-471a-c5f8-248a2b2a5591"},"Id":"3fc641c5-2382-2a1a-6772-89859b10613e","ActivityTypeId":"c2a5ef3a-dde9-4309-8921-5a6fd011d0ba","Parameters":{}},"e242f143-bded-471a-c5f8-248a2b2a5591":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"e242f143-bded-471a-c5f8-248a2b2a5591","ActivityTypeId":"fef847a8-540e-408d-9cf1-3d8a133c3de0","Parameters":{}},"98677baa-b501-41d2-2c4e-5a31ee3aa1b2":{"Paths":{"default":"cc9e88d8-ff3e-5343-1c23-69a00acaf98c"},"Id":"98677baa-b501-41d2-2c4e-5a31ee3aa1b2","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"cc9e88d8-ff3e-5343-1c23-69a00acaf98c":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"cc9e88d8-ff3e-5343-1c23-69a00acaf98c","ActivityTypeId":"fef847a8-540e-408d-9cf1-3d8a133c3de0","Parameters":{}},"993d78c2-ebf2-6cdb-42b6-dcbf8e6c2592":{"Paths":{"default":"4da0c52e-fe2c-c842-0496-85359daf9a55"},"Id":"993d78c2-ebf2-6cdb-42b6-dcbf8e6c2592","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"4da0c52e-fe2c-c842-0496-85359daf9a55":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"4da0c52e-fe2c-c842-0496-85359daf9a55","ActivityTypeId":"fef847a8-540e-408d-9cf1-3d8a133c3de0","Parameters":{}},"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba":{"Paths":{},"Id":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba","ActivityTypeId":"a47371c2-8921-421f-8902-f3eccd229d56","Parameters":{}}},"UniversalActivities":{}}
+- ID: "621d7a1f-c6a3-4a2f-8fcd-7dd1fd893c9c"
+  Hint: Custom Values
+  Value: "{}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180816T201845Z
+    - ID: "365f1971-b028-4065-bc11-ce1f471452af"
+      Hint: Name
+      Value: Request for a Review
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "6a30148e-72a9-401c-933c-bb7a42097f23"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20181005T065437Z
+    - ID: "e259e500-b38e-41fe-82db-8b604bcf9e75"
+      Hint: Description
+      Value: Fourteen days after a recipient has made a purchase, an email message is sent requesting a review of the product or service. If this email message contains references to other products or provides commercial incentives to complete the review, it may be considered a marketing email message. If the request is not commercial in nature it can be considered a service email message.

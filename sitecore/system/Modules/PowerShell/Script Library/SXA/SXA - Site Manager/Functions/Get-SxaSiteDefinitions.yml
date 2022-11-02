@@ -1,0 +1,228 @@
+---
+ID: "804ee1fc-c164-49f2-9fa0-75df2ee79ef7"
+Parent: "35c1b8ba-9b58-4c90-8a0d-db26eab2d928"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Site Manager/Functions/Get-SxaSiteDefinitions"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Process-Site () {
+    	[CmdletBinding()]
+    	param(
+    		[Parameter(Mandatory = $true,Position = 0)]
+    		[ref]$siteObj,
+    		[Parameter(Mandatory = $true,Position = 1)]
+    		[ref]$usedUrls
+    	)
+    
+    	begin {
+    		Import-Function Get-EnvironmentSitesResolver
+    		Write-Verbose "Cmdlet Process-Site - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Process-Site - Process"
+    		$currentEnvironment = $environmentSitesResolver.GetActiveEnvironment()
+    
+    		$site = $siteObj.value;
+    		$siteName = $site.Name
+    		$hostName = if ([string]::IsNullOrEmpty($site.HostName)) { "*" } else { $site.HostName }
+    		$virtualVolder = if ($site.VirtualFolder.StartsWith("/")) { $site.VirtualFolder } else { "/$($site.VirtualFolder)" }
+    		$environment = "*"
+    		
+    		$currUrls = $hostName.Split("|") | % { $_ + $virtualVolder };
+    
+    		$conflicted = $false
+    		foreach ($currUrl in $currUrls) {
+    			foreach ($url in $usedUrls.value) {
+    				if ((($url.Url -eq "*/") -or ($currUrl -like $url.Url)) -and (($environment -eq $url.Env) -or ($url.Env -eq "*"))) {
+    					$environmentColor = if (($url.Env -eq $currentEnvironment) -or ($url.Env -eq "*")) { "yellowgreen" } else { "royalblue" }
+    					$conflictText = "<italics>$currUrl</italics>&nbsp; hidden by <italics>$($url.url)</italics> from <b>$($url.UsedBy)</b>&nbsp;on&nbsp;<strong style='color:$environmentColor;'>$($url.Env)</strong>&nbsp;environment";
+    					if (-not $conflicted) {
+    						$site.Conflict = $conflictText;
+    					}
+    					else {
+    						#"Conflicted already"
+    						$site.Conflict = "$($site.Conflict)<br><span style='color:red;'>and</span> $conflictText";
+    					}
+    					$conflicted = $true;
+    				}
+    			}
+    			$usedUrls.value += @{ Url = $currUrl; UsedBy = $siteName; Env = $environment };
+    		}
+    		return $conflicted
+    	}
+    }
+    
+    function Process-SiteDefinition () {
+    	[CmdletBinding()]
+    	param(
+    		[Parameter(Mandatory = $true,Position = 0)]
+    		[ref]$siteObj,
+    		[Parameter(Mandatory = $true,Position = 1)]
+    		[ref]$usedUrls
+    	)
+    
+    	begin {
+    		Import-Function Get-EnvironmentSitesResolver
+    		Write-Verbose "Cmdlet Process-SiteDefinition - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Process-SiteDefinition - Process"
+    		$currentEnvironment = $environmentSitesResolver.GetActiveEnvironment()
+    
+    		$site = $siteObj.value;
+    		$siteName = $site["SiteName"]
+    		$hostName = if ([string]::IsNullOrEmpty($site["HostName"])) { "*" } else { $site["HostName"] }
+    		$environment = if ([string]::IsNullOrWhiteSpace($site["Environment"])) { "*" } else { $site["Environment"] }
+    		if($site["VirtualFolder"]){
+    		    $virtualVolder = if ($site["VirtualFolder"].StartsWith("/")) { $site["VirtualFolder"] } else { "/" + $site["VirtualFolder"] }
+    		}
+    		else {
+    		    $virtualVolder = "/"
+    		}
+    		
+    		$currUrls = $hostName.Split("|") | % { $_ + $virtualVolder }
+    
+    		$conflicted = $false
+    		foreach ($currUrl in $currUrls) {
+    			foreach ($url in $usedUrls.value) {
+    				if ((($url.Url -eq "*/") -or ($currUrl -like $url.Url)) -and (($environment -eq $url.Env) -or ($url.Env -eq "*"))) {
+    					$environmentColor = if (($url.Env -eq $currentEnvironment) -or ($url.Env -eq "*")) { "yellowgreen" } else { "royalblue" }
+    					$conflictText = "<italics>$currUrl</italics>&nbsp; hidden by <italics>$($url.url)</italics> from <b>$($url.UsedBy)</b>&nbsp;on&nbsp;<strong style='color:$environmentColor;'>$($url.Env)</strong>&nbsp;environment";
+    					if (-not $conflicted) {
+    						#"New conflict"
+    						if (Get-Member -InputObject $site -Name "Conflict" -MemberType NoteProperty) {
+    							$site.Conflict = $conflictText;
+    						} else
+    						{
+    							Add-Member -InputObject $site -MemberType NoteProperty -Name "Conflict" -Value $conflictText;
+    						}
+    					}
+    					else {
+    						#"Conflicted already"
+    						$site.Conflict = "$($site.Conflict)<br><span style='color:red;'>and</span> $conflictText";
+    					}
+    					$conflicted = $true;
+    				}
+    			}
+    			$usedUrls.value += @{ Url = $currUrl; UsedBy = $siteName; Env = $environment };
+    		}
+    		return $conflicted
+    	}
+    }
+    
+    
+    function Get-SxaSiteDefinitions {
+    	[CmdletBinding()]
+    	param()
+    
+    	begin {
+    		Import-Function Get-NonSxaSites
+    		Import-Function Get-EnvironmentSitesResolver
+    		Import-Function Get-Environments
+    		Write-Verbose "Cmdlet Get-SxaSiteDefinitions - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Get-SxaSiteDefinitions - Process"
+    
+    		$db = Get-Database -Name "master"
+    		$environmentSitesResolver = Get-EnvironmentSitesResolver
+    		$sxaSites = $environmentSitesResolver.ResolveAllSites($db)
+    		
+    		$beforeSites = Get-NonSxaSites | ? { $_.ResolveBeforeSxaSites }
+    		$afterSites = Get-NonSxaSites | ? { $_.ResolveAfterSxaSites }
+    		$sites = $beforeSites + $sxaSites + $afterSites
+    
+    		$usedUrls = @()
+    		$outSites = @()
+    		$checkSites = @()
+    		$conflicts = 0
+    		$progress = 1
+    		$ignoredSites = @("system", "publisher", "scheduler") # + @("shell", "login", "admin", "service", "modules_shell", "modules_website");
+    
+    
+    		$currentEnvironment = $environmentSitesResolver.GetActiveEnvironment()
+    
+    		foreach ($site in $sites) {
+    			$siteModel = New-Object Sitecore.XA.Foundation.Multisite.Models.SiteDefinitionModel
+    			if($site.GetType().Name -eq "SiteDefinitionModel"){
+    			    $siteModel = $site
+    			    $sitename = $siteModel.Name;
+    			    if ($ignoredSites -contains $sitename) {
+    					continue;
+    				}
+    				
+    				$conflicted = $false
+    				$conflicted = $(Process-Site ([ref]$siteModel) ([ref]$usedUrls))
+    			
+    			    $siteModel.State = if ($siteModel.Conflict) { $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Multisite.Texts]::ConflictState)) } else { $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Multisite.Texts]::OkState)) }
+    			    $siteModel.Icon = if ($siteModel.Conflict) { "Applications/32x32/forbidden.png" } else { "Applications/32x32/check.png" }
+    			}
+    			else {
+    			    $siteItem = $site
+    				$virtualVolder = if ($site["VirtualFolder"].StartsWith("/")) { $site["VirtualFolder"] } else { "/" + $site["VirtualFolder"] };
+    				$hostName = $siteItem["HostName"];
+    				$sitename = $siteItem["SiteName"];
+    
+    				if ($hostName -eq $null -or $hostName -eq "") {
+    					$hostName = "*";
+    				}
+    				
+    				$conflicted = $false
+    				$conflicted = $(Process-SiteDefinition ([ref]$siteItem) ([ref]$usedUrls))
+    
+    				$siteModel.VirtualFolder = $virtualVolder
+    				$siteModel.HostName = $hostName
+    				$siteModel.Name = $sitename
+    				$siteModel.DefinitionItem = $siteItem
+    				$siteModel.State = if ($siteItem.Conflict) { $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Multisite.Texts]::ConflictState)) } else { $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Multisite.Texts]::OkState)) }
+    				$siteModel.Environment = if (($currentEnvironment -eq $siteItem["Environment"]) -or ($siteItem["Environment"] -eq "*") -or [string]::IsNullOrWhiteSpace($siteItem["Environment"])) { "<span style='color:yellowgreen;'>$($siteItem['Environment'])</span>&nbsp;<div title='Current environment is $currentEnvironment' style='color:lightgray;float:right;'>(Active)</div>" } else { "<span style='color:royalblue;'>$($siteItem['Environment'])</span>" }
+    
+    				if ([string]::IsNullOrWhiteSpace($siteItem.Conflict) -eq $false) {
+    					$siteModel.Conflict = $siteItem.Conflict
+    				}
+    
+    				if ($siteModel.Conflict -and (($siteItem["Environment"] -eq $currentEnvironment) -or ($siteItem["Environment"] -eq "*") -or [string]::IsNullOrWhiteSpace($siteItem["Environment"])))
+    				{
+    					$siteModel.Icon = "Applications/32x32/forbidden.png"
+    				} else {
+    					$siteModel.Icon = if ($siteModel.Conflict) { "Applications/32x32/warning.png" } else { "Applications/32x32/check.png" }
+    				}
+    			}
+    			
+    			if ($conflicted) {
+    				$conflicts++;
+    			}
+    				
+    			Write-Progress -PercentComplete ($progress / (($sites.Count) - ($ignoredSites.Count)) * 100) -Activity "Processing Sites List" -CurrentOperation "Analyzing $($siteModel.Name)"
+    			Start-Sleep -m 10
+    			
+    			$progress = $progress + 1
+    			$outSites +=,$siteModel
+    		}
+    
+    		return $outSites
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Get-SxaSiteDefinitions - End"
+    		Write-Progress -Activity " " -Status " " -Completed
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170523T153722Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

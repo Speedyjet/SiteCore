@@ -1,0 +1,54 @@
+---
+ID: "dc28d4fb-7cdf-4d58-a387-da921b9de853"
+Parent: "74ac6db3-58c5-4bf9-aa9f-26940029fd49"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Cmdlets/Test-BrokenLinks"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Test-BrokenLinks {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Item
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Test-BrokenLinks - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Test-BrokenLinks - Process"
+            [Sitecore.Text.UrlString]$url = [Sitecore.UIUtil]::GetUri("control:BreakingLinks")
+            $liststring = [Sitecore.Text.ListString]::new($Item.Paths.Path, '|')
+            $url.Append("ignoreclones", "0");
+            $url.Append("language", $Item.Language.Name);
+    
+            $handle = [Sitecore.Web.UrlHandle]::new()
+            $handle["list"] = $liststring.ToString()
+            $handle.Add($url)
+    
+            $msg = [Spe.Commands.Interactive.Messages.ShowModalDialogPsMessage]::new($url.ToString(), $null, $null, @{list = $liststring })
+            [Spe.Commands.Interactive.BaseShellCommand]::PutMessage($msg)
+            $msg.GetResult() -eq "yes"
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Test-BrokenLinks - End"
+        }
+    }
+    
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20201105T162514Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

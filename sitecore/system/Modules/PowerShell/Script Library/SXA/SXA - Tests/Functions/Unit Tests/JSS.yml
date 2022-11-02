@@ -1,0 +1,14 @@
+---
+ID: "37948d42-df15-4105-badb-7f29aabec3a6"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/JSS"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181130T093528Z

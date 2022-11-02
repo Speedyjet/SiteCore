@@ -1,0 +1,156 @@
+---
+ID: "89aa3bb6-be29-4769-9100-48f32c3c42c8"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Convert splitters rendering parameters"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1502
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ItemByIdSafe
+    
+    $rowSplitterRenderingId = "2DA9B139-FB9C-4FD7-BE84-CB066B2D7CC3"
+    $columnSplitterRenderingId = "C25766C8-9AFD-4D28-87FE-147774F6806D"
+    
+    function Get-AffectedItems() {
+        Get-ItemsWithSplitters | Select-Object -Unique | % { Get-ItemByIdSafe $_ } | ? { $_.Paths.IsContentItem } | ? { Test-HasSplittersToMigrate $_ }
+    }
+    
+    function Get-ItemsWithSplitters(){
+        Get-Usages $rowSplitterRenderingId
+        Get-Usages $columnSplitterRenderingId
+    }
+    
+    function Get-Usages {
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            [Sitecore.Data.ID]$UID
+        )
+        $db = Get-Database "master"
+        $db.DataManager.DataSource.SelectIDs($null, $null, [Sitecore.FieldIDs]::FinalLayoutField, "*$UID*", $true)
+        $db.DataManager.DataSource.SelectIDs($null, $null, [Sitecore.FieldIDs]::LayoutField, "*$UID*", $true)
+    }
+    
+    function ShouldRun () {
+        $themes = Get-AffectedItems
+        $themes.Count -gt 0
+    }
+    
+    function Set-RenderingParameters($currentItem) {        
+        Set-RenderingParametersForField $currentItem ([Sitecore.FieldIDs]::LayoutField)
+        Set-RenderingParametersForField $currentItem ([Sitecore.FieldIDs]::FinalLayoutField)
+    }
+    
+    function Get-PresentationDetails ($item) {
+        $layoutFieldValue = $item.Fields[[Sitecore.FieldIDs]::LayoutField].Value;
+        $finalLayoutFieldValue = $item.Fields[[Sitecore.FieldIDs]::FinalLayoutField].Value;
+        if($layoutFieldValue -eq [string]::Empty){
+            $layoutFieldValue = "<r xmlns:xsd='http://www.w3.org/2001/XMLSchema'></r>"
+        }
+        [Sitecore.Data.Fields.XmlDeltas]::ApplyDelta($layoutFieldValue, $finalLayoutFieldValue)
+    }
+    
+    function Test-HasSplittersToMigrate($item) {
+        $result = $false
+        $presentation = Get-PresentationDetails $item
+        $definition = [Sitecore.Layouts.LayoutDefinition]::Parse($presentation)
+        $definition.Devices | % {
+            $renderings = $_.Renderings | ? {
+                $par = [Sitecore.Web.WebUtil]::ParseUrlParameters($_.Parameters)
+                $parSplitterSize = $par["SplitterSize"]
+                $parEnabledPh = $par["EnabledPlaceholders"]
+                ($parSplitterSize -ne $null) -and ($parEnabledPh -eq $null)
+            }
+            if ($renderings -ne $null) {
+                $result = $true
+            }
+        }
+        $result
+    }
+    
+    function Set-RenderingParametersForField($item, $fieldID) {
+        $laytoutField = New-Object "Sitecore.Data.Fields.LayoutField" $item.Fields[$fieldID]
+        $touched = $false
+        $definition = [Sitecore.Layouts.LayoutDefinition]::Parse($laytoutField.Value)
+        $definition.Devices | % {
+            $_.Renderings | % {
+                $par = [Sitecore.Web.WebUtil]::ParseUrlParameters($_.Parameters)
+                $parSplitterSize = $par["SplitterSize"]
+                $parEnabledPh = $par["EnabledPlaceholders"]
+                if (($parSplitterSize -ne $null) -and ($parEnabledPh -eq $null)) {
+                    $par["EnabledPlaceholders"] = 1..$parSplitterSize -join ","
+                    $_.Parameters = (New-Object "Sitecore.Text.UrlString" $par).GetUrl()
+                    $touched = $true
+                }
+            }
+        }
+        
+        if ($touched) {
+            Write-Verbose "Saving item: $($item.Paths.Path)"
+            $item.Editing.BeginEdit()
+            $laytoutField.Value = $definition.ToXml()
+            $item.Editing.EndEdit() > $null
+        }
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $arguments
+        )
+    
+        process {
+            Write-Verbose "Getting items for processing . . ."
+            $affectedItems = Get-AffectedItems
+            Write-Verbose "Found $($affectedItems.Count) items."
+    
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $affectedItems | % {
+                    Write-Verbose "Processing '$($_.Name)' item [$($_.ID)]"
+                    $currentItemPath = $($_.Paths.Path)
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Convert row/column splitters rendering parameters")) {
+                        Set-RenderingParameters $_
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1502
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171016T142033Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Convert splitters rendering parameters
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Convert rendering parameters of Column/Row Splitter renderings.

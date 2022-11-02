@@ -1,0 +1,122 @@
+---
+ID: "d9e06c86-4542-450d-99bd-f387d4df3a98"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Fix Scaffolding templates"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1903
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ItemByIdSafe
+    
+    $mapping = @{ }
+    #site scripts
+    $mapping["{C86FFA42-E614-4169-B68F-03A5567A382B}"] = "{617DD07E-157C-482C-93B4-5B84D79C3841}"
+    $mapping["{8F5EDA3E-E2AA-4192-97DC-06BB74D196CB}"] = "{A4237BB6-146A-40C3-8455-9596FBB539F6}"
+    $mapping["{03FF4F11-D9CD-4BC9-BA23-395D2285124C}"] = "{659D203A-70D8-45A6-9742-CB99BE3EB48C}"
+    $mapping["{5D1738B5-722D-4F05-A495-4FF083093DF1}"] = "{ED6FBCE1-89C0-4009-BD40-CBA067E4C8DC}"
+    $mapping["{C37E65C3-0A00-4F39-BF9F-50CB9B5119A0}"] = "{41FAC394-0A1D-4524-8451-493D60B54338}"
+    $mapping["{EF47252E-0B12-462C-836D-5C2F7BADC2D6}"] = "{18DA2EBE-4888-4CC7-9619-8873D9CF65E0}"
+    $mapping["{0791B061-CEF8-4290-8DB4-65BD70A80487}"] = "{3CB531C2-B5A2-4A0F-AF8C-FD4C62AB9514}"
+    $mapping["{E3CBB11C-97B8-4A12-9FF1-862FDC5B4845}"] = "{479E004D-DB76-48DE-80FE-54C50A0A26DD}"
+    $mapping["{71B0D960-67A9-49D7-B6DB-8667666FA219}"] = "{A080DD5B-3916-4283-BCDB-EDBD428586F5}"
+    $mapping["{D99CBEE9-7EC4-4ED1-9964-8763E980C433}"] = "{ADE223E9-0DF0-4EDE-8CA5-5084C257A12E}"
+    $mapping["{E7C0EDA0-54B3-45DD-A1EB-8E1686EF84AF}"] = "{BE09A0BA-0987-4E1B-A5BE-1EF9DA504B2B}"
+    $mapping["{EB952227-60FB-449C-9F30-91C389D1E3F1}"] = "{5B677F3B-D957-4E26-ACBC-3A0C8251B113}"
+    $mapping["{74C840FC-821C-4E30-90AD-9AEF4E0ACA80}"] = "{E229961E-321A-4735-9567-4EBD2222B568}"
+    $mapping["{94FA6D32-F7D1-4000-BBAA-A0203480B693}"] = "{CCE2C41D-2117-4C33-BBFC-533A3AFB579D}"
+    $mapping["{6C1D9FDA-A4A7-4A47-A853-A30DA614460F}"] = "{50F421DF-C311-45C6-9EBF-A03885864FFC}"
+    $mapping["{DD9D34E6-F04F-48E5-AA76-BEB87C1D5DF5}"] = "{5F6F490A-9121-4BF1-ABB2-F8D960550E97}"
+    #tenant scripts
+    $mapping["{A276FEC2-F6FA-478F-B87D-6DAD03CF027B}"] = "{403772FA-2819-4CB6-BA28-C8EE2CDC14AF}"
+    $mapping["{484FFEBE-990F-4AB6-9112-79C8A47C7B94}"] = "{C9F6DFF8-F27B-4B3F-B99C-DBDA5BF876FB}"
+    $mapping["{A854F9E1-74EE-439C-8F64-7E253F610131}"] = "{EB8F3C4B-2CB7-4179-993B-9CC4BFD28FD5}"
+    $mapping["{75D43CC7-EA81-44C2-B80E-90C28A64C48F}"] = "{96789D69-82CE-47EF-AF01-6866F752C98B}"
+    $mapping["{CBC125FF-E877-4E2D-B8C6-C85D5668D491}"] = "{3C44A261-8E65-45CE-AC1C-F7224ECDF160}"
+    
+    function ShouldRun () {
+        $item = Get-ItemByIdSafe "{AD5E6E00-D811-4EA3-8CF5-D970FCBEE1F8}" 
+        $item.ParentID -ne "{B06460C2-8B7B-47A5-9E2C-F966F689B6CA}"
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Move-ToValidLocation {
+        param (
+            [ID]$sourceItem, 
+            [ID]$targetItem, 
+            [switch]$RemoveOldParent
+        )    
+        $src = Get-ItemByIdSafe $sourceItem
+        $dst = Get-ItemByIdSafe $targetItem
+        $parent = $src.Parent
+        $src | Move-Item -DestinationItem $dst
+        Write-Verbose "Moving $sourceItem to $targetItem"
+        if ($RemoveOldParent) {
+            $parent.Recycle() > $null
+        }
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            $arguments
+        )
+        
+        process {
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                if ($pscmdlet.ShouldProcess("{AD5E6E00-D811-4EA3-8CF5-D970FCBEE1F8}", "Move template to correct fields section")) {
+                    # Execute Site Script
+                    Move-ToValidLocation "{AD5E6E00-D811-4EA3-8CF5-D970FCBEE1F8}" "{B06460C2-8B7B-47A5-9E2C-F966F689B6CA}" -RemoveOldParent
+                }
+                if ($pscmdlet.ShouldProcess("{2DD4617A-D4EB-4363-9B09-848C60D61EBD}", "Move template to correct fields section")) {
+                    # Execute Tenant Script
+                    Move-ToValidLocation "{2DD4617A-D4EB-4363-9B09-848C60D61EBD}" "{3D4E4577-AB33-4CA6-AE43-B98D1EC6472F}" -RemoveOldParent
+                }
+    
+                $mapping.Keys | % {
+                    $item = Get-ItemByIdSafe $_ | Wrap-Item
+                    if ($item.Script -eq "") {
+                        if ($pscmdlet.ShouldProcess("$($_)", "Restore 'Script' field value")) {
+                            $newFieldValue = $mapping[$_]
+                            Write-Verbose "Updating field for item $($_) with value: $newFieldValue"
+                            $item.Script = $newFieldValue
+                        }
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1902
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170608T134551Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Fix Scaffolding templates
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Resolves problems with templates inconsistency.

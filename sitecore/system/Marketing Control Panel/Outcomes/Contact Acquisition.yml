@@ -1,0 +1,44 @@
+---
+ID: "75d53206-47b3-4391-bd48-75c42e5fc2ce"
+Parent: "062a1e69-0bf6-4d6d-ac4f-c11d0f7dc1e1"
+Template: "ee43c2f0-6277-4144-b144-8ca2cefccf12"
+Path: /sitecore/system/Marketing Control Panel/Outcomes/Contact Acquisition
+DB: master
+SharedFields:
+- ID: "6ae27532-bac3-42c3-b91f-b4f1f20711c0"
+  Hint: Group
+  Value: "{7D618803-64E1-448D-B2A7-C54A9B27AF40}"
+- ID: "a4f985d9-98b3-4b52-aaaf-4344f6e747c6"
+  Hint: __Workflow
+  Value: "{689E2994-4656-4C58-9112-7826CB46EE69}"
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 298
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20141030T122442Z
+    - ID: "3e431de1-525e-47a3-b6b0-1ccbec3a8c98"
+      Hint: __Workflow state
+      Value: "{EDCBB550-BED3-490F-82B8-7B2F14CCD26E}"
+    - ID: "4674871a-2885-4504-9cde-cfba07b2fa69"
+      Hint: Monetary Value Applicable
+      Type: Checkbox
+      Value: 0
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "13fd4ae9-c175-405d-a0a8-018e251619bd"
+    - ID: "ac6ba888-4213-43bd-b787-d8da2b6b881f"
+      Hint: Name
+      Value: Contact Acquisition
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20150601T163935:635687735756032083Z"

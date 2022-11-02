@@ -1,0 +1,51 @@
+---
+ID: "d30e047a-8f7b-4f3c-baeb-ee83ae7600dc"
+Parent: "bb8a3f2e-b5ad-48ed-a083-0eb106301da7"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Multisite/Functions/Site cloning/Get-UniqueName"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-UniqueName {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [string]$Name,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [string[]]$ForbiddenNames
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-UniqueName - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-UniqueName - Process"        
+            $proposedName = $Name
+            $index = 1
+            while ($ForbiddenNames.Contains($proposedName)) {
+                $proposedName = $Name + $index
+                $index++
+            }
+            $proposedName
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Get-UniqueName - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170608T103757Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

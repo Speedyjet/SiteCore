@@ -1,0 +1,93 @@
+---
+ID: "80c32f80-04e6-4571-b7ed-c1695d02fd82"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Add Layout Service data"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1311
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-SiteItem
+    Import-Function Invoke-AddItem
+    Import-Function Get-AllSxaSite
+    Import-Function Get-PresentationItem
+    
+    $layoutServiceActionItemId = "{FB5CE386-A01A-4F71-8C70-838D6A1A96A1}"
+    $layoutServiceActionitem = Get-Item -Path master: -Id $layoutServiceActionItemId
+    
+    function Get-AffectedSiteItem {
+        Get-AllSxaSite | ? {
+            $presentationItem = Get-PresentationItem $_
+            -not(Test-Path "$($presentationItem.Paths.Path)/Layout Service/") 
+        }
+    }
+    
+    function New-LayoutServiceItem {
+        Write-Verbose "Getting affected sites . . ."
+        $siteItems = Get-AffectedSiteItem
+        Write-Verbose "Found $($siteItems.Count) sites to update."
+    
+        $siteItems | % {
+            $siteItem = $_
+            Invoke-AddItem $siteItem $layoutServiceActionitem
+        }
+    }
+    
+    function Set-LayoutServiceIntegration {
+        New-LayoutServiceItem
+    }
+        
+    function ShouldRun () {
+        $siteItems = Get-AffectedSiteItem
+        $siteItems.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }   
+        
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            $arguments
+        )
+        
+        process {
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                if ($pscmdlet.ShouldProcess("Add Layout Service items and mark SXA renderigns with SXA JSON serializer")) {
+                    Set-LayoutServiceIntegration
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1311
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170203T091206Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Layout Service support
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Populate site with Layout Service items and use SXA JSON serializer for all SXA renderings

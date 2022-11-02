@@ -1,0 +1,33 @@
+---
+ID: "1ebc1a84-99a1-4e6e-97d7-47a436e66f0f"
+Parent: "8b1771e7-2a9a-445f-b6b2-4783a1a0c8d8"
+Template: "5c547d4e-7111-4995-95b0-6b561751bf2e"
+Path: "/sitecore/layout/Placeholder Settings/Feature/Experience Accelerator/Security/social-login"
+DB: master
+SharedFields:
+- ID: "7256bdab-1fd2-49dd-b205-cb4873d2917c"
+  Hint: Placeholder Key
+  Value: "social-login*"
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1600
+- ID: "e391b526-d0c5-439d-803e-17512eae6222"
+  Hint: Allowed Controls
+  Type: TreelistEx
+  Value: |
+    {54C249A4-35C6-4058-B8E0-90168DCB9425}
+    {5FB707BA-6254-4074-98A2-DD822D7414A0}
+    {1D66D380-B975-4089-AEE4-8410ED2AF0E1}
+    {AD486F6B-AA44-49FE-8B66-8D4B63C0E477}
+    {A58672D4-0B34-41B2-9CCF-5A48C275FD40}
+    {E49F6EF0-B94B-4927-8B0E-443468249D9B}
+    {22EDCC9B-BD25-442F-B685-4CFC8656F653}
+    {908BA80C-53C7-4607-99B9-04D28C340156}
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20140220T151100

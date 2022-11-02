@@ -1,0 +1,398 @@
+---
+ID: "810f6878-e57b-49e2-a9b3-c07c11cddb92"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Content architecture cleanup"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 11201
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    $paths = @()
+    $paths += @{Database = "master"; Path = "/sitecore/templates/Foundation/Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/templates/Feature/Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/templates/Branches/Foundation/Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/templates/Branches/Feature/Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/system/Settings/Insert Rules/Foundation/Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/system/Settings/Foundation/Experience Accelerator"; Exclude = @("./Upgrade", "./Multisite") }
+    $paths += @{Database = "master"; Path = "/sitecore/system/Settings/Foundation/Experience Accelerator/Upgrade"; Skip = @("./Current", "./Initial", "./Log") }
+    $paths += @{Database = "master"; Path = "/sitecore/system/Settings/Foundation/Experience Accelerator/Multisite"; Exclude = @("./Management") }
+    $paths += @{Database = "master"; Path = "/sitecore/system/Settings/Feature/Experience Accelerator"; Exclude = @("./Stylelabs") }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Feature/Experience Accelerator/Stylelabs/Transformations/Original Image" }
+    $paths += @{Database = "master"; Path = "/sitecore/system/Modules/PowerShell/Script Library/SXA" }
+    $paths += @{Database = "master"; Path = "/sitecore/media library/Foundation/Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/media library/Feature/Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/layout/Renderings/Foundation/Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/layout/Renderings/Feature/Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/layout/Placeholder Settings/Foundation/Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/layout/Placeholder Settings/Feature/Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/layout/Layouts/Foundation/Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/layout/Layouts/Feature/Experience Accelerator" }
+    $paths += @{Database = "core"; Path = "/sitecore/content/Applications/WebEdit/Ribbons/WebEdit/View/Editing" }
+    $paths += @{Database = "core"; Path = "/sitecore/content/Applications/WebEdit/Ribbons/WebEdit/Experience Accelerator" }
+    $paths += @{Database = "core"; Path = "/sitecore/client/Business Component Library/version 1/Layouts/Renderings/Feature/Experience Accelerator" }
+        
+    $paths += @{Database = "master"; Path = "/sitecore/templates/Feature/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/templates/Foundation/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/templates/Branches/Feature/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/templates/Branches/Foundation/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/system/Settings/Feature/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/system/Settings/Foundation/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/layout/Renderings/Feature/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/layout/Renderings/Foundation/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/layout/Placeholder Settings/Feature/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/layout/Placeholder Settings/Foundation/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/layout/Layouts/Feature/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/layout/Layouts/Foundation/JSS Experience Accelerator"; Exclude = @("./Presentation") }
+    $paths += @{Database = "master"; Path = "/sitecore/media library/Foundation/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/media library/Feature/JSS Experience Accelerator" }
+    $paths += @{Database = "master"; Path = "/sitecore/system/Modules/PowerShell/Script Library/JSS SXA" }
+        
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/XA API" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Analytics" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Core Libraries" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Editing Components" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Components Theme" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Resolve Conflicts" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Main Theme" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Themes/Wireframe-deprecated" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Themes/Wireframe" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Themes/Basic2" }
+        
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Editing Theme" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Horizon Editing Theme" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Grid Theme" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Variants" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Composite Theme" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Meta Partial Design Theme" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/StickyNotes" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/SearchTheme" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Maps" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Bing Maps JS Connector" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Google Maps JS Connector" }
+    $paths += @{Database = "master"; Single = "/sitecore/media library/Base Themes/Json" }
+        
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Elements/SXA" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Elements/SXA - Designing" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Elements/Request" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Elements/Item Information/Item Base Template" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Elements/SXA - PageBranches" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Elements/Item Hierarchy/Site Context" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Tags/SXA" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Tags/SXA - Designing" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Tags/SXA - PageBranches" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Macros/PageDesigns" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Macros/PageBranches" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Insert Options/Rules/Datasource Worflow Action Insert Rule" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Insert Options/Rules/Scriban Insert Rule" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Buckets/Search Types/SXA Token" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Elements/Bucketing/Resolve Tag" }
+        
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Add Column" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Add Row" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/StickyNote" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit Configuration Item" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit File" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit Flash" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit Google Calendar" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit Image" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit map central point" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit Map Item" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit Picasa Gallery" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit Tags" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit Twitter Configuration Item" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit Video" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit HTML Source" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Publish" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Remove Column" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Remove Row" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Assign Background Image" }
+        
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Themes" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Page Designs" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Select Base Partial Design" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Set Page Design Explicitly" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Design Map" }
+        
+    $paths += @{Database = "core"; Single= "/sitecore/system/Field types/System Types/Internal Link/WebEdit Buttons" }
+    $paths += @{Database = "core"; Single= "/sitecore/system/Field types/Link Types/General Link/WebEdit Buttons/Follow Link" }
+    $paths += @{Database = "core"; Single= "/sitecore/content/Applications/WebEdit/Menus/Page Designs" }
+    $paths += @{Database = "core"; Single= "/sitecore/content/Applications/WebEdit/Menus/Partial Designs" }
+    $paths += @{Database = "core"; Single= "/sitecore/content/Applications/WebEdit/Menus/Publish" }
+    $paths += @{Database = "core"; Single= "/sitecore/content/Applications/WebEdit/Menus/View Mode" }
+    $paths += @{Database = "core"; Single= "/sitecore/content/Applications/WebEdit/Ribbons/WebEdit/Experience Accelerator" }
+    $paths += @{Database = "core"; Single= "/sitecore/content/Applications/WebEdit/Ribbons/WebEdit/View/Editing" }
+    $paths += @{Database = "core"; Single= "/sitecore/system/Settings/Html Editor Profiles/Rich Text XA" }
+        
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Default Rendering Buttons/Edit grid parameters" }
+    $paths += @{Database = "core"; Single = "/sitecore/client/Business Component Library/version 1/Layouts/Renderings/Resources/Rule/Rules/Conditions/LCSIIsVMedia" }
+    $paths += @{Database = "core"; Single = "/sitecore/system/Field types/Developer Types/Styling Parameters" }
+    $paths += @{Database = "core"; Single = "/sitecore/system/Field types/Developer Types/Grid Parameters" }
+    $paths += @{Database = "core"; Single = "/sitecore/system/Field types/Developer Types/VariantComponentFieldRenderingParameters" }
+    $paths += @{Database = "core"; Single = "/sitecore/system/Field types/List Types/Tag Treelist" }
+    $paths += @{Database = "core"; Single = "/sitecore/system/Field types/List Types/Taglist" }
+        
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Ribbons/WebEdit/View/Show/Show Grid Lines" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Ribbons/WebEdit/View/Show/Show Grid Hidden Components" }
+        
+    $paths += @{Database = "core"; Single = "/sitecore/client/Applications/ExperienceEditor/Pipelines/InitializePageEdit/RegisterSxaEditingCommandDependency" }
+    $paths += @{Database = "core"; Single = "/sitecore/client/Applications/ExperienceEditor/Pipelines/InitializePageEdit/HideSxaStrip" }
+        
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Accordion" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Accordion Empty" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Carousel" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Carousel Empty" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Flip" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Flip Empty" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Flip Full" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Tabs" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Tabs Empty" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Snippet" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Snippet Empty" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Event" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Event Empty" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Gallery Empty" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Gallery Image" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Gallery Video" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Flash" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/File" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/File Empty" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Picasa Gallery" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Playlist Empty" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Playlist Video" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Video" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Link" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Link Empty" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Edit column grid parameters" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Remove Selected Row" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Move Selected Row Up" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Move Selected Row Down" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Remove Selected Column" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Move Selected Column Right" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Move Selected Column Left" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Add New Row After" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Custom Experience Buttons/Add New Column After" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Meta" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/OpenGraph" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Properties" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/WebEdit/Edit Frame Buttons/Tags" }
+        
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/Content Editor/Ribbons/Chunks/Creative Exchange" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/Content Editor/Ribbons/Strips/Home/Creative Exchange" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/Content Editor/Ribbons/Ribbons/Default/Error Handling" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/Content Editor/Ribbons/Strips/Error Handling" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/Content Editor/Ribbons/Chunks/Error Handling" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/Content Editor/Ribbons/Chunks/Point Selector" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/Content Editor/Ribbons/Strips/Geospatial" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/Content Editor/Ribbons/Ribbons/Default/Geospatial" }
+    $paths += @{Database = "core"; Single = "/sitecore/client/Applications/ExperienceEditor/Dialogs/MapPointSelectorDialog" }
+        
+    $paths += @{Database = "master"; Single = "/sitecore/templates/System/Layout/Layout Service" }
+    $paths += @{Database = "master"; Single = "/sitecore/templates/System/Layout/Layout/Layout Service" }
+    $paths += @{Database = "master"; Single = "/sitecore/templates/System/Layout/Sections/Rendering Options/Layout Service" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Modules/Layout Service" }
+    
+    $paths += @{Database = "master"; Single = "/sitecore/layout/Devices/JSON" }
+    
+    $paths += @{Database = "master"; Single = "/sitecore/templates/System/Layout/Sections/Rendering Options" }
+    
+    $paths += @{Database = "master"; Single = "/sitecore/system/Modules/PowerShell" }
+    $paths += @{Database = "master"; Single = "/sitecore/templates/Modules" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Tags/PowerShell" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Tags/PowerShell Experience Buttons" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Tags/PowerShell ISE" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Elements/PowerShell" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Elements/PowerShell Experience Buttons" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Elements/PowerShell ISE" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/Definitions/Elements/PowerShell Security" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Settings/Rules/PowerShell" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Modules/PowerShell/Script Library/SPE" }
+    $paths += @{Database = "master"; Single = "/sitecore/system/Tasks/Commands/PowerShellScriptCommand" }
+    
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/PowerShell" }
+    $paths += @{Database = "core"; Single = "/sitecore/system/Dictionary/PowerShell" }
+    $paths += @{Database = "core"; Single = "/sitecore/layout/Layouts/Applications/PowerShell" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Documents and settings/All users/Start menu/Right/Development Tools/PowerShell ISE" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Documents and settings/All users/Start menu/Right/PowerShell Console" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Documents and settings/All users/Start menu/Right/PowerShell Toolbox" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Documents and settings/All users/Start menu/Right/Reporting Tools/PowerShell Reports" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/Content Editor/Context Menues/Default/Edit Script" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/Content Editor/Context Menues/Default/PowerShell Console" }
+    $paths += @{Database = "core"; Single = "/sitecore/content/Applications/Content Editor/Context Menues/Default/Context PowerShell Scripts" }
+    $paths += @{Database = "core"; Single = "/sitecore/client/Applications/Launchpad/PageSettings/Buttons/ContentEditing/PowerShell ISE" }
+    $paths += @{Database = "core"; Single = "/sitecore/client/Applications/Launchpad/PageSettings/Buttons/ContentEditing/PowerShell Reports" }
+    
+    $field_isResource = (Get-Item /sitecore/content).InnerData.Definition.GetType().GetField("_isResource", [Reflection.BindingFlags]::NonPublic -bor [Reflection.BindingFlags]::Instance)
+    
+    function Expand-Path {
+        param (
+            [Parameter(Mandatory = $true )][string] $rootPath,
+            [Parameter(Mandatory = $true )][string] $exclude
+        )
+        process {
+            if ($exclude.StartsWith("./")) {
+                $rootPath.TrimEnd("/") + $exclude.Replace(".", [string]::Empty)
+            } 
+            else {
+                $exclude
+            }
+        }
+    }
+    
+    function IsResource($startItem) {
+        $field_isResource.GetValue($startItem.InnerData.Definition)
+    }
+    
+    function Clear-Tree {
+        [CmdletBinding()]
+        param ($startItem)
+            
+        process {
+            if ($pscmdlet.ShouldProcess($startItem.Paths.Path, "Cleanup content tree")) {
+                Write-Progress -Activity "$([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Upgrade.Texts]::ProcessingStep)): '$($script.Title)'" -Status ("$($startItem.Database.Name):$($startItem.Paths.Path)")
+                [System.Collections.Generic.List`1[Sitecore.Data.Items.Item]]$itr = $startItem.Axes.GetDescendants()
+                $itr.Add($startItem)
+                $itr = $itr | ? { !(IsResource $_) }
+                if ($itr.Count -gt 0) {
+                    [Sitecore.Shell.Framework.Pipelines.DeleteItems]::Delete($itr)
+                }
+            }
+        }
+    }
+        
+    function ShouldRun (){
+        $appPhysicalPath = [System.Web.Hosting.HostingEnvironment]::ApplicationHost.GetPhysicalPath()
+        $resourcePath = [System.IO.Path]::Combine($appPhysicalPath, "sitecore modules", "items", "master", "items.master.sxa.dat")
+        Test-Path $resourcePath
+    }
+        
+    function Get-DialogParameters (){}
+        
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            $arguments
+        )
+            
+        process {
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $paths | % {    
+                    $db = $_.Database
+                    # write-host "------$($db):$($_.Path)|$($_.Single)------"
+                    if ($_.Single){
+                        #item
+                        $path = $_.Single
+                        $psPath = "$($db):$path"
+                        if (Test-Path $psPath) {
+                            $singleItem = Get-Item $psPath
+                            write-host "[Single]`t $($singleItem.Paths.Path)" -ForegroundColor cyan
+                            Clear-Tree $singleItem
+                        }
+                    } 
+                    elseif ($_.Path){
+                        # content tree
+                        $path = $_.Path
+                        $psPath = "$($db):$path"
+                        $exPath = $_.Exclude
+                        $exItem = $_.Skip
+        
+                        if ($exPath) {
+                            $exPath = $exPath | % { Expand-Path $path $_ }
+                            if (Test-Path $psPath) {
+                                Get-ChildItem -Path $psPath | % {
+                                    $rootPath = $_.Paths.Path
+                                    if ($exPath.Contains($rootPath)) {
+                                        write-host "[SkipPath]`t $rootPath" -ForegroundColor DarkRed
+                                    } 
+                                    else {
+                                        write-host "[Path]`t`t $rootPath" -ForegroundColor Green
+                                        Clear-Tree $_
+                                    }
+                                }
+                            }
+                        } 
+                        else {
+                            if ($exItem) {
+                                $excludedSingleItemPaths = $exItem | % {
+                                    if ($_.StartsWith("./")) {
+                                        $path.TrimEnd("/") + $_.Replace(".", [string]::Empty)
+                                    } 
+                                    else {
+                                        $_
+                                    }
+                                }
+        
+                                if (Test-Path $psPath) {
+                                    $singleToRemove = Get-ChildItem -Path $psPath -Recurse | % {
+                                        $rootPath = $_.Paths.Path
+                                        $skipped2 = $excludedSingleItemPaths | ? { $rootPath.StartsWith($_) }
+                                        $skipped3 = $excludedSingleItemPaths | ? { $_.StartsWith($rootPath) }
+                                        if ($skipped2.Count -gt 0 -or $skipped3.Count -gt 0) {
+                                            write-host "[SkipSingle]`t $rootPath" -ForegroundColor DarkRed
+                                        } 
+                                        else {
+                                            $_
+                                        }
+                                    }
+                                }
+                                $recentlyRemoved = @()
+                                $singleToRemove | Sort-Object -property @{Expression = { [int]$_.Paths.Path.Length } } | % {
+                                    $rootPath = $_.Paths.Path
+                                    $skipped2 = $recentlyRemoved | ? { $rootPath.StartsWith($_) }
+                                    if ($skipped2.Count -gt 0) {
+                                        Write-Host "[Single]`t $rootPath" -ForegroundColor DarkGreen
+                                    } 
+                                    else {
+                                        Write-Host "[Path]`t`t $rootPath" -ForegroundColor Green
+                                        Clear-Tree $_
+                                        $recentlyRemoved += $rootPath
+                                    }
+                                }
+                            } 
+                            else {
+                                if (Test-Path $psPath) {
+                                    Get-ChildItem -Path $psPath | % {
+                                        $rootPath = $_.Paths.Path
+                                        write-host "[Path]`t`t $rootPath" -ForegroundColor Green
+                                        Clear-Tree $_
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+        
+                $result.Result = "Success"
+            } 
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            } 
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 11052
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20210709T055258Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Content architecture cleanup
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Makes sure that SXA content is correct

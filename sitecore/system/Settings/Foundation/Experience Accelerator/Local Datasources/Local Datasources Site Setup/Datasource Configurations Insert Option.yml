@@ -1,0 +1,30 @@
+---
+ID: "a7c899a4-9012-4c0e-af32-58ec01f0f808"
+Parent: "38a7183c-d39c-4cea-9452-7acc54d053a2"
+Template: "1773ecce-3f78-4201-8095-cae3574e8ede"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Local Datasources/Local Datasources Site Setup/Datasource Configurations Insert Option
+DB: master
+SharedFields:
+- ID: "58aca5ca-742a-41bb-866f-cfa3764200c8"
+  Hint: Arguments
+  Type: Treelist
+  Value: "{F86FE270-00A4-492F-BFAF-5BF27E40CE13}"
+- ID: "76691b61-8692-4d98-a4ff-115ba4208ab6"
+  Hint: EditType
+  Value: AddInsertOptions
+- ID: "e308b8ae-e98e-42b2-80e2-12e902e5e50e"
+  Hint: Template
+  Type: Treelist
+  Value: "{6A8A971B-01BC-4749-9EF5-10C69BBA73FE}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160824T063527Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

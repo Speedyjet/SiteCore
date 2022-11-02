@@ -1,0 +1,36 @@
+---
+ID: "65db1b5e-215b-421d-b06d-95ac3dc85783"
+Parent: "dbe138c0-160f-4540-9868-0098e2ce8174"
+Template: "a08790da-fae8-4dda-a4f8-cfe38eace722"
+Path: /sitecore/system/Settings/Analytics/Lookups/Countries/Slovakia
+DB: master
+SharedFields:
+- ID: "4b6f46f0-ed6d-4920-a447-1dee7586044d"
+  Hint: Country Code
+  Value: SK
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20110512T152213
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "0ff121d6-4499-4ce8-b73a-cde11c0791e3"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20110512T152213:634408105335445449"

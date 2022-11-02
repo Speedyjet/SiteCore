@@ -1,0 +1,42 @@
+---
+ID: "6f3d4a6a-8da1-4117-90e8-daaa6509355a"
+Parent: "cf4f6efb-4bd5-417b-b2ac-b38ed03fe9e2"
+Template: "3b4fde65-16a8-491d-bf15-99ce83cf3506"
+Path: /sitecore/system/Marketing Control Panel/Taxonomies/Channel/Offline/Advertising/Advertising agency fee
+DB: master
+SharedFields:
+- ID: "8fb875eb-3ad3-44ff-87e1-998370cc3199"
+  Hint: Code
+  Value: 01
+- ID: "a4f985d9-98b3-4b52-aaaf-4344f6e747c6"
+  Hint: __Workflow
+  Value: 
+Languages:
+- Language: en
+  Fields:
+  - ID: "870a6b2a-4cac-490b-8791-195b1fc464e5"
+    Hint: Description
+    Value: 
+  - ID: "8bdee96a-e8f5-446a-a1d2-568c3018c98e"
+    Hint: Image
+    Value: |
+      <image mediaid="{6A32B50A-B56C-42AC-BE9E-5427038F97D9}" />
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20141115T102432Z
+    - ID: "3e431de1-525e-47a3-b6b0-1ccbec3a8c98"
+      Hint: __Workflow state
+      Value: 
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "8c7f1b27-8671-42d2-9e68-2c1f253037c2"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20150123T142506:635576199069914162Z"

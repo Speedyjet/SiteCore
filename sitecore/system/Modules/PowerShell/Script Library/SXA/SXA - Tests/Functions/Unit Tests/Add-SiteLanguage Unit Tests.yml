@@ -1,0 +1,212 @@
+---
+ID: "fa5f63b6-2f8c-433e-8a79-c230498b141f"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Add-SiteLanguage Unit Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function New-Tenant
+    Import-Function New-Site
+    Import-Function Add-SiteLanguage
+    Import-Function Remove-TenantFolder
+    Import-Function Clear-ContentTree
+    Import-Function Get-NewTestTenantModel
+    Import-Function Get-NewTestSiteModel
+    
+    Describe "Add-SiteLanguage" {
+        Mock Run-SiteManager {}
+        BeforeEach {
+            $tenantName = "T"
+            $siteName = "S"
+            $contentPath = "master:\content\Unit Tests"
+            $tenantPath = "$contentPath\$tenantName"
+            $sitePath = "$tenantPath\$siteName"
+            $mediaLibraryPath = "master:\media library\Project\Unit Tests"
+            $themesPath = "master:\media library\Themes\Unit Tests"
+            $templatesPath = "master:\templates\Project\Unit Tests"
+            $gridSetupPath = "master:\system\Settings\Feature\Experience Accelerator\Foundation\Grid Setup"        
+            $languageCode1 = "pl-pl"
+            $languageCode2 = "da"
+            $languageItem1Path = "master:\sitecore\system\Languages\$languageCode1" 
+            $languageItem2Path = "master:\sitecore\system\Languages\$languageCode2" 
+        }
+        Context "Add site language using default language" {
+            It "clean the content tree" {
+                Clear-ContentTree $contentPath
+                if (Test-Path -Path $languageItem1Path) {
+                    Remove-Item -Path $languageItem1Path -Recurse
+                }       
+                
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+                Test-Path -Path $languageItem1Path | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                
+                New-Tenant $model
+                Test-Path -Path "$contentPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$themesPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }
+            It "create site with all default settings" {
+                $model = Get-NewTestSiteModel $siteName "$contentPath\$tenantName" $gridSetupPath
+                New-Site $model            
+            }
+            It "check content location" {
+                Test-Path $sitePath | Should BeExactly $true
+            }
+            It "check new language item" {
+                $parent = Get-Item -Path "/sitecore/system/Languages"
+                $newLanguageItem = New-Item -Parent $parent -Name $languageCode1 -ItemType "System/Language" -Language "en"
+                $newLanguageItem."Charset"="iso-8859-2"
+                $newLanguageItem."Code page"="65001"
+                $newLanguageItem."Encoding"="utf-8"
+                $newLanguageItem."Iso"="pl"
+                $newLanguageItem."Regional Iso Code" = $languageCode1
+                
+                Test-Path -Path $languageItem1Path | Should BeExactly $true
+            }
+            It "check if there are no versions in new language" {
+                $siteItem = Get-Item -Path $sitePath
+                
+                $newLanguage = $siteItem.Languages | ? { $_.Name -eq $languageCode1  } | Select-Object -First 1
+                $oldLanguage = $siteItem.Languages | ? { $_.Name -eq "en"  } | Select-Object -First 1
+                
+                Get-ChildItem -Path $sitePath -Recurse | % {
+                    $_.Versions.GetVersionNumbers($oldLanguage) | Should Not BeNullOrEmpty
+                    $_.Versions.GetVersionNumbers($newLanguage) | Should BeNullOrEmpty
+                }
+            }
+            It "check if new language added" {
+                $siteItem = Get-Item -Path $sitePath
+                $homeItem = Get-Item -Path "$sitePath\Home"
+                $homeItem."Title" = "ENG"
+                
+                Add-SiteLanguage $siteItem "en" $languageCode1
+                
+                $newLanguage = $siteItem.Languages | ? { $_.Name -eq $languageCode1  } | Select-Object -First 1
+                $oldLanguage = $siteItem.Languages | ? { $_.Name -eq "en"  } | Select-Object -First 1
+                
+                $enHome = $homeItem.Database.GetItem($homeItem.Paths.Path, $oldLanguage) | Wrap-Item
+                $plHome = $homeItem.Database.GetItem($homeItem.Paths.Path, $newLanguage) | Wrap-Item
+                $plHome."Title" | Should BeExactly $enHome."Title"
+                
+                Get-ChildItem -Path $sitePath -Recurse | % {
+                    $_.Versions.GetVersionNumbers($oldLanguage) | Should Not BeNullOrEmpty
+                    $_.Versions.GetVersionNumbers($newLanguage) | Should Not BeNullOrEmpty
+                }
+            }
+        }
+        Context "Add site language using another language" {
+            It "clean the content tree" {
+                Clear-ContentTree $contentPath
+                if (Test-Path -Path $languageItem1Path) {
+                    Remove-Item -Path $languageItem1Path -Recurse
+                }
+                if (Test-Path -Path $languageItem2Path) {
+                    Remove-Item -Path $languageItem2Path -Recurse
+                }
+    
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+                Test-Path -Path $languageItem1Path | Should BeExactly $false
+                Test-Path -Path $languageItem2Path | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                
+                New-Tenant $model
+                Test-Path -Path "$contentPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$themesPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }
+            It "create site with all default settings" {
+                $model = Get-NewTestSiteModel $siteName "$contentPath\$tenantName" $gridSetupPath
+                New-Site $model
+            }
+            It "check content location" {
+                Test-Path $sitePath | Should BeExactly $true
+            }
+            It "check new language item" {
+                $parent = Get-Item -Path "/sitecore/system/Languages"
+                $newLanguageItem = New-Item -Parent $parent -Name $languageCode1 -ItemType "System/Language" -Language "en"
+                $newLanguageItem."Charset" = "iso-8859-2"
+                $newLanguageItem."Code page" = "65001"
+                $newLanguageItem."Encoding" = "utf-8"
+                $newLanguageItem."Iso" = "pl"
+                $newLanguageItem."Regional Iso Code" = $languageCode1
+    
+                $newLanguageItem = New-Item -Parent $parent -Name $languageCode2 -ItemType "System/Language" -Language "en"
+                $newLanguageItem."Charset" = "iso-8859-1"
+                $newLanguageItem."Code page" = "65001"
+                $newLanguageItem."Encoding" = "utf-8"
+                $newLanguageItem."Iso" = "da"
+                $newLanguageItem."Regional Iso Code" = $languageCode2
+                
+                Test-Path -Path $languageItem1Path | Should BeExactly $true
+                Test-Path -Path $languageItem2Path | Should BeExactly $true
+            }
+            It "check if there are no versions in new language" {
+                $siteItem = Get-Item -Path $sitePath
+                
+                $newLanguage1 = $siteItem.Languages | ? { $_.Name -eq $languageCode1  } | Select-Object -First 1
+                $newLanguage2 = $siteItem.Languages | ? { $_.Name -eq $languageCode2  } | Select-Object -First 1
+                $oldLanguage = $siteItem.Languages | ? { $_.Name -eq "en"  } | Select-Object -First 1
+                
+                Get-ChildItem -Path $sitePath -Recurse | % {
+                    $_.Versions.GetVersionNumbers($oldLanguage) | Should Not BeNullOrEmpty
+                    $_.Versions.GetVersionNumbers($newLanguage1) | Should BeNullOrEmpty
+                    $_.Versions.GetVersionNumbers($newLanguage2) | Should BeNullOrEmpty
+                }
+            }
+            It "check if new language added" {
+                $siteItem = Get-Item -Path $sitePath
+                $homeItem = Get-Item -Path "$sitePath\Home"
+                
+                $homeItem."Title" = "ENG"
+                Add-SiteLanguage $siteItem "en" $languageCode1
+                $newLanguage1 = $siteItem.Languages | ? { $_.Name -eq $languageCode1  } | Select-Object -First 1
+                $newLanguage2 = $siteItem.Languages | ? { $_.Name -eq $languageCode2  } | Select-Object -First 1
+                $oldLanguage = $siteItem.Languages | ? { $_.Name -eq "en"  } | Select-Object -First 1
+                
+                $enHome = $homeItem.Database.GetItem($homeItem.Paths.Path, $oldLanguage) | Wrap-Item
+                $plHome = $homeItem.Database.GetItem($homeItem.Paths.Path, $newLanguage1) | Wrap-Item
+                $plHome."Title" | Should BeExactly $enHome."Title"
+                
+    
+                $plHome."Title" = "PL"
+                Add-SiteLanguage $siteItem $languageCode1 $languageCode2         
+                $enHome = $homeItem.Database.GetItem($homeItem.Paths.Path, $oldLanguage) | Wrap-Item            
+                $plHome = $homeItem.Database.GetItem($homeItem.Paths.Path, $newLanguage1) | Wrap-Item               
+                $daHome = $homeItem.Database.GetItem($homeItem.Paths.Path, $newLanguage2) | Wrap-Item
+                $daHome."Title" | Should BeExactly $plHome."Title"
+                $daHome."Title" | Should Not Be $enHome."Title"
+                
+                Get-ChildItem -Path $sitePath -Recurse | % {
+                    $_.Versions.GetVersionNumbers($oldLanguage) | Should Not BeNullOrEmpty
+                    $_.Versions.GetVersionNumbers($newLanguage1) | Should Not BeNullOrEmpty
+                    $_.Versions.GetVersionNumbers($newLanguage2) | Should Not BeNullOrEmpty
+                }
+            }
+        }    
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20200526T101838:637260851189038734Z"

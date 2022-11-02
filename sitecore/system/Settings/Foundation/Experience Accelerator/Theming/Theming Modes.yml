@@ -1,0 +1,22 @@
+---
+ID: "d7bf6dd2-35fd-4583-93ee-6f16549d6818"
+Parent: "b08ebc6b-fc6c-4fbb-a28f-661d943ff00c"
+Template: "68beab02-d5c4-4ab8-99c3-4ba87b4d5e03"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Theming/Theming Modes
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: Office/16x16/insert_option_assign.png
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180529T095358Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

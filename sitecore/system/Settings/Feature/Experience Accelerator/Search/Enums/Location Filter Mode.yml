@@ -1,0 +1,14 @@
+---
+ID: "5ba48dae-d3fb-47ab-9e76-95e27a996ed2"
+Parent: "95f7acb7-718c-49e1-9ca8-4045ec7bfd20"
+Template: "0a92feee-0e15-4e81-b044-2ad901b88ddd"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Search/Enums/Location Filter Mode
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160608T111459Z

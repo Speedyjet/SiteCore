@@ -1,0 +1,14 @@
+---
+ID: "7bfc37a7-7817-48a4-afea-b4c1c631b93a"
+Parent: "acb55094-35fb-420c-b041-c08792169c4b"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Content Editor/Insert Item"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160628T084408Z

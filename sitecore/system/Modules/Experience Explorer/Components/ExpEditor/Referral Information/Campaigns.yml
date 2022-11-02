@@ -1,0 +1,34 @@
+---
+ID: "23b8ba9d-f316-4fc9-b6b8-1a8af701506d"
+Parent: "ad76c4e6-d57d-4bcf-a83f-34a10530e71d"
+Template: "e360bed5-b72b-4c02-890f-e434486de3f1"
+Path: /sitecore/system/Modules/Experience Explorer/Components/ExpEditor/Referral Information/Campaigns
+DB: master
+SharedFields:
+- ID: "64461e27-1c6a-4aa2-bda8-44e5316ef09e"
+  Hint: Method
+  Value: GetEditorReferralInformationCampaigns
+- ID: "ad8d5f6d-d0a3-4f86-a4e7-c29ff7427597"
+  Hint: Path
+  Value: /sitecore modules/Web/ExperienceExplorer/Controls/ReferralInformation/Campaign/SearchableCampaignEditor.ascx
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20130401T224417
+    - ID: "804e29ad-9cff-4d31-b4d4-b5a6daed990b"
+      Hint: Tab Name
+      Value: Campaigns
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "83f5ab69-9516-4821-9cc8-cfad4609c8e8"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20130902T155516:635137341164502983"

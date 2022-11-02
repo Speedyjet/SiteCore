@@ -1,0 +1,44 @@
+---
+ID: "d3804483-3353-49bc-989e-36e5eee609d9"
+Parent: "74ac6db3-58c5-4bf9-aa9f-26940029fd49"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Cmdlets/Select-SingleItemFromEachGroup"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Select-SingleItemFromEachGroup {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 , ValueFromPipeline = $true)]
+            [Microsoft.PowerShell.Commands.GroupInfo]$GroupsOfItems
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Select-SingleItemFromEachGroup - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Select-SingleItemFromEachGroup - Process"
+            $langSpecific = $GroupsOfItems.Group | ? { $_.Language.Name -eq $SitecoreContextItem.Language.Name }
+            if ($langSpecific) {
+                $langSpecific | Select-Object -First 1
+            }
+            else {
+                $GroupsOfItems.Group | Select-Object -First 1
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Select-SingleItemFromEachGroup - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20181114T153102:636778062624456749Z"

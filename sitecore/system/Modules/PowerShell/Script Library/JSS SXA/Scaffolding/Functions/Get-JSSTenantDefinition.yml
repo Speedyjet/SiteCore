@@ -1,0 +1,40 @@
+---
+ID: "2179751b-79c2-4b0a-9d92-274bf46086e9"
+Parent: "7d8d6e32-75e6-4822-8491-f3c0a7a1577f"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/JSS SXA/Scaffolding/Functions/Get-JSSTenantDefinition"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-JSSTenantDefinition {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [string]$Layer
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-JSSTenantDefinition - Begin"
+            Import-Function Select-SingleItemFromEachGroup
+            Import-Function Get-ModuleDefinition
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-JSSTenantDefinition - Process"
+            Get-ModuleDefinition $Layer "HeadlessTenantSetupRoot"
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Get-JSSTenantDefinition - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181113T120759Z

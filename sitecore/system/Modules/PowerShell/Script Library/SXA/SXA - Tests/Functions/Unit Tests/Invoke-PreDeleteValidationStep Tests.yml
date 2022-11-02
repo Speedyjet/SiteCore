@@ -1,0 +1,94 @@
+---
+ID: "5d007f40-3ee5-4883-b05d-55c890adb7b9"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Invoke-PreDeleteValidationStep Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function New-Tenant
+    Import-Function New-Site
+    Import-Function Invoke-PreDeleteStep
+    Import-Function Clear-ContentTree
+    Import-Function Remove-Tenant
+    Import-Function Get-NewTestTenantModel
+    
+    Describe "PreDelete Validation Step" {
+        Mock Run-SiteManager { }
+        BeforeEach {
+            $tenantName = "T"
+            $contentPath = "master:\content\Unit Tests"
+            $tenantPath = "$contentPath\$tenantName"
+            $mediaLibraryPath = "master:\media library\Project\Unit Tests"
+            $themesPath = "master:\media library\Themes\Unit Tests"
+            $templatesPath = "master:\templates\Project\Unit Tests"
+        }    
+        Context "Validation - OK" {
+            It "clean the content tree" {
+                Clear-ContentTree $contentPath
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                
+                $mockModuleRoot = Get-Item . -ID "{5E371E4B-9A74-4A0A-AA4C-F99C8E34C615}"
+                $model.DefinitionItems.Add($mockModuleRoot)
+                
+                New-Tenant $model
+                Test-Path -Path "$contentPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$themesPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }
+            It "check if predelete validation action invoked when running 'Remove-Tenant'" {
+                $tenant = Get-Item -Path $tenantPath
+                
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+                Remove-Tenant $tenant
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $false
+            }        
+        }
+        Context "Validation - FAIL" {
+            It "clean the content tree" {
+                Clear-ContentTree $contentPath
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                
+                $mockModuleRoot = Get-Item . -ID "{5FEE5913-96D9-439F-A0D4-9343353E2A7C}"
+                $model.DefinitionItems.Add($mockModuleRoot)
+                
+                New-Tenant $model
+                Test-Path -Path "$contentPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$themesPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }
+            It "check if predelete validation action invoked when running 'Remove-Tenant'" {
+                $tenant = Get-Item -Path $tenantPath
+                
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+                Remove-Tenant $tenant
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }        
+        }      
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180904T134936Z

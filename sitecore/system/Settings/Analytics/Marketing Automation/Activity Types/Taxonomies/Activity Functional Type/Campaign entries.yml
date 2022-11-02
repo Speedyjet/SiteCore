@@ -1,0 +1,39 @@
+---
+ID: "43e49783-5fc3-4f66-84fc-f913110e1b38"
+Parent: "340062a7-9f50-4ce1-8a53-da3f6a23b73a"
+Template: "2b3e1408-ce5c-4d0b-a8b3-4bad37dcdcec"
+Path: /sitecore/system/Settings/Analytics/Marketing Automation/Activity Types/Taxonomies/Activity Functional Type/Campaign entries
+DB: master
+SharedFields:
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 0
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "0daa3df9-cf00-4261-b2cb-12bcde357a9c"
+      Hint: Title
+      Value: Campaign entries
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170124T030915Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "d05d466a-58e0-444d-9999-15d52438edc2"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20171124T093820Z

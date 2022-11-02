@@ -1,0 +1,59 @@
+---
+ID: "62bfd39b-941c-4753-bb1f-214dc6524eb2"
+Parent: "171dcedb-ddd8-445e-97db-a9072df74a5a"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Web API/RunPesterTest"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    #Override Write-Progress to avoid errors which happen because of impossibility to write-progress in non-interactive sessions
+    function Write-Progress {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $false)]
+            $Activity,
+            [Parameter(Mandatory = $false)]
+            $CurrentOperation,
+            [Parameter(Mandatory = $false)]
+            $Status,
+            [Parameter(Mandatory = $false)]
+            $PercentComplete,
+            [Parameter(Mandatory = $false)]
+            [switch]$Completed
+        )
+    
+        process {
+            # do nothing
+        }
+    } 
+    
+    $customPesterModulePath   #Obligatory QueryString Parameter
+    $outputFilePath           #Obligatory QueryString Parameter
+    $outputFormat = 'NUnitXML'
+    Write-Host $customPesterModulePath
+    Write-Host $outputFilePath
+    
+    Import-Module -Name $customPesterModulePath
+    
+    $testName = $scriptArguments.Get_Item("testName")
+    $testScriptItemID = '{3A1777B1-CE3D-4086-8520-EB256BFCD5B6}'
+    $testScriptRoot = Get-Item 'master:' -ID $testScriptItemID
+    Write-Host $testScriptRoot
+    $path = $testScriptRoot.Paths.FullPath
+    Write-Host $path
+    $query = "$path/$testName"
+    Write-Host $query
+    $testScript = Get-Item -Path master: -Language "en" -Query $query
+    Write-Host $testScript.Script
+    
+    Invoke-Pester $testScript.Script -OutputFile $outputFilePath -OutputFormat $outputFormat
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171228T201736Z

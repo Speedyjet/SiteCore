@@ -1,0 +1,103 @@
+---
+ID: "be759a33-4ab0-480e-9fe3-698be9b2f907"
+Parent: "55488203-7133-4622-aa88-a4405dd51a96"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Feature/Show-NewModuleDialog"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Show-NewModuleDialog {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$CurrentItem
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Show-NewModuleDialog - Begin"
+            Import-Function Get-ModuleStartLocation
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Show-NewModuleDialog - Process"
+            $Layer = "Feature"
+            if ($CurrentItem.ID -eq "{31C85853-D86D-46B0-A418-86DF28F7294F}") {
+                $Layer = "Foundation"
+            }
+    
+            $availableContainers = Get-ModuleStartLocation
+            $selectedContainers = $availableContainers.Values
+            
+            $availableSetupTemplates = New-Object System.Collections.Specialized.OrderedDictionary
+            $availableSetupTemplates.Add("Tenant Setup", "{141DF88E-7156-4D2E-A004-C8C1A7C51E9D}")
+            $availableSetupTemplates.Add("Site Setup", "{292CCFCD-7790-4692-856B-76014B8038E7}")
+            
+            $selectedSetupTemplates = $availableSetupTemplates.Values
+    
+            $dialogParmeters = @()
+            $dialogParmeters += @{ Name = "newFeatureName"; Value = ""; Title = ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::FeatureName)); Tab = ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::General))}
+            $dialogParmeters += @{ Name = "targetModule"; Value = $CurrentItem; Title = ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::FeatureLocation)); Root = $Root.Paths.Path; Tab = ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::General))}
+            $dialogParmeters += @{ Name = "selectedContainers"; Title = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::FeatureContainers); Options = $availableContainers; Editor = "checklist"; Height = "200px"; Tab = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::General); }
+            $dialogParmeters += @{ Name = "selectedSetupTemplates"; Title = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::FeatureScaffoldingActions); Options = $availableSetupTemplates; Editor = "checklist"; Height = "30px"; Tab = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::General); }
+    
+            $result = Read-Variable -Parameters $dialogParmeters `
+                -Description ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::NewFeatureDialogDescription)) `
+                -Title ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::NewFeatureDialogTitle)) -Width 650 -Height 700 -OkButtonName "Proceed" -CancelButtonName "Abort" -ShowHints `
+                -Validator {            
+                    $newFeatureName = $variables.newFeatureName.Value;
+                    $pattern = "^[\w][\w\s\-]*(\(\d{1,}\)){0,1}$"
+                    if ($newFeatureName.Length -gt 100) {
+                        $variables.newFeatureName.Error = $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::ThelengthofthevalueistoolongPleasespecifyavalueoflesstha)) -f 100
+                        continue
+                    }
+                    if ([System.Text.RegularExpressions.Regex]::IsMatch($newFeatureName, $pattern, [System.Text.RegularExpressions.RegexOptions]::ECMAScript) -eq $false) {
+                        $variables.newFeatureName.Error = $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::IsNotAValidName)) -f $newFeatureName
+                        continue
+                    }
+                    $existingPaths = $availableContainers.Values | ? { 
+                        $path = $_ -f "$($Layer)/"
+                        $path += $variables.newFeatureName.Value
+                        $item = $variables.targetModule.Value.Database.GetItem($path) | Wrap-Item
+                        $item -ne $null
+                    }
+                    
+                    if ($existingPaths.Length -gt 0) {
+                        $variables.newFeatureName.Error = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::FeatureAlreadyExists);
+                        continue
+                    }
+            } -ValidatorParameters @{ 
+                availableContainers = $availableContainers
+                Layer = $Layer
+            }
+    
+    
+            if ($result -ne "ok") {
+                Exit
+            }
+            
+            if($selectedSetupTemplates.Count -gt 0 -and !$selectedContainers.Contains("/sitecore/system/Settings/{0}")){
+                $selectedContainers+="/sitecore/system/Settings/{0}"
+            }
+            
+            $model = New-Object "Sitecore.XA.Foundation.Scaffolding.Models.NewModuleModel"
+            $model.Tail                  = [regex]::Replace($targetModule.Paths.Path , $CurrentItem.Paths.Path, "")
+            $model.Roots                 = $selectedContainers | % { $_ -f $Layer} | % { Get-Item -Path $_ }
+            $model.Name                  = $newFeatureName
+            $model.SetupItemTemplatesIds = $selectedSetupTemplates
+            $model
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Show-NewModuleDialog - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171124T120339Z

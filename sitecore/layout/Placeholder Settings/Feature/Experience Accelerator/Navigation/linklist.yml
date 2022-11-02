@@ -1,0 +1,18 @@
+---
+ID: "d1a4da5a-b396-422c-9619-22b8f8f1c163"
+Parent: "1b8aab12-754e-4793-8254-5eb58efa65e1"
+Template: "5c547d4e-7111-4995-95b0-6b561751bf2e"
+Path: /sitecore/layout/Placeholder Settings/Feature/Experience Accelerator/Navigation/linklist
+DB: master
+SharedFields:
+- ID: "7256bdab-1fd2-49dd-b205-cb4873d2917c"
+  Hint: Placeholder Key
+  Value: linklist*
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160901T083705Z

@@ -1,0 +1,39 @@
+---
+ID: "c322db62-b2cb-4226-aa1c-7e8da7640602"
+Parent: "13d7e7c6-aff4-4f6b-a4f5-d15ddc6c6021"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Cmdlets/Get-PartialDesign"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-PartialDesign {
+    	[CmdletBinding()]
+        param(
+    		[Parameter(Mandatory=$true, ValueFromPipeline = $true, Position=0 )]
+    		[Item]$Root
+            )
+    
+    	begin {
+    	    Import-Function Test-ItemIsPartialDesign
+    		Write-Verbose "Cmdlet Get-PartialDesign - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Get-PartialDesign - Process"   
+    		Get-ChildItem -Path $Root.Paths.Path -Recurse | ? { (Test-ItemIsPartialDesign $_ ) -eq $true } | Select-Object -First 1
+    	} 
+    
+    	end {
+    		Write-Verbose "Cmdlet Get-PartialDesign - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160708T072221Z

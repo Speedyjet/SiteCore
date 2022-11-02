@@ -1,0 +1,23 @@
+---
+ID: "18feae99-e073-41b4-8584-46ecbdb80468"
+Parent: "555fbee2-f95b-436e-853b-3eb9b0d100f6"
+Template: "6fac654e-2215-4a41-9a1d-59197bebc0fe"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Forms/Forms Tenant Setup/Add forms folder
+DB: master
+SharedFields:
+- ID: "c0a5bd91-e658-46ce-b631-77ce337d8e6e"
+  Hint: Script
+  Type: Treelist
+  Value: "{3C6AB37C-1472-437E-902D-F8E912EE47E8}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180813T072229Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

@@ -1,0 +1,47 @@
+---
+ID: "938ec74b-3ba4-4c93-9152-015655088998"
+Parent: "c33ddd15-2016-4766-b54a-c150ee9b832e"
+Template: "d4d43c33-3661-4630-af63-0754cab7b110"
+Path: "/sitecore/system/Marketing Control Panel/Marketing Automation Templates/938ec74b-3ba4-4c93-9152-015655088998"
+DB: master
+SharedFields:
+- ID: "1766652d-080b-409c-abbf-3a90e0f801f5"
+  Hint: Start Date
+  Value: 00010101T000000
+- ID: "2c41a32f-86a9-4f43-8550-bf0af266e3f2"
+  Hint: End Date
+  Value: 00010101T000000
+- ID: "394d49b2-b579-43aa-ab32-b4010b18fd07"
+  Hint: Marketing Theme
+  Value: "{85506484-7854-4B14-AB0C-DFC61CA65CC0}"
+- ID: "3fb918c8-08ec-4879-8062-088bbf71ee72"
+  Hint: Plan Data
+  Value: |
+    {"ReentryMode":1,"ContextKeyFactoryType":null,"EntryActivityId":"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac","NewEnrollmentRegulatorType":null,"NewEnrollmentRegulatorParameters":null,"Alias":"938ec74b-3ba4-4c93-9152-015655088998","IgnoreIsActiveProperty":true,"Activities":{"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac":{"Paths":{"default":"9d9cc866-8029-db6a-dd91-118017d6e1e2"},"Id":"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac","ActivityTypeId":"8c92d3c1-2c38-4e8a-92d1-9590e17cce89","Parameters":{"Condition":{"$type":"Sitecore.Marketing.Rules.Rule[], Sitecore.Marketing","$values":[{"Id":"06ffc943-a91e-4478-986f-4964530242d6","Name":null,"ConditionType":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","_condition":{"$type":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing","Id":"ab99d9a2-1438-4d8c-a213-bab6430f9c8e","DescriptorId":"39bf2c11-7cbd-4d30-bdfb-984b4065e575","Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib","ItemId":"{AE494231-FFF8-4D3B-8530-1634F4C52804}"}}}]},"UseCondition":true}},"9d9cc866-8029-db6a-dd91-118017d6e1e2":{"Paths":{"false":"ee1c827e-2209-fc50-9b32-318d1e566d88","true":"5ee1a77e-43cf-78c9-c89a-a409742e5b7c"},"Id":"9d9cc866-8029-db6a-dd91-118017d6e1e2","ActivityTypeId":"7fca5e5b-4796-4d7e-abec-28f376e4d7e2","Parameters":{"Condition":{"$type":"Sitecore.Marketing.Rules.Rule[], Sitecore.Marketing","$values":[{"Id":"c4942224-a952-4e4c-b57b-9c31c8ba803a","Name":null,"ConditionType":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","_condition":{"$type":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing","Id":"60b62471-f760-4bd8-8032-6b42441d7b9d","DescriptorId":"60bbb23f-1ba6-44f8-812d-cafdf236073a","Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib","Number":"24","Unit":"Hours"}}}]},"ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"08:00:00","WaitUntil":null},"Name":"Has completed purchase"}},"ee1c827e-2209-fc50-9b32-318d1e566d88":{"Paths":{"default":"cf83677e-7985-22d3-eefb-10268ae3ea00"},"Id":"ee1c827e-2209-fc50-9b32-318d1e566d88","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{"MessageId":null}},"cf83677e-7985-22d3-eefb-10268ae3ea00":{"Paths":{"false":"8fa75d7e-6e3e-e2ba-c399-cb67c1c12ccf","true":"02a1ec5f-031c-cbec-32a2-af2675718093"},"Id":"cf83677e-7985-22d3-eefb-10268ae3ea00","ActivityTypeId":"7fca5e5b-4796-4d7e-abec-28f376e4d7e2","Parameters":{"Condition":{"$type":"Sitecore.Marketing.Rules.Rule[], Sitecore.Marketing","$values":[{"Id":"3c848e13-6adb-490e-953f-b984ecc0a88c","Name":null,"ConditionType":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","_condition":{"$type":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing","Id":"6b2cdfca-a44a-4a4a-838f-3c225492b3a9","DescriptorId":"60bbb23f-1ba6-44f8-812d-cafdf236073a","Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib","Unit":"Hours","Number":"24"}}}]},"ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"1.00:00:00","WaitUntil":null},"Name":"Has completed purchase"}},"8fa75d7e-6e3e-e2ba-c399-cb67c1c12ccf":{"Paths":{"default":"882ad45d-2d0c-3f36-b2e4-4be001cd7e35"},"Id":"8fa75d7e-6e3e-e2ba-c399-cb67c1c12ccf","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"882ad45d-2d0c-3f36-b2e4-4be001cd7e35":{"Paths":{"false":"186c17be-1f69-1075-dc2d-fa602833ca47","true":"3af50e4b-724f-507c-708e-867268bb5041"},"Id":"882ad45d-2d0c-3f36-b2e4-4be001cd7e35","ActivityTypeId":"7fca5e5b-4796-4d7e-abec-28f376e4d7e2","Parameters":{"Condition":{"$type":"Sitecore.Marketing.Rules.Rule[], Sitecore.Marketing","$values":[{"Id":"4c045a9a-4611-4214-8fa7-b26f5326b514","Name":null,"ConditionType":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","_condition":{"$type":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing","Id":"edfc24e8-4313-4e8e-9eff-bf65922b7dbe","DescriptorId":"60bbb23f-1ba6-44f8-812d-cafdf236073a","Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib","Number":"24","Unit":"Hours"}}}]},"ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"1.00:00:00","WaitUntil":null},"Name":"Has competed purchase"}},"186c17be-1f69-1075-dc2d-fa602833ca47":{"Paths":{"default":"d32c1036-3f2c-012e-8541-c561d853eeca"},"Id":"186c17be-1f69-1075-dc2d-fa602833ca47","ActivityTypeId":"c2a5ef3a-dde9-4309-8921-5a6fd011d0ba","Parameters":{}},"d32c1036-3f2c-012e-8541-c561d853eeca":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"d32c1036-3f2c-012e-8541-c561d853eeca","ActivityTypeId":"07a0b752-bb0e-4ab8-92ed-ae9c03ba1301","Parameters":{}},"3af50e4b-724f-507c-708e-867268bb5041":{"Paths":{"default":"43592d73-9669-cb68-574d-f7a8b0f1bec8"},"Id":"3af50e4b-724f-507c-708e-867268bb5041","ActivityTypeId":"c2a5ef3a-dde9-4309-8921-5a6fd011d0ba","Parameters":{}},"43592d73-9669-cb68-574d-f7a8b0f1bec8":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"43592d73-9669-cb68-574d-f7a8b0f1bec8","ActivityTypeId":"fef847a8-540e-408d-9cf1-3d8a133c3de0","Parameters":{}},"02a1ec5f-031c-cbec-32a2-af2675718093":{"Paths":{"default":"a2737625-bad0-4b67-7322-4c4272e58bce"},"Id":"02a1ec5f-031c-cbec-32a2-af2675718093","ActivityTypeId":"c2a5ef3a-dde9-4309-8921-5a6fd011d0ba","Parameters":{}},"a2737625-bad0-4b67-7322-4c4272e58bce":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"a2737625-bad0-4b67-7322-4c4272e58bce","ActivityTypeId":"fef847a8-540e-408d-9cf1-3d8a133c3de0","Parameters":{}},"5ee1a77e-43cf-78c9-c89a-a409742e5b7c":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"5ee1a77e-43cf-78c9-c89a-a409742e5b7c","ActivityTypeId":"fef847a8-540e-408d-9cf1-3d8a133c3de0","Parameters":{}},"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba":{"Paths":{},"Id":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba","ActivityTypeId":"a47371c2-8921-421f-8902-f3eccd229d56","Parameters":{}}},"UniversalActivities":{}}
+- ID: "621d7a1f-c6a3-4a2f-8fcd-7dd1fd893c9c"
+  Hint: Custom Values
+  Value: "{}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180817T122631Z
+    - ID: "365f1971-b028-4065-bc11-ce1f471452af"
+      Hint: Name
+      Value: Cart Abandonment
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "dc0f32fe-953f-4b5b-ace7-4519326f33c3"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20181005T065416Z
+    - ID: "e259e500-b38e-41fe-82db-8b604bcf9e75"
+      Hint: Description
+      Value: "When a customer fails to complete an order, an automated marketing email message  is sent to the recipient. The intention is to re-engage the recipient and to encourage them to complete the order. Appropriate timings differ depending on the sales cycle of the product. In our example we show three email messages over three days. To discourage misuse of promotional codes in this campaign, brands may want to set a limit to the number of times a recipient can re-enter this campaign."

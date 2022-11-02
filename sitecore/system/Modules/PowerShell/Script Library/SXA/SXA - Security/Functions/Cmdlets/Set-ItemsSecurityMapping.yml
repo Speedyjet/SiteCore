@@ -1,0 +1,89 @@
+---
+ID: "8407bdde-e67f-4b57-ac7a-73730ccacd30"
+Parent: "df608d21-2980-49da-9804-7f818c8624d3"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Security/Functions/Cmdlets/Set-ItemsSecurityMapping"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Set-ItemsSecurityMapping {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$ContentRootItem,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Item]$MappingsRootItem
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Set-ItemsSecurityMapping - Begin"
+        }
+    
+        process {
+            $mappings = Get-ChildItem -Path $MappingsRootItem.Paths.Path -Recurse -WithParent
+            Get-ChildItem -Path $ContentRootItem.Paths.Path -WithParent | ForEach-Object {
+    
+                $item = $_
+                $mappingItem = $mappings | Where-Object {
+                    [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item).InheritsFrom($_.TemplateID)
+                }
+                if ($mappingItem) {
+                    Write-Verbose "Modifying security field of: $($item.Paths.Path)"
+                    Write-Verbose " > $($mappingItem.Name)"
+                    Set-SecurityField $item $mappingItem
+                }
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Set-ItemsSecurityMapping - End"
+        }
+    }
+    
+    function Set-SecurityField {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Item,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            $ValueHolder
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Set-SecurityField - Begin"
+            Import-Function Get-ResolvedDomainTokens
+        }
+    
+        process {
+            $value = ""
+            if($ValueHolder.GetType() -eq [Item]){
+                Write-Verbose "Setting security field of item: $($item.ID) to $($ValueHolder.__Security)"
+                $value =  Get-ResolvedDomainTokens $ValueHolder.__Security
+            }else {
+                Write-Verbose "Setting security field of item: $($item.ID) to $($ValueHolder)"
+                $value =  Get-ResolvedDomainTokens $ValueHolder
+            }
+    
+            $item.__Security = $item.__Security + $value
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Set-SecurityField - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170406T134637Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

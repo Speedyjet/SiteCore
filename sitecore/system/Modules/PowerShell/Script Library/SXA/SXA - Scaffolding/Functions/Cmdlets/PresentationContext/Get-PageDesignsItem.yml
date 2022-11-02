@@ -1,0 +1,39 @@
+---
+ID: "2b576085-c42e-4dfe-b9ed-f6fc80dbbd3f"
+Parent: "adeed651-58a0-4c6c-972f-1d95791a0a23"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Cmdlets/PresentationContext/Get-PageDesignsItem"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-PageDesignsItem {
+    	[CmdletBinding()]
+        param(
+    	    [Parameter(Mandatory=$true, Position=0 )]
+    		[Item]$CurrentItem
+        )
+    
+    	begin {
+    		Write-Verbose "Cmdlet Get-PageDesignsItem - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Get-PageDesignsItem - Process"
+            $instance = [Sitecore.DependencyInjection.ServiceLocator]::ServiceProvider
+            $instance.GetType().GetMethod('GetService').Invoke($instance, [Sitecore.XA.Foundation.Presentation.IPresentationContext]).GetPageDesignsItem($CurrentItem) | ? { $_ -ne $null} | Wrap-Item
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Get-PageDesignsItem - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160712T091111Z

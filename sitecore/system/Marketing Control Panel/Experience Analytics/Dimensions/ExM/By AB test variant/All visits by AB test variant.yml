@@ -1,0 +1,45 @@
+---
+ID: "0ec316ba-73e7-4c72-9c7d-43a711c11bc9"
+Parent: "a720ac6e-a9a3-410c-bad0-e3102a1d58ce"
+Template: "a87ee256-044e-450d-a73c-9a464aa773ef"
+Path: /sitecore/system/Marketing Control Panel/Experience Analytics/Dimensions/ExM/By AB test variant/All visits by AB test variant
+DB: master
+SharedFields:
+- ID: "a4f985d9-98b3-4b52-aaaf-4344f6e747c6"
+  Hint: __Workflow
+  Value: "{933DFBF3-3D97-4FF7-9F5E-74579BD1A219}"
+- ID: "f6d8a61c-2f84-4401-bd24-52d2068172bc"
+  Hint: __Originator
+  Value: 
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20141119T160636Z
+    - ID: "3e431de1-525e-47a3-b6b0-1ccbec3a8c98"
+      Hint: __Workflow state
+      Value: "{3C70E8B1-D6D2-42CC-8E21-1AE8EC72A0FB}"
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "a6e7828a-9ea1-4903-a0a5-4e35ed52205b"
+    - ID: "9b0413da-641e-46d9-8a2a-d8598479952c"
+      Hint: Name
+      Value: All visits by AB test variant
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20160224T122225Z

@@ -1,0 +1,14 @@
+---
+ID: "378b13cd-9459-42bc-b915-61c725091854"
+Parent: "95f7acb7-718c-49e1-9ca8-4045ec7bfd20"
+Template: "0a92feee-0e15-4e81-b044-2ad901b88ddd"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Search/Enums/Facet Slider Relation
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160812T063753Z

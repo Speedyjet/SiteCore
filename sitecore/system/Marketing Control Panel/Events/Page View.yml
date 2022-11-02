@@ -1,0 +1,37 @@
+---
+ID: "9326cb1e-cec8-48f2-9a3e-91c7dbb2166c"
+Parent: "a65e2d0f-27e1-49ad-b332-076745a74ed6"
+Template: "a386c5f2-f7f1-4980-aede-72a5b84b7f45"
+Path: /sitecore/system/Marketing Control Panel/Events/Page View
+DB: master
+SharedFields:
+- ID: "a4f985d9-98b3-4b52-aaaf-4344f6e747c6"
+  Hint: __Workflow
+  Value: "{689E2994-4656-4C58-9112-7826CB46EE69}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160901T150147Z
+    - ID: "3e431de1-525e-47a3-b6b0-1ccbec3a8c98"
+      Hint: __Workflow state
+      Value: "{EDCBB550-BED3-490F-82B8-7B2F14CCD26E}"
+    - ID: "797466f5-763b-4299-b6ad-e4192bf21222"
+      Hint: Description
+      Value: Indicates a page was viewed during a web session
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "6d825dfc-111a-4591-a631-bdfcb713c7ae"
+    - ID: "ac6ba888-4213-43bd-b787-d8da2b6b881f"
+      Hint: Name
+      Value: Page View
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20160901T150227Z

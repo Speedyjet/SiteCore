@@ -1,0 +1,37 @@
+---
+ID: "9d6356ed-7c78-4c48-99fc-67d02e1f1257"
+Parent: "7ee5e27b-5d84-4b3c-a289-e0f4973d6760"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: /sitecore/system/Modules/PowerShell/Script Library/JSS SXA/Scaffolding/Functions/Pre Delete Steps/Pre Delete Site Step
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Invoke-Step {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Root
+        )
+        begin {
+            Write-Verbose "Cmdlet Invoke-Validation - Begin"
+            Import-Function Get-ItemByIdSafe
+            Import-Function Get-SettingsItem
+        }
+        process {
+            Write-Verbose "Cmdlet Invoke-Validation - Process"
+            $settingsItem = Get-SettingsItem $Root
+        }
+        end {
+            Write-Verbose "Cmdlet Invoke-Validation - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190111T131348Z

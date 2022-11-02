@@ -1,0 +1,14 @@
+---
+ID: "77e9b711-2d37-48f9-bd59-714f95c340f9"
+Parent: "21221e48-076c-4f69-ad42-9a8f563235d5"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Forms/Functions/Forms folder security"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180807T134308Z

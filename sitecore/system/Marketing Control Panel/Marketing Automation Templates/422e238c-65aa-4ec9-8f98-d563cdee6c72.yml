@@ -1,0 +1,47 @@
+---
+ID: "422e238c-65aa-4ec9-8f98-d563cdee6c72"
+Parent: "c33ddd15-2016-4766-b54a-c150ee9b832e"
+Template: "d4d43c33-3661-4630-af63-0754cab7b110"
+Path: "/sitecore/system/Marketing Control Panel/Marketing Automation Templates/422e238c-65aa-4ec9-8f98-d563cdee6c72"
+DB: master
+SharedFields:
+- ID: "1766652d-080b-409c-abbf-3a90e0f801f5"
+  Hint: Start Date
+  Value: 00010101T000000Z
+- ID: "2c41a32f-86a9-4f43-8550-bf0af266e3f2"
+  Hint: End Date
+  Value: 00010101T000000Z
+- ID: "394d49b2-b579-43aa-ab32-b4010b18fd07"
+  Hint: Marketing Theme
+  Value: "{B75D8686-8244-42D2-9749-1CE8B2D65755}"
+- ID: "3fb918c8-08ec-4879-8062-088bbf71ee72"
+  Hint: Plan Data
+  Value: |
+    {"ReentryMode":1,"ContextKeyFactoryType":null,"EntryActivityId":"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac","NewEnrollmentRegulatorType":null,"NewEnrollmentRegulatorParameters":null,"Alias":"422e238c-65aa-4ec9-8f98-d563cdee6c72","IgnoreIsActiveProperty":true,"Activities":{"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac":{"Paths":{"default":"92780576-0401-826f-8240-b7c09ac62f04"},"Id":"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac","ActivityTypeId":"8c92d3c1-2c38-4e8a-92d1-9590e17cce89","Parameters":{"EventIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":[]},"GoalIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["8ffb183b-da1a-4c74-8f3a-9729e9fcff6a"]},"OutcomeIds":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":[]},"TestOperation":0,"UseCondition":false}},"92780576-0401-826f-8240-b7c09ac62f04":{"Paths":{"default":"39cd30d2-b0ff-7a0a-dd14-0681893eb4da"},"Id":"92780576-0401-826f-8240-b7c09ac62f04","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"39cd30d2-b0ff-7a0a-dd14-0681893eb4da":{"Paths":{"default":"20e4be3d-e478-3087-433f-be7394399521"},"Id":"39cd30d2-b0ff-7a0a-dd14-0681893eb4da","ActivityTypeId":"9046a4aa-07d9-4377-8a6e-1db27765b2ba","Parameters":{"Name":"2 Days","ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"2.00:00:00","WaitUntil":null}}},"20e4be3d-e478-3087-433f-be7394399521":{"Paths":{"default":"ae96c516-c03a-1bb1-7137-79c9fbea772c"},"Id":"20e4be3d-e478-3087-433f-be7394399521","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"ae96c516-c03a-1bb1-7137-79c9fbea772c":{"Paths":{"default":"34d168e4-4002-222f-7a79-aa53c8cc1d12"},"Id":"ae96c516-c03a-1bb1-7137-79c9fbea772c","ActivityTypeId":"9046a4aa-07d9-4377-8a6e-1db27765b2ba","Parameters":{"Name":"2 Days","ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"2.00:00:00","WaitUntil":null}}},"34d168e4-4002-222f-7a79-aa53c8cc1d12":{"Paths":{"default":"0e4b102c-614a-97bb-7c98-ef762633c8ed"},"Id":"34d168e4-4002-222f-7a79-aa53c8cc1d12","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"0e4b102c-614a-97bb-7c98-ef762633c8ed":{"Paths":{"false":"317155f8-4a18-c9f8-ae13-99f6d375db2f","true":"8014c420-ffb1-3135-e7f6-a16e41e13abb"},"Id":"0e4b102c-614a-97bb-7c98-ef762633c8ed","ActivityTypeId":"1031590a-c964-4d5a-86d4-53658b356712","Parameters":{"ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"7.00:00:00","WaitUntil":null},"Outcomes":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["9016e456-95cb-42e9-ad58-997d6d77ae83"]},"MatchAll":false,"Name":"Outcome registered"}},"317155f8-4a18-c9f8-ae13-99f6d375db2f":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"317155f8-4a18-c9f8-ae13-99f6d375db2f","ActivityTypeId":"07a0b752-bb0e-4ab8-92ed-ae9c03ba1301","Parameters":{}},"8014c420-ffb1-3135-e7f6-a16e41e13abb":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"8014c420-ffb1-3135-e7f6-a16e41e13abb","ActivityTypeId":"07a0b752-bb0e-4ab8-92ed-ae9c03ba1301","Parameters":{}},"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba":{"Paths":{},"Id":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba","ActivityTypeId":"a47371c2-8921-421f-8902-f3eccd229d56","Parameters":{}}},"UniversalActivities":{}}
+- ID: "621d7a1f-c6a3-4a2f-8fcd-7dd1fd893c9c"
+  Hint: Custom Values
+  Value: "{}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180816T124657Z
+    - ID: "365f1971-b028-4065-bc11-ce1f471452af"
+      Hint: Name
+      Value: Welcome
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "e9133484-b938-4e3a-8583-32a3e4eaafc3"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20181005T065248Z
+    - ID: "e259e500-b38e-41fe-82db-8b604bcf9e75"
+      Hint: Description
+      Value: When a new recipient is added to xDB, an automated marketing email message is sent to the recipient. The intention of the email is to introduce the recipient to the brand, the website, and key parts of the offering such as how to get in touch. In some cases, this campaign is a single email message but for large brands there may be up to seven email messages sent, one per day for the first week. Suggested maximum enrollment is 1.

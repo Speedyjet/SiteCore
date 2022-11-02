@@ -1,0 +1,14 @@
+---
+ID: "504568f0-2224-45b9-8ca5-a48136ba33ec"
+Parent: "48358d62-f2e0-4fe0-be8e-bd9a0e84c7b1"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Theming/Functions/Test"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180528T111038Z

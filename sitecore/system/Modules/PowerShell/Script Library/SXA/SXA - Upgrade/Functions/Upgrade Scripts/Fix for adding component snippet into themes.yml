@@ -1,0 +1,127 @@
+---
+ID: "04e6ca9d-55cf-4280-a860-5040b495b937"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Fix for adding component snippet into themes"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1501
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Test-ModuleEnabled
+    Import-Function Get-AllSxaSite
+    Import-Function Test-ItemIsTheme
+    
+    $compositesFeature = Get-Item -Path . -ID "{631D6C11-B901-42F7-96DA-E8DA836E876C}"
+    $componentsBaseThemeID = "{C7F3C097-9A71-4701-B8A9-0C6740FBF84E}"
+    $baseLayoutFieldId = "{384C2D3C-3E34-4493-9CB2-ADE68CAF0DA2}"
+    
+    function Test-ComponentsBaseThemeNotInstalled($theme) {
+        $instance = [Sitecore.DependencyInjection.ServiceLocator]::ServiceProvider
+        $list = New-Object System.Collections.ObjectModel.Collection[Sitecore.Data.ID]
+        $themingContext = $instance.GetType().GetMethod('GetService').Invoke($instance, [Sitecore.XA.Foundation.Theming.IThemingContext])
+        $themesWithBaseThemes = $themingContext.GetThemesWithBaseThemes($theme, $list, $baseLayoutFieldId)
+        $onPageEditingBaseThemes = $themesWithBaseThemes | ? { $_.ID -eq $componentsBaseThemeID }
+        $onPageEditingBaseThemes -eq $null
+    }
+    
+    function Get-AffectedThemes() {
+        $sites = Get-AllSxaSite | ? { Test-ModuleEnabled $_ $compositesFeature }
+        
+        $affectedThemes = $sites | % {
+            $site = $_
+            $themeFolderItem = $site.Database.GetItem($site.ThemesFolder)
+            if ($themeFolderItem -eq $null) {
+                Write-Error "Could not find theme folder for '$($site.Name)' site"
+            }
+            else {
+                Get-ChildItem -Path $themeFolderItem.Paths.Path -Recurse | ? { Test-ItemIsTheme $_ } | `
+                    ? {-not (Test-AssetExists $_)} | `
+                    ? { Test-ComponentsBaseThemeNotInstalled $_ }
+            }            
+        }
+        $affectedThemes    
+    }
+    
+    function Test-AssetExists([Item] $theme) {
+        Test-Path "$($theme.Paths.Path)/scripts/component-snippet"
+    }
+    
+    function ShouldRun () {
+        $themes = Get-AffectedThemes
+        $themes.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Add-ThemeStyle([Item]$themeItem, [Item]$styleItem) {
+        $scriptsFolder = "scripts"
+        $scriptItemName = $styleItem.Name
+        if ($themeItem.Children[$scriptsFolder] -eq $null) {
+            $scripts = New-Item -Parent $themeItem -ItemType "System/Media/Media folder"  -Name $scriptsFolder  -Language "en"
+        }
+        
+        $scripts = $themeItem.Children[$scriptsFolder]
+        if ($scripts.Children[$scriptItemName] -eq $null) {
+            Copy-Item -Path $styleItem.Paths.Path -Destination $scripts.Paths.Path
+            Write-Verbose "$scriptItemName added into a $($scripts.Paths.Path) folder."
+        }
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $arguments
+        )
+    
+        process {
+            Write-Verbose "Getting themes for processing . . ."
+            $affectedThemes = Get-AffectedThemes
+            Write-Verbose "Found $($affectedThemes.Count) themes."
+    
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $scriptItem = Get-Item master: -ID "{1CE3E2A6-443A-4590-B463-E92631A87F93}" # component-snippet from Components Theme
+                
+                $affectedThemes | % {
+                    Write-Verbose "Processing '$($_.Name)' theme [$($_.ID)]"
+                    $currentItemPath = $($_.Paths.Path)
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Added $($scriptItem.Name).js")) {
+                        Add-ThemeStyle $_ $scriptItem
+                    }
+                }
+                
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1501
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170203T091206Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Snippet script
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: "Ensures that every user's theme contains the component-snippet.js script."

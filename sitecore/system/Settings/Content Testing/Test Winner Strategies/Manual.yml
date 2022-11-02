@@ -1,0 +1,35 @@
+---
+ID: "9551fa9b-2c25-40a1-9c00-038de67abdc2"
+Parent: "c0c108be-fca9-4b41-befa-95bf47dcb58a"
+Template: "61618000-f943-4b7a-8286-28f8593a630f"
+Path: /sitecore/system/Settings/Content Testing/Test Winner Strategies/Manual
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "15f1de80-696e-418b-b017-f70f464e313b"
+      Hint: Name
+      Value: Manually select winner
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20140508T123340
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "ce578dff-2f22-4d4f-b5a9-224177069cc7"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20140925T131929:635472479694240764Z"

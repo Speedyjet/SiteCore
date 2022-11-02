@@ -1,0 +1,24 @@
+---
+ID: "a0f38085-e3b3-45cd-93c6-3fbe85e29255"
+Parent: "24dff2cf-b30a-4b75-8967-2fe3ded82271"
+Template: "0771b0a2-5bcf-4f87-91de-13474618b6bf"
+Path: /sitecore/system/Marketing Control Panel/Profiles/Focus/Pattern Cards
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20110329T114230
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "3c20671f-c56e-4bc7-a2dc-2c631a12d9de"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20110413T164700:634383100208455036"

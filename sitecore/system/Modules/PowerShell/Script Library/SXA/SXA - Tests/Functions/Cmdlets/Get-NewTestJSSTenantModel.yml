@@ -1,0 +1,55 @@
+---
+ID: "4dc5393f-f6ea-473a-a8bb-01a84ed1ddff"
+Parent: "0b506ced-7de2-44db-ab55-32408b644ea1"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Cmdlets/Get-NewTestJSSTenantModel"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-NewTestJSSTenantModel {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [string]$tenantName,
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [string]$contentPath
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-NewTestJSSTenantModel - Begin"
+            Import-Function Get-ItemByIdSafe
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-NewTestJSSTenantModel - Process"
+            $model = New-Object Sitecore.XA.JSS.Foundation.Scaffolding.Models.CreateNewJSSTenantModel
+            $model.TenantName = $tenantName
+            $model.TenantLocation = Get-Item -Path $contentPath
+            $model.DefinitionItems = New-Object System.Collections.ArrayList($null)
+            $db = Get-Database "master"
+            $db.DataManager.DataSource.SelectIDs("","{F036B5E0-37FB-4537-9D36-EF84E5BD41B7}") `
+                | % { Get-ItemByIdSafe $_ } `
+                | ? { $_.Paths.LongID.Contains("{087E1EA5-6280-4575-9E70-85B588DB91B2}") } `
+                | ? { $_.IncludeByDefault -eq '1' } `
+                | % { $model.DefinitionItems.Add($_) } > $null
+            $model
+        } 
+    
+        end {
+            Write-Verbose "Cmdlet Get-NewTestJSSTenantModel - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20201015T113855Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

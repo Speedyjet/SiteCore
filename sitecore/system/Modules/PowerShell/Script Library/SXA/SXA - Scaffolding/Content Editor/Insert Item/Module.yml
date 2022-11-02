@@ -1,0 +1,53 @@
+---
+ID: "f054ba2f-fe30-41cf-b101-da89db468622"
+Parent: "7bfc37a7-7817-48a4-afea-b4c1c631b93a"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Content Editor/Insert Item/Module"
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: Office/32x32/add.png
+- ID: "1c76313e-3c8c-4807-a826-135d10c39299"
+  Hint: ShowRule
+  Type: Rules
+  Value: |
+    <ruleset>
+      <rule
+        uid="{5BE0104A-1C45-4E97-91E6-DBC25218252C}">
+        <conditions>
+          <condition
+            id="{4F5389E9-79B7-4FE1-A43A-EEA4ECD19C94}"
+            uid="583B6C0A7F9148BF94BDADDD1D8F9384"
+            operatorid="{10537C58-1684-4CAB-B4C0-40C10907CE31}"
+            value="{31C85853-D86D-46B0-A418-86DF28F7294F}" />
+        </conditions>
+      </rule>
+      <rule
+        uid="{EB64665E-06C1-4B5B-8F1E-D630B58411B7}">
+        <conditions>
+          <condition
+            id="{4F5389E9-79B7-4FE1-A43A-EEA4ECD19C94}"
+            uid="370FE2B5C50E4288B4149B3412C8E6DF"
+            value="{256655EC-8F3A-45B5-AD90-B63BC25B8067}"
+            operatorid="{10537C58-1684-4CAB-B4C0-40C10907CE31}" />
+        </conditions>
+      </rule>
+    </ruleset>
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Show-NewModuleDialog
+    Import-Function Add-Module
+    
+    $CurrentItem = Get-Item .
+    $model = Show-NewModuleDialog $CurrentItem
+    Add-Module $model
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171124T110703Z

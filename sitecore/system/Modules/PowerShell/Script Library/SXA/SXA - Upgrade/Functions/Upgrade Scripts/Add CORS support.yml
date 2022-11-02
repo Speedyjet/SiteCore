@@ -1,0 +1,91 @@
+---
+ID: "38b39b34-b18a-450f-bb51-246331de47d6"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Add CORS support"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1310
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-SiteItem  
+    Import-Function Invoke-SiteAction
+    Import-Function Get-SiteDefinitions
+    Import-Function Get-Action
+    Import-Function Get-AllSxaSiteDefinition
+        
+    $CORSGroupingBranchPath = (Get-Item . -ID "{F0E39DC1-6A4F-41ED-B0FE-B65BF09A1745}").Paths.Path.Replace("/sitecore/templates/","")
+    
+    function Get-AffectedSiteDefinitions {
+        $siteDefinitions = Get-AllSxaSiteDefinition | ? {
+            $siteDefinitionPath = $_.Paths.Path
+            $testPath = "$siteDefinitionPath/CORS/default"
+            -not(Test-Path $testPath)
+        }
+        $siteDefinitions
+    }
+            
+        
+    function Add-CorsItems {
+        $siteDefinitions = Get-AffectedSiteDefinitions
+    
+        Write-Verbose "Found $($siteDefinitions.Count) site definitions for processing.."
+        $siteDefinitions | % {
+            $path = $_.Paths.Path + "/CORS"
+            New-Item -Path $path -ItemType $CORSGroupingBranchPath > $null
+        }
+    }
+            
+    function ShouldRun () {
+        $items = Get-AffectedSiteDefinitions
+        $items.Count -gt 0
+    }
+        
+    function Get-DialogParameters () {
+    }   
+            
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            $arguments
+        )
+            
+        process {
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                if ($pscmdlet.ShouldProcess("Add CORS specific items for SXA Data Modeling")) {
+                    Add-CorsItems
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1310
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170203T091206Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: CORS support
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: CORS support for SXA Data Modeling

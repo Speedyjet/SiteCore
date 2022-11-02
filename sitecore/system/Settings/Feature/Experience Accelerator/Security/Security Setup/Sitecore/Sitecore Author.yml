@@ -1,0 +1,29 @@
+---
+ID: "8742c93a-e0fb-4113-a267-10380089e836"
+Parent: "9c58e5df-a87f-4d2a-8a7b-5b9708479050"
+Template: "35528c6b-4039-4ee5-89ae-831340190764"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/Sitecore/Sitecore Author
+DB: master
+SharedFields:
+- ID: "2f325664-bba1-4eac-8d8f-c365d2f40245"
+  Hint: RoleDomain
+  Value: sitecore
+- ID: "5382bfde-8e39-4571-a1c5-eb3c43d5bce3"
+  Hint: RoleName
+  Value: Author
+- ID: "9c6106ea-7a5a-48e2-8cad-f0f693b1e2d4"
+  Hint: __Read Only
+  Type: Checkbox
+  Value: 1
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170404T112534Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

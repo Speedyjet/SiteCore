@@ -1,0 +1,23 @@
+---
+ID: "fe73d135-0b1d-4ee2-95fa-844194e988d6"
+Parent: "5fee5913-96d9-439f-a0d4-9343353e2a7c"
+Template: "a7981549-d3e3-4883-8a55-3554acc9cc53"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Invoke-PreDeleteValidationStep Tests/FAIL/Step"
+DB: master
+SharedFields:
+- ID: "51bae6c9-5808-423c-8c0f-bebd884b256d"
+  Hint: ValidationScript
+  Type: Treelist
+  Value: "{1D39F078-F5FC-4F9A-B37A-EF394B359BBF}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180904T135055Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

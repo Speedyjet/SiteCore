@@ -1,0 +1,14 @@
+---
+ID: "21739248-4f4d-45a4-9c48-ee5636b183ab"
+Parent: "fa4fc270-d16a-4230-a7ce-a0f6b0d97de7"
+Template: "fa4fc270-d16a-4230-a7ce-a0f6b0d97de7"
+Path: /sitecore/templates/Feature/Experience Accelerator/Media/Datasource/FlashTemplate/__Standard Values
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20111207T111100

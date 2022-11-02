@@ -1,0 +1,158 @@
+---
+ID: "7f02f95a-e09c-4bf5-a78f-b616ff34fbb0"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Add MetaPartialDesign to Insert Options"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1701
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Select-SingleItemFromEachGroup
+    Import-Function Get-UniqueItem
+    Import-Function Get-AllSxaSite
+    Import-Function Get-AllSxaTenant
+    Import-Function Get-TenantTemplate
+    Import-Function New-Tenant
+    Import-Function Get-TenantTemplatesRoot
+    Import-Function Set-InsertOptionsForTenantTemplate
+    
+    $partialDesignFolderTemplateId = "{6A4620BB-19F5-4995-837A-7BAA61231C52}"
+    $metadataPartialDesignTemplateId = "{C2A8E276-1757-4957-9DD5-8669B79FD80D}"
+    $partialDesignTemplateId = "{BF680756-B2FA-4CAE-8B69-EE361080616F}"
+    
+    function Get-AffectedTenant () {
+        Get-AllSxaTenant
+    }
+    
+    function Add-MetaPartialDesignToInsertOptions {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0 )]
+            [Item]$tenantItem
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Add-MetaPartialDesignToInsertOptions - Begin"
+            Import-Function Invoke-TenantAction
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Add-MetaPartialDesignToInsertOptions - Process"
+            
+            $templateRoot = Get-TenantTemplatesRoot $tenantItem
+            $tenantTemplate = Get-TenantTemplate $templateRoot
+    
+            $tenantTemplate = $tenantTemplate | ? { 
+                $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_.ID, $_.Database)
+                $template.InheritsFrom($partialDesignFolderTemplateId) -or $template.InheritsFrom($metadataPartialDesignTemplateId) -or $template.InheritsFrom($partialDesignTemplateId)    
+            }
+    
+            $oldInsertOptionsMapping = @{}
+            $tenantTemplate | % {
+                $svId = $_."__Standard values"
+                if ($svId) {
+                    $svItem = Get-Item . -ID $svId
+    
+                    # backup old insert options
+                    $insertOptions = $svItem."__Masters"
+                    if ($insertOptions) {
+                        $ids = $insertOptions.Split("|") | ? { $_ -ne ""} 
+                        # select insert options which are not default
+                        $insertOptions = $ids | ? {
+                            $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_, $svItem.Database)
+                            -not($template.InheritsFrom($partialDesignFolderTemplateId)) -and -not($template.InheritsFrom($metadataPartialDesignTemplateId)) -and -not($template.InheritsFrom($partialDesignTemplateId))
+                        }                    
+                        if ($insertOptions) {
+                            $oldInsertOptionsMapping.Add($svItem.ID, $insertOptions)
+                        }
+                    }                
+                    Reset-ItemField -IncludeStandardFields -Name "__Masters" -Item $svItem
+                }
+            }
+    
+            # assign old insert options, if any
+            $oldInsertOptionsMapping.Keys | ? {$oldInsertOptionsMapping[$_] -ne ""} | % {
+                $oldInsertOptionsIDs = $oldInsertOptionsMapping[$_]
+                $svItem = Get-Item . -ID $_
+                [Sitecore.Data.ID[]]$newValue = $svItem."__Masters".Split("|") | ? { $_ -ne ""} 
+                $oldInsertOptionsIDs | % { $newValue += $_}
+                $svItem."__Masters" = $newValue -join '|'
+            }
+    
+            # update insert options
+            if ($tenantTemplate) {
+                Set-InsertOptionsForTenantTemplate $tenantTemplate
+            }
+        }
+        end {
+            Write-Verbose "Cmdlet Add-MetaPartialDesignToInsertOptions - End"
+        }   
+    }
+    
+    function ShouldRun () {
+        $outdatedTemplates = Get-AffectedTenant
+        $outdatedTemplates.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $arguments
+        )
+    
+        process {
+            Write-Verbose "Getting affected tenants . . ."
+            $affectedTenants = Get-AffectedTenant
+            
+            Write-Verbose "Found $($affectedTenants.Count) tenants"
+    
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $affectedTenants | % { 
+                    $currentItemPath = $($_.Paths.Path)
+                    Write-Verbose "Processing '$($_.Name)' tenant [$($_.ID)]"
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Adding missing insert options")) {
+                        Add-MetaPartialDesignToInsertOptions $_ 
+                    }
+                }            
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1701
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180518T101902Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Add Metadata Partial Design to Insert Options
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Adds missing Meta Partial Design to an Insert Options of Partial Design Folder Template

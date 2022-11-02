@@ -1,0 +1,14 @@
+---
+ID: "3b47c187-7f80-497f-95d9-16d072e3e6bd"
+Parent: "96fc3cd8-8616-43ed-a0e5-a58b1b0d6503"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Security/Functions"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160708T073821Z

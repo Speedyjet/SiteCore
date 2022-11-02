@@ -1,0 +1,34 @@
+---
+ID: "5a67bd04-f5c3-4114-98ce-b4db50dc980b"
+Parent: "5e25b717-0af0-46ca-9631-2a7d4bb24b1c"
+Template: "0a98e368-cdb9-4e1e-927c-8e0c24a003fb"
+Path: /sitecore/layout/Sublayouts/Email/Preview Block
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: software/32x32/element_selection_delete.png
+- ID: "5d1ddbd2-ca51-4708-8f58-b1e5dcdce14c"
+  Hint: Data source
+  Value: 
+- ID: "e42081b6-8a95-4a11-89ce-df70ed502f57"
+  Hint: Path
+  Value: /sitecore modules/Web/EXM/sublayouts/Email/Preview Block.ascx
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190626T091308Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "159f6fc1-3d18-4dab-ba72-8297ef2c23a6"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20200331T101506Z

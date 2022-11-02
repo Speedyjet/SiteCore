@@ -1,0 +1,14 @@
+---
+ID: "7880cac9-86c1-4cfe-ba22-4195704f6577"
+Parent: "d2dcf96c-bd83-4ee4-8a62-37fdfc54b675"
+Template: "96c8e5dd-63c3-496b-a97c-a3e37e1dacba"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Page Branches/Rules/Page Branches Rules/Design Rules
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190218T102027Z

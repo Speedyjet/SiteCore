@@ -1,0 +1,45 @@
+---
+ID: "7aaabf7e-3aed-445c-ab16-e131bd833e02"
+Parent: "173817d0-0245-4ce8-b227-06dc98213e39"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Cmdlets/Bulk Installer/Get-ItemWithoutModuleInstalled"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-ItemWithoutModuleInstalled {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item[]]$Items,
+            
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Item]$SetupItem
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-ItemWithoutModuleInstalled - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-ItemWithoutModuleInstalled - Process"
+            $Items | ? {
+                $item = $_
+                [Sitecore.Data.ID[]]$installedModules = $item.Modules.Split('|') | ? { [guid]::TryParse($_, [ref][guid]::Empty) }
+                $installedModules -eq $null -or -not($installedModules.Contains($SetupItem.ID))
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Get-ItemWithoutModuleInstalled - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20181119T155252:636782395729868176Z"

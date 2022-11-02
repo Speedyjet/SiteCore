@@ -1,0 +1,113 @@
+---
+ID: "85b5c267-65e9-4c33-936c-81bc04eab6a0"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Add Composites Base Theme"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1407
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-SettingsItem
+    Import-Function Get-AllSxaSite
+    
+    $onPageEditingBaseThemeID = "{F7EBFA55-129B-43C4-88EB-E9D03D2E0C41}"
+    $compositesSiteSetupItemId = "{631D6C11-B901-42F7-96DA-E8DA836E876C}"
+    $baseLayoutFieldId = "{E0367CD6-E333-4625-9993-BAA4F1C0C92B}"
+    
+    function Get-SitesWithCompositesFeatureEnabled() {
+        Get-AllSxaSite | `
+            ? { $_.Modules -ne $null } | `
+            ? { ($_.Modules.Contains($compositesSiteSetupItemId)) -eq $true }
+    }
+    
+    function Get-EditngThemeForSite($site) {
+        $settingsItem = Get-SettingsItem $_
+        $editingThemeId = $settingsItem.EditingTheme
+        if ($editingThemeId -ne $null) {
+            $editingTheme = $settingsItem.Database.GetItem($editingThemeId)
+            $editingTheme
+        }    
+    }
+    
+    function Test-OnPageEditingNotInstalled($theme) {
+        $instance = [Sitecore.DependencyInjection.ServiceLocator]::ServiceProvider
+        $list = New-Object System.Collections.ObjectModel.Collection[Sitecore.Data.ID]
+        $themingContext = $instance.GetType().GetMethod('GetService').Invoke($instance, [Sitecore.XA.Foundation.Theming.IThemingContext])
+        $themesWithBaseThemes = $themingContext.GetThemesWithBaseThemes($theme, $list, $baseLayoutFieldId)
+        $onPageEditingBaseThemes = $themesWithBaseThemes | ? { $_.ID -eq $onPageEditingBaseThemeID }
+        $onPageEditingBaseThemes -eq $null
+    }
+    
+    function Get-AffectedThemes() {
+        Get-SitesWithCompositesFeatureEnabled | `
+            % { Get-EditngThemeForSite $_ } | `
+            ? { $_ -ne $null } | `
+            ? { Test-OnPageEditingNotInstalled $_ } | Wrap-Item
+    }
+    
+    function ShouldRun () {
+        $outdatedTemplates = Get-AffectedThemes
+        $outdatedTemplates.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Add-BaseTheme($themeItem) {
+        $themeItem.BaseLayout = $themeItem.BaseLayout, $onPageEditingBaseThemeID -join '|'
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $arguments
+        )
+    
+        process {
+            Write-Verbose "Getting affected themes . . ."
+            $affectedThemes = Get-AffectedThemes
+            Write-Verbose "Found $($affectedThemes.Count) themes without base Composite theme"
+    
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $affectedThemes | ForEach-Object {
+                    Write-Verbose "Processing '$($_.Name)' theme [$($_.ID)]"
+                    $currentItemPath = $($_.Paths.Path)
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Adding missing Composite base theme to the base themes field")) {
+                        Add-BaseTheme $_
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1407
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170203T091206Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: On page editing of composites base theme
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Ensures that every site editing theme contains the Composites base theme.

@@ -1,0 +1,27 @@
+---
+ID: "b575090a-38db-4d7d-bde5-e2b3d317e6ab"
+Parent: "7941d7d1-24ae-4478-beab-0227e14a1cf9"
+Template: "00a60c7a-2373-4e30-8197-920b8374509e"
+Path: /sitecore/system/Modules/Experience Explorer/Components/ExpViewer/Onsite Behavior
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20130401T223910
+    - ID: "4882658b-7490-4f7a-a16f-080bb4ae9e99"
+      Hint: Accordion Name
+      Value: Onsite Behavior
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "979042ec-d640-45d9-b1d7-2022a20f3cea"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20130401T223910:635004527508258895"

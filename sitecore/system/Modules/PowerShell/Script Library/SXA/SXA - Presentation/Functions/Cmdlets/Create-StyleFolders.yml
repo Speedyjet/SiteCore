@@ -1,0 +1,61 @@
+---
+ID: "349c8215-e676-4998-80e7-ed1b9107e37e"
+Parent: "051ab794-1d86-4596-a368-dae1eeae1a12"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Presentation/Functions/Cmdlets/Create-StyleFolders"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Create-StyleFolders {
+    	[CmdletBinding()]
+    	param(
+    		[Parameter(Mandatory = $true,Position = 0)]
+    		[item]$item,
+    		[Parameter(Mandatory = $true,Position = 1)]
+    		[object]$renderingInfo
+    	)
+    
+    
+    	begin {
+    		Import-Function Add-FolderStructure
+    		Import-Function Get-StylesItem
+    		Write-Verbose "Cmdlet Create-StyleFolders - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Create-StyleFolders - Process"
+    		$stylesItem = Get-StylesItem $item
+    		if($(Test-Path $renderingInfo.DestinationFolder) -eq $false){
+    		    $componentFolderPath = "$($stylesItem.Paths.Path)/$($renderingInfo.Component)"
+    		    if($(Test-Path $componentFolderPath)){
+    		        $sectionFolder = Add-FolderStructure "$($renderingInfo.SectionFolder)" "Foundation/Experience Accelerator/Presentation/Styles" | Wrap-Item
+    		        if ($componentFolderPath -ne $sectionFolder.ItemPath) {
+    		            Move-Item -Path $componentFolderPath $sectionFolder.ItemPath
+                        Write-Verbose "Moved $componentFolderPath folder into $($sectionFolder.ItemPath) section"
+    		        }
+    		    }
+    		}
+    		
+    		$folder = Add-FolderStructure "$($renderingInfo.DestinationFolder)" "Foundation/Experience Accelerator/Presentation/Styles" | Wrap-Item
+    		$folder."__Display name" = $renderingInfo.FolderName
+    		return $folder
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Create-StyleFolders - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170801T104409Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

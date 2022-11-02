@@ -1,0 +1,30 @@
+---
+ID: "77271668-d85e-4df9-82f5-beed05c2ed9d"
+Parent: "f41379c4-96dc-4efc-9ab7-e62bf7c8a444"
+Template: "b7450f41-8e34-497b-971a-2fd329ade505"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/Tenant/Tenant Author
+DB: master
+SharedFields:
+- ID: "2f325664-bba1-4eac-8d8f-c365d2f40245"
+  Hint: RoleDomain
+  Value: $tenantDomain
+- ID: "359b28a0-9fac-4f93-b0f6-db957cbe5ce9"
+  Hint: MemberOf
+  Type: Treelist
+  Value: |
+    {FAF0706C-AB2F-4D71-813D-D70716F2552B}
+    {174A8965-55E8-4202-9EDB-68D6303C50B5}
+- ID: "5382bfde-8e39-4571-a1c5-eb3c43d5bce3"
+  Hint: RoleName
+  Value: Tenant Author
+- ID: "6471939f-9e50-4512-9eb7-556594c5c728"
+  Hint: RoleType
+  Value: "{8E1B514E-F0CC-416F-85ED-B2C70DAA8639}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170404T121143Z

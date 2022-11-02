@@ -1,0 +1,14 @@
+---
+ID: "c79630a2-ba72-4b43-bf66-9faed3a21a4c"
+Parent: "c91208dd-ed39-4c88-a761-31f9d79c0233"
+Template: "0a92feee-0e15-4e81-b044-2ad901b88ddd"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/Enums/Role Types
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20120308T160248

@@ -1,0 +1,14 @@
+---
+ID: "01582364-20e6-4577-b385-3017e1ddd2ff"
+Parent: "63543ea1-d265-4836-a63d-cc57188d82f3"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Site Metadata/Functions"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160708T073821Z

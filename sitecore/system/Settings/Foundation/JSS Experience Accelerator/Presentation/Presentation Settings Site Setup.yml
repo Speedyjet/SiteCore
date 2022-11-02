@@ -1,0 +1,26 @@
+---
+ID: "ca502dcf-20d2-4618-a735-e4fcb6d5e114"
+Parent: "78fcd6c8-4797-4169-9382-ede096efe6fb"
+Template: "bed31d6f-d968-45a9-b54e-12d7f977d861"
+Path: /sitecore/system/Settings/Foundation/JSS Experience Accelerator/Presentation/Presentation Settings Site Setup
+DB: master
+SharedFields:
+- ID: "06d2c562-9229-4779-8807-e2a5fd2990d4"
+  Hint: IsSystemModule
+  Type: Checkbox
+  Value: 1
+- ID: "11488836-d40f-40d4-beb4-1d31da7b1470"
+  Hint: IncludeByDefault
+  Type: Checkbox
+  Value: 1
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181122T001106Z
+    - ID: "c202067e-7fab-4606-afb4-e76df2185ddc"
+      Hint: Name
+      Value: Presentation

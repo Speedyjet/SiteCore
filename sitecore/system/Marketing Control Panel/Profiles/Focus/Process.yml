@@ -1,0 +1,46 @@
+---
+ID: "f5652c06-676b-4e12-a9d0-06d000e5f1c8"
+Parent: "24dff2cf-b30a-4b75-8967-2fe3ded82271"
+Template: "44ab5107-3c73-42f0-a427-bec549f944b9"
+Path: /sitecore/system/Marketing Control Panel/Profiles/Focus/Process
+DB: master
+SharedFields:
+- ID: "12e2c64a-5f08-4948-86c8-55ae06afeef8"
+  Hint: MaxValue
+  Value: 10
+- ID: "271d7b0f-446c-4f24-bfe7-e33c20bf7a41"
+  Hint: MinValue
+  Value: 0
+Languages:
+- Language: en
+  Fields:
+  - ID: "2e1a9aab-f7c1-49ee-b032-28b98d3688d6"
+    Hint: Name
+    Value: Process
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "001dd393-96c5-490b-924a-b0f25cd9efd8"
+      Hint: __Lock
+      Value: <r />
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20081227T142454
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "81d27904-2a28-4684-a6f5-0a902c4605db"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20090609T101548:633801393487340428"

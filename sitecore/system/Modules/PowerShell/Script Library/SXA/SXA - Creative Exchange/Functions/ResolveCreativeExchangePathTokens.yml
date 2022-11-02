@@ -1,0 +1,54 @@
+---
+ID: "18da2ebe-4888-4cc7-9619-8873d9cf65e0"
+Parent: "fceb63c0-2640-4429-ad6c-aa6fa2af38ae"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Creative Exchange/Functions/ResolveCreativeExchangePathTokens"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-SettingsItem
+    
+    function Invoke-ModuleScriptBody {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Site,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Item[]]$TenantTemplates		
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Invoke-ModuleScriptBody - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Invoke-ModuleScriptBody - Process"
+            $settingsItem = Get-SettingsItem $Site 
+    		
+            [Sitecore.Data.ID]$fileStorageTemplateID = [Sitecore.XA.Feature.CreativeExchange.Templates+CreativeExchangeFileStorage]::ID
+            $fileStorages = Get-ChildItem -Path $settingsItem.Paths.Path -Recurse | ? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_).InheritsFrom($fileStorageTemplateID) }
+    		
+            [Sitecore.Data.ID]$siteTemplateID = [Sitecore.XA.Foundation.Multisite.Templates+SiteDefinition]::ID
+            $siteItem = Get-ChildItem -Path $settingsItem.Paths.Path -Recurse | ? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_).InheritsFrom($siteTemplateID) }
+            $fileStorages | % {
+                $oldPath = $_."Destination Path"
+                $_."Destination Path" = $oldPath.Replace("`$sxaSiteName", "$($siteItem.Name)")
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Invoke-ModuleScriptBody - End"
+        }
+    }
+    
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20161026T074725Z

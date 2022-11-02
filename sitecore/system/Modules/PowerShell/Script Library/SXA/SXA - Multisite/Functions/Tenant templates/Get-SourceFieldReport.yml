@@ -1,0 +1,48 @@
+---
+ID: "8df1259f-a051-45e0-a5d7-06b0b20507b7"
+Parent: "3b4f6691-dc5d-4a58-a297-426c4bc6686a"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Multisite/Functions/Tenant templates/Get-SourceFieldReport"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-SourceFieldReport {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $false, Position = 0 )]
+            [string]$StartPath = "/sitecore/templates/Project"
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-SourceFieldReport - Begin"        
+            Import-Function Get-FieldSourceMapping
+            Import-Function Get-FieldWithEmptySourceField
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-SourceFieldReport - Process"
+    
+            $mapping = Get-FieldSourceMapping
+            Get-FieldWithEmptySourceField $StartPath | Show-ListView `
+                -ViewName "SxaReportView" `
+                -ActionData $StartPath `
+                -Property `
+                    @{Label = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Multisite.Texts]::Name); Expression = {$_.Name} },
+                    @{Label = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Multisite.Texts]::Path); Expression = {$_.Paths.Path } },
+                    @{Label = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Multisite.Texts]::Type); Expression = {$_.Fields["Type"].Value} },
+                    @{Label = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Multisite.Texts]::Recommendation); Expression = {$mapping[$_.Fields["Type"].Value]} }
+        }
+        end {
+            Write-Verbose "Cmdlet Get-SourceFieldReport - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180528T110549Z

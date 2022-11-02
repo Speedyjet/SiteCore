@@ -1,0 +1,39 @@
+---
+ID: "81200602-e948-4d11-a443-c225874a7f82"
+Parent: "35b91bd0-2822-4cb5-b7c1-1b3ae9c8d32d"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Presentation/Functions/Cmdlets/PresentationContext/Get-StylesItem"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-StylesItem {
+    	[CmdletBinding()]
+        param(
+    	    [Parameter(Mandatory=$true, Position=0 )]
+    		[Item]$CurrentItem
+        )
+    
+    	begin {
+    		Write-Verbose "Cmdlet Get-StylesItem - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Get-StylesItem - Process"
+            $instance = [Sitecore.DependencyInjection.ServiceLocator]::ServiceProvider
+            $instance.GetType().GetMethod('GetService').Invoke($instance, [Sitecore.XA.Foundation.Presentation.IPresentationContext]).GetStylesItem($CurrentItem) | ? { $_ -ne $null} | Wrap-Item
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Get-StylesItem - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160712T091111Z

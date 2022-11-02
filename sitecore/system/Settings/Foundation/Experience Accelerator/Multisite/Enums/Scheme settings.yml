@@ -1,0 +1,14 @@
+---
+ID: "ddecface-23c4-4411-a62c-28f6c331e1b2"
+Parent: "61a9df06-dd99-4f24-9dd9-9f75f50449db"
+Template: "0a92feee-0e15-4e81-b044-2ad901b88ddd"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Multisite/Enums/Scheme settings
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160630T083105Z

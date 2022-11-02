@@ -1,0 +1,28 @@
+---
+ID: "5e06b64f-6ea7-495c-aa66-7b69f7b94c19"
+Parent: "938c20b4-78be-4d2a-8999-7e4714c32e78"
+Template: "314be5b0-8536-45cf-900d-a84b2b335210"
+Path: /sitecore/system/Settings/Content Testing/Test Strategies/Subgroup Round Robin Sticky
+DB: master
+SharedFields:
+- ID: "3d445351-a7d8-4c5f-a009-9af499b44c6e"
+  Hint: Type
+  Value: Sitecore.ContentTesting.Strategy.SubgroupRoundRobinTestStrategy, Sitecore.ContentTesting
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20090603T121800
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "1008af79-0942-4089-9a37-6f92a8636d7a"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20150424T080247:635654593674403377Z"

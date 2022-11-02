@@ -1,0 +1,14 @@
+---
+ID: "630677f5-9818-4c22-b56c-765ed672daa9"
+Parent: "f2af9511-d897-4b60-bd85-ce59fb9f17fa"
+Template: "f2af9511-d897-4b60-bd85-ce59fb9f17fa"
+Path: /sitecore/templates/Foundation/Experience Accelerator/Theming/Base Themes/__Standard Values
+DB: master
+SharedFields:
+- ID: "63c92316-2b8a-435e-bd07-0b84b9f5c2ea"
+  Hint: CompositeLayout
+  Value: "{45CEA5E0-10A1-46D5-BB66-6FCDDBE236D7}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1

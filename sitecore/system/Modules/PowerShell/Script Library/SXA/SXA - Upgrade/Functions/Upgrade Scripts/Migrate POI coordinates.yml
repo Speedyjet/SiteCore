@@ -1,0 +1,100 @@
+---
+ID: "3ce67400-cfb0-4c54-8962-6acd573a3512"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Migrate POI coordinates"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1712
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ItemByIdSafe
+    
+    function Get-PoiItems() {
+        $db = Get-Database -Name "master"
+        $poiTemplateId = "{6EBB38CE-04FC-425C-895B-3C81FA4A7B5C}"
+        $db.DataManager.DataSource.SelectIDs([string]::Empty, $poiTemplateId) | % { Get-ItemByIdSafe $_ }
+    }
+    
+    function ShouldRun () {
+        $items = Get-PoiItems
+        $items.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Update-Fields ($item, $oldFieldID, $newFieldID) {
+        $newFieldValue = $item.Fields[$newFieldID].Value
+        $oldFieldValue = $item.Fields[$oldFieldID].Value 
+        if ($newFieldValue -eq "" -and $oldFieldValue -ne "") {
+            $item.Editing.BeginEdit()
+            $item.Fields[$newFieldID].Value = $item.Fields[$oldFieldID].Value 
+            $item.Fields[$oldFieldID].Reset()
+            $item.Editing.EndEdit() > $null
+        }
+        else {
+            Write-Verbose "Conditions are not met. Either new fields are already filled in or old fields have no values"
+        }
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $arguments
+        )
+    
+        process {
+            Write-Verbose "Getting affected POI . . ."
+            $affectedDatasourceItems = Get-PoiItems
+            Write-Verbose "Found $($affectedDatasourceItems.Count) items"
+    
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $affectedDatasourceItems | ForEach-Object {
+                    Write-Verbose "Processing '$($_.Name)' item [$($_.ID)]"
+                    $currentItemPath = $($_.Paths.Path)
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Copy Latitude value from obsolete to a new field")) {
+                        Update-Fields $_ "{94969C59-C4B8-43ED-9C92-3FBF930C0ACF}" "{1DF37811-7355-4EE2-B1C7-ECBD6BE8DF44}"
+                    }
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Copy Longitude value from obsolete to a new field")) {
+                        Update-Fields $_ "{8C1AEA63-2E5E-4FEE-B413-D3B1E050DD26}" "{38732912-D8C3-46C3-9E23-6933552429FA}"
+                    }                
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1702
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180709T101837Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Migrate POI coordinates
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Copies values from SXA POI fields (Latitude, Longitude) to Sitecore fields.

@@ -1,0 +1,86 @@
+---
+ID: "8e5df86a-6272-4502-a2fe-6579a703e2e0"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Convert Twitter datasource items field value"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1401
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ItemByIdSafe
+    
+    $twitterAppFieldId = "{50B49831-4E52-4A67-8393-D7393F22CF37}"
+    $twitterTemplateId = "{C27AAA1E-2764-46E4-908C-BB3A4C75C68F}"
+    
+    function Get-DatasourceItems() {
+        $twitterDatasourceTemplateId = "{C27AAA1E-2764-46E4-908C-BB3A4C75C68F}"
+        $db = Get-Database "master"
+        $db.DataManager.DataSource.SelectIDs($null, $twitterTemplateId, $twitterAppFieldId, "*/*", $true) | `
+            % { Get-ItemByIdSafe $_ } | `
+            ? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_).InheritsFrom($twitterDatasourceTemplateId) } | `
+            ? { Test-Path $_.TwitterApp }
+    }
+    
+    function ShouldRun () {
+        $items = Get-DatasourceItems
+        $items.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $arguments
+        )
+    
+        process {
+            Write-Verbose "Getting affected twitter datasource items . . ."
+            $affectedDatasourceItems = Get-DatasourceItems
+            Write-Verbose "Found $($affectedDatasourceItems.Count) items"
+    
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $affectedDatasourceItems | ForEach-Object {
+                    Write-Verbose "Processing '$($_.Name)' item [$($_.ID)]"
+                    $currentItemPath = $($_.Paths.Path)
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Convert field value from path to id")) {
+                        $appItem = $_.Database.GetItem($_.TwitterApp)
+                        $_.TwitterApp = $appItem.ID
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1401
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170704T123154Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Convert Twitter datasource items field value
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Convert field value from path to id

@@ -1,0 +1,102 @@
+---
+ID: "81016db2-ca31-42c0-a0b7-6512f2fcf16e"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Convert Gallery Image items"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1503
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ItemByIdSafe
+    
+    $galleryImageFieldId = "{CBDAAB5F-3F7A-4072-8B7F-6A325A4A2205}"
+    $galleryImageTemplate = "{9D77C212-A828-4792-8E72-749F19C0154D}"
+    $fieldName = "Image"
+    
+    function Get-AffectedItems() {
+        $db = Get-Database "master"
+        $db.DataManager.DataSource.SelectIDs($null, $galleryImageTemplate, $galleryImageFieldId, '*link*', $true) | `
+            % { Get-ItemByIdSafe $_ } | `
+            ? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_).InheritsFrom($galleryImageTemplate) } | `
+            ? { $_.Paths.IsContentItem } | `
+            ? {
+                [Sitecore.Data.Fields.LinkField]$linkField = $_.Fields[$fieldName]
+                $linkField.LinkType -like "media"
+              }
+        $items
+    }
+    
+    function ShouldRun () {
+        $themes = Get-AffectedItems
+        $themes.Count -gt 0
+    }
+    
+    function Update-FieldValue($currentItem) {        
+        [Sitecore.Data.Fields.LinkField]$linkField = $_.Fields[$fieldName]
+        if ($linkField.TargetID) {
+            $newFieldValue = "<image mediaid=""$($linkField.TargetID)"" />"
+            $currentItem."$fieldName" = $newFieldValue
+        }
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $arguments
+        )
+    
+        process {
+            Write-Verbose "Getting Gallery images for processing . . ."
+            $affectedItems = Get-AffectedItems
+            Write-Verbose "Found $($affectedItems.Count) items."
+    
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $affectedItems | % {
+                    Write-Verbose "Processing '$($_.Name)' item [$($_.ID)]"
+                    $currentItemPath = $($_.Paths.Path)
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Convert Gallery Image field value")) {
+                        Update-FieldValue $_
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1503
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171207T130240Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Convert Gallery Image items
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Converts Gallery Image items so they can be supported by updated Gallery rendering.

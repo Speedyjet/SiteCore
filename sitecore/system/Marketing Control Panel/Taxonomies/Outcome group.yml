@@ -1,0 +1,29 @@
+---
+ID: "03dac2cb-cac1-4621-81f8-e7b56490f1be"
+Parent: "f0265697-7e06-4c39-81a6-a1cb98a41972"
+Template: "68ee5149-a463-41b8-b413-e868166ba479"
+Path: /sitecore/system/Marketing Control Panel/Taxonomies/Outcome group
+DB: master
+SharedFields:
+- ID: "1172f251-dad4-4efb-a329-0c63500e4f1e"
+  Hint: __Masters
+  Type: TreelistEx
+  Value: "{A4DC92D1-1FFF-429B-A186-1A1B3F608217}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20150506T142238Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "e0d21f61-46d1-4bf5-9a27-f8d3a9b1d666"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20150727T093601Z

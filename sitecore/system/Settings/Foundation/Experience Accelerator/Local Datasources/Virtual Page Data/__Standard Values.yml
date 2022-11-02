@@ -1,0 +1,23 @@
+---
+ID: "9700dc24-8969-4638-acc3-34d54335829e"
+Parent: "c730d876-f9dc-4fe3-9897-09c22b0a6c89"
+Template: "c730d876-f9dc-4fe3-9897-09c22b0a6c89"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Local Datasources/Virtual Page Data/__Standard Values
+DB: master
+SharedFields:
+- ID: "dec8d2d5-e3cf-48b6-a653-8e69e2716641"
+  Hint: __Security
+  Value: |
+    ar|SXA\Author|pe|+item:create|
+Languages:
+- Language: en
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: Data
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160718T090743Z

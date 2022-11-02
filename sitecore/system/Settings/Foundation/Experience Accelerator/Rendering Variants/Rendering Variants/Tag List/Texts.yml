@@ -1,0 +1,14 @@
+---
+ID: "e593ea1b-685b-49e1-bb30-a923ff1775f3"
+Parent: "f6ece67a-2929-470f-9951-80061cfb35af"
+Template: "fb3e3034-33f8-4ce8-be98-dd05010f4c22"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Rendering Variants/Rendering Variants/Tag List/Texts
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160623T082451Z

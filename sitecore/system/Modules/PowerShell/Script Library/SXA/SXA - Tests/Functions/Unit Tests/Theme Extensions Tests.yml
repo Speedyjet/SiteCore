@@ -1,0 +1,130 @@
+---
+ID: "7410353e-e5fb-42a3-b643-3af592327b3e"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Theme Extensions Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Copy-Children
+    Import-Function New-Tenant
+    Import-Function New-Site
+    Import-Function Get-SxaSiteDefinitions
+    Import-Function Remove-TenantFolder
+    Import-Function Clear-ContentTree
+    Import-Function Remove-OptimizedMin 
+    Import-Function Get-NewTestTenantModel
+    Import-Function Get-NewTestSiteModel
+    
+    #Override Write-Progress to avoid errors which happen because of impossibility to write-progress in non-interactive sessions
+    function Write-Progress {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $false)]
+            $Activity,
+            [Parameter(Mandatory = $false)]
+            $CurrentOperation,
+            [Parameter(Mandatory = $false)]
+            $Status,        
+            [Parameter(Mandatory = $false)]
+            $PercentComplete,
+            [Parameter(Mandatory = $false)]
+            [switch]$Completed
+        )
+    
+        process {
+            # do nothing
+        }
+    } 
+    
+    function CleanContent($contentPath) {
+        Clear-ContentTree $contentPath
+        
+        $(gci -Path master: -Id "{249F636C-ACD4-40AD-A133-64475C582A56}") |% { $_.Recycle() }
+        $(gci -Path master: -Id "{631D6C11-B901-42F7-96DA-E8DA836E876C}") |? {$_.Name -contains "extension"} |% { $_.Recycle() }
+    }
+    
+    $global:extensionThemeId = ""
+    
+    Describe "Theme Extensions tests" {
+        Mock Run-SiteManager {}
+        BeforeEach {
+            $tenantName = "T"
+            $siteName = "S"
+            $siteThemeName = "$siteName theme"
+            $extensionThemesFolder = Get-Item -Path master: -Id "{249F636C-ACD4-40AD-A133-64475C582A56}"
+            $extensionThemeName = "$siteName extension theme"
+            $plainTheme = Get-Item -Path master: -Id "{B43D07BD-61D5-448F-9323-8B6ACAD4F3C4}"
+            $contentPath = "master:\content\Unit Tests"
+            $tenantPath = "$contentPath\$tenantName"
+            $sitePath = "$tenantPath\$siteName"
+            $mediaLibraryPath = "master:\media library\Project\Unit Tests"
+            $themesPath = "master:\media library\Themes\Unit Tests"
+            $siteThemePath = "$themesPath\$tenantName\$siteName\$siteThemeName"
+            $templatesPath = "master:\templates\Project\Unit Tests"
+            $gridSetupPath = "master:\system\Settings\Feature\Experience Accelerator\Foundation\Grid Setup"
+        }
+        Context "Create site with a theme and an extension to it" {
+            It "clean the content tree" {
+                CleanContent $contentPath
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                
+                New-Tenant $model
+                Test-Path -Path "$contentPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$themesPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }
+            It "create a new extension theme" {
+                $themeTemplate = Get-Item -Path master: -Id ([Sitecore.XA.Foundation.Theming.Templates+Theme]::ID)
+                $extensionTheme = New-Item -Parent $extensionThemesFolder -ItemType $themeTemplate.Paths.FullPath -Name $extensionThemeName -Language "en"
+                $global:extensionThemeId = $extensionTheme.ID
+                Copy-Children $plainTheme $extensionTheme
+            }
+            It "create a new Extend Site Theme action" {
+                $compositeFeature = Get-Item -Path master: -Id "{631D6C11-B901-42F7-96DA-E8DA836E876C}"
+                $extendSiteThemeTemplate = Get-Item -Path master: -Id "{621318AC-63E9-48B1-B5A9-5BCF31D0E41A}"
+                $extendSiteThemeAction = New-Item -Parent $compositeFeature -ItemType $extendSiteThemeTemplate.Paths.FullPath -Name "$extensionThemeName" -Language "en"
+                $extendSiteThemeAction = Wrap-Item -Item $extendSiteThemeAction
+                #Write-Host "$global:extensionThemeId"
+                $extendSiteThemeAction.Arguments = $extensionThemeId
+            }
+            It "create site with a new theme" {
+                Remove-OptimizedMin "master"
+                $model = Get-NewTestSiteModel $siteName "$contentPath\$tenantName" $gridSetupPath
+                $model.CreateSiteTheme = $true
+                $model.ThemeName = $siteThemeName
+                New-Site $model
+            }
+            It "check created theme was extended" {
+                $plainThemeAssetsCount = $( $(gci -Path master: -Id "{B43D07BD-61D5-448F-9323-8B6ACAD4F3C4}" -recurse) |? {($_.TemplateID -ne [Sitecore.TemplateIDs]::MediaFolder ) -and ($_.Name -ne 'optimized-min')}).Count
+                $extensionThemeAssetsCount = $( $(gci -Path master: -Id $global:extensionThemeId -recurse) |? {($_.TemplateID -ne [Sitecore.TemplateIDs]::MediaFolder) -and ($_.Name -ne 'optimized-min') }).Count
+                #Write-Host "Count1 $extensionThemeAssetsCount"
+                $themeAssetsCount = $( $(gci -Path $siteThemePath -recurse) |? {($_.TemplateID -ne [Sitecore.TemplateIDs]::MediaFolder) -and ($_.Name -ne 'optimized-min')}).Count
+                #Write-Host "Count2 $themeAssetsCount"
+                $themeAssetsCount | Should BeExactly $($extensionThemeAssetsCount + $plainThemeAssetsCount)
+            }
+        }
+    }
+    
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170714T115610Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

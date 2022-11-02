@@ -1,0 +1,51 @@
+---
+ID: "1a6ce37b-9a5f-4044-ac27-ea07482b9911"
+Parent: "59b831db-114c-47a7-ae5e-787d092c660f"
+Template: "b0bd1136-7f76-426c-8eae-4fb4998b4d2c"
+Path: /sitecore/system/Marketing Control Panel/Experience Analytics/Dimensions/Visits/By conversion
+DB: master
+SharedFields:
+- ID: "572b00c2-3d74-4d4f-976f-dcae76297a85"
+  Hint: Metrics
+  Type: Multilist
+  Value: |
+    {D0F260A7-4839-4C4D-94AA-745DC8BCDF13}
+    {84C79DEA-BF76-47B0-A9A8-25B793DB4371}
+    {6505EA17-E36D-4DCD-9337-943E2E47B212}
+    {DF041885-2C4E-4FEF-BC64-03D8B210F393}
+    {5DC58DE8-E219-4BF0-8C67-D1DF8BC55095}
+    {056EF1F1-13F4-45EF-B807-B544C152495F}
+    {5D1B1338-8D13-4DAB-A5CF-D626541D587C}
+    {452E2737-75A1-4D1A-AC80-46928CC033EB}
+- ID: "632e369b-3c22-4dd4-b6e9-0c6648a97ec3"
+  Hint: MetricType
+  Value: ConversionsMetrics
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170310T033156Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "a5e6f1cf-d41d-44b2-91fa-24d69bdf2ed7"
+    - ID: "a6302f86-e82b-4bda-ab63-639395e1b614"
+      Hint: Name
+      Value: By conversion
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20170314T100706Z

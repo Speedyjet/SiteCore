@@ -1,0 +1,14 @@
+---
+ID: "2bb1dcbe-b73d-4fbd-8754-95eb089ea5dc"
+Parent: "fa86ad54-9cec-4509-9efd-dd6dbc608a5b"
+Template: "6d82fcd8-c379-443c-97a9-c6423c71e7d5"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Search"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160830T133027Z

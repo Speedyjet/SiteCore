@@ -1,0 +1,62 @@
+---
+ID: "a9c9d8e2-312f-4b33-9fa6-42ac5a6108f3"
+Parent: "df608d21-2980-49da-9804-7f818c8624d3"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Security/Functions/Cmdlets/Add-RoleMembers"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Add-RoleMembers {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $sxaTenantRoles
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Add-RoleMembers - Begin"
+            Import-Function Get-ResolvedDomainTokens
+            Import-Function Get-RoleIdentity
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Add-RoleMembers - Process"
+            $sxaTenantRoles  | ForEach-Object {
+                $role = $_
+                $domainCurrent = Get-ResolvedDomainTokens $role.RoleItem.Fields['RoleDomain'].Value
+                $nameCurrent = $role.RoleItem.Fields['RoleName'].Value
+    
+                $currentIdentity = Get-RoleIdentity $nameCurrent $domainCurrent
+                Write-Verbose "Processing: $($currentIdentity)"
+    
+                $role.RoleItem.Fields['MemberOf'].Value.Split('|') | Where-Object { $_ -ne "" } | ForEach-Object {
+                    $baseRoleItem = Get-Item master: -ID $_
+    
+                    $domain = Get-ResolvedDomainTokens $baseRoleItem.Fields['RoleDomain'].Value
+                    $name = $baseRoleItem.Fields['RoleName'].Value
+                    $identity = Get-RoleIdentity $name $domain
+                    Write-Verbose "`tAdding $identity to $currentIdentity"
+    
+                    Add-RoleMember -Identity $identity -Members $currentIdentity
+                }
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Add-RoleMembers - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170405T095042Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

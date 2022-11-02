@@ -1,0 +1,45 @@
+---
+ID: "809528b1-588a-42a7-93c1-41e73800100a"
+Parent: "1ce3b36c-9b0c-4eb5-a996-bfcb4eaa5287"
+Template: "5c547d4e-7111-4995-95b0-6b561751bf2e"
+Path: /sitecore/layout/Placeholder Settings/webedit
+DB: master
+SharedFields:
+- ID: "14d0728a-82f9-4b01-ab16-1fe1577cede2"
+  Hint: Editable
+  Type: Checkbox
+  Value: 0
+- ID: "7256bdab-1fd2-49dd-b205-cb4873d2917c"
+  Hint: Placeholder Key
+  Value: webedit
+Languages:
+- Language: en
+  Fields:
+  - ID: "87871ff5-1965-46d6-884f-01d6a0b9c4c1"
+    Hint: Description
+    Value: |
+      <div style="font-size: 0.8em;">
+      <p style="margin-top: 0px;">Sitecore 6.4 and later supports the webedit placeholder for compatibility with previous releases, but deprecates this feature.</p>
+      <p>If a layout contains a placeholder with the "webedit" key, the Experience Editor inserts the Experience Editor ribbon into that placeholder, and the ribbon scrolls up and down with the page. If a layout does not contain a placeholder with the "webedit" key, the Experience Editor always displays the ribbon at the top of the browser window when the user scrolls up and down through the rendered page thereby providing a better user experience.</p>
+      <p>The purpose of this webedit placeholder settings definition item is to prevent Experience Editor users from binding presentation controls to the "webedit" placeholder when it is present.</p>
+      </div>
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20100713T155300
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "45c1439e-c42d-4b76-9cea-aede1d934728"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20150416T160329:635647970096519652Z"

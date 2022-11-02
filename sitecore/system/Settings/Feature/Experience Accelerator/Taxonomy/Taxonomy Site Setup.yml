@@ -1,0 +1,34 @@
+---
+ID: "4e3a13d1-df8f-4c7f-9405-ac74af29c47b"
+Parent: "c974ece9-2aac-4283-a21d-dffdfa909904"
+Template: "292ccfcd-7790-4692-856b-76014b8038e7"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Taxonomy/Taxonomy Site Setup
+DB: master
+SharedFields:
+- ID: "11488836-d40f-40d4-beb4-1d31da7b1470"
+  Hint: IncludeByDefault
+  Type: Checkbox
+  Value: 1
+- ID: "40deee2f-7595-40bd-b2c9-51f9e2346100"
+  Hint: Dependencies
+  Type: Treelist
+  Value: |
+    {D132F62B-B14B-4A66-867B-E6CB9C65E990}
+    {BDF83718-907A-435B-B1BA-64139E07983F}
+    {A697796D-A01B-4D48-9D3F-CB062DC0FFE0}
+    {924EA53C-93E5-4571-B205-04B798FB34E3}
+Languages:
+- Language: en
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: Taxonomy Site Setup
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160707T065422Z
+    - ID: "c202067e-7fab-4606-afb4-e76df2185ddc"
+      Hint: Name
+      Value: Taxonomy

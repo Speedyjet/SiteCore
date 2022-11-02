@@ -1,0 +1,23 @@
+---
+ID: "e7c0eda0-54b3-45dd-a1eb-8e1686ef84af"
+Parent: "4ee33975-db00-455e-9f9c-2cb78c892c79"
+Template: "b06460c2-8b7b-47a5-9e2c-f966f689b6ca"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Geospatial/Geospatial Site Setup/Assign POI items
+DB: master
+SharedFields:
+- ID: "ff1383bb-f095-4958-9b6d-e555db653c44"
+  Hint: Script
+  Type: Treelist
+  Value: "{BE09A0BA-0987-4E1B-A5BE-1EF9DA504B2B}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160823T094810Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

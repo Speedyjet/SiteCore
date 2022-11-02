@@ -1,0 +1,92 @@
+---
+ID: "208b5f84-833d-42f5-a44a-1e9487849c2c"
+Parent: "515fa3ce-65eb-4564-80c0-aa4a62eb2b60"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Site/Add-SiteModule"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ItemByIdSafe
+    
+    function Get-EditingTheme ($SiteItem) {    
+        $SettingsItem = Get-SettingsItem $SiteItem    
+        $editingThemeID = $SettingsItem[[Sitecore.XA.Foundation.Theming.Templates+_EditingTheme+Fields]::Theme]
+        Get-ItemByIdSafe $editingThemeID
+    }
+    
+    function Get-SiteTheme ($SiteItem) {
+        $defaultDeviceID = "{FE5D7FDF-89C0-4D99-9AA3-B5FBD009C9F3}"
+        $defaultDevice = Get-Item -Path . -ID $defaultDeviceID
+        Get-ThemeItem $SiteItem $defaultDevice
+    }
+    
+    function Update-FeatureField ($SiteItem, $ID) {
+        $newFeaturesList = $SiteItem.Modules.Split("|") | ? { [guid]::TryParse($_, [ref][guid]::Empty) } | % { $_ }
+        $newFeaturesList += $ID
+        $SiteItem.Modules = $newFeaturesList -join "|"
+    }
+    
+    function Add-SiteModule {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Site,
+            
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Item[]]$DefinitionItems
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Add-SiteModule - Begin"
+            Import-Function Get-SortedSetupItemsCollection
+            Import-Function Get-SettingsItem
+            Import-Function Get-ThemeItem
+            Import-Function Invoke-SiteAction
+            Import-Function Get-Action
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Add-SiteModule - Process"
+            $DefinitionItems = Get-SortedSetupItemsCollection $DefinitionItems
+    
+            $siteTheme = Get-SiteTheme $Site
+            $editingTheme = Get-EditingTheme $Site
+    
+            $percentage_start = 5
+            $percentage_end = 100
+            $percentage_diff = $percentage_end - $percentage_start
+            foreach ($definitionItem in $DefinitionItems) {
+                $currentIndex = $DefinitionItems.IndexOf($definitionItem)
+                $percentComplete = ($percentage_start + 1.0 * $percentage_diff * ($currentIndex) / ($DefinitionItems.Count))
+                $currentOperation = $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::InstallingFeature)) -f $definitionItem._Name
+                Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::AddingSiteFeature)) -CurrentOperation ($currentOperation) -PercentComplete $percentComplete
+                $actions = $definitionItem | Get-Action
+                try {
+                    foreach ($actionItem in $actions) {
+                        Invoke-SiteAction $Site $actionItem -SiteTheme $siteTheme -EditingTheme $editingTheme $Site.Language.Name
+                    }
+                    Update-FeatureField $Site $definitionItem.ID
+                }
+                catch {
+                    Write-Log -Log Error "An error occured while processing $($actionItem.Paths.Path) action"        
+                    $ErrorRecord = $Error[0]
+                    Write-Log -Log Error $ErrorRecord
+                    Close-Window
+                }
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Add-SiteModule - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171124T073529Z

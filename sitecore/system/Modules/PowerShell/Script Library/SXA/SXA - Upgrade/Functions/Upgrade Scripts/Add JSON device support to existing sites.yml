@@ -1,0 +1,248 @@
+---
+ID: "5097d78f-d1b2-47e4-9007-0ff6aa7db256"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Add JSON device support to existing sites"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1206
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ItemByIdSafe
+    
+    function Get-AffectedEditingThemes {
+        [CmdletBinding()]
+        param()
+        
+        begin {
+            Write-Verbose "Cmdlet Get-AffectedEditingThemes - Begin"
+        }
+        
+        process {
+            Write-Verbose "Cmdlet Get-AffectedEditingThemes - Process"
+        
+            $gridThemeId = "{B2808B2D-50FC-4D77-BEAB-2FDA5F654B91}"
+            $jsonThemeId = "{458A21EB-EA0B-4494-A91C-0441C72D0224}"
+        
+            $db = Get-Database "master"
+            $db.DataManager.DataSource.SelectIDs("editing theme", $null) | `
+                % { Get-ItemByIdSafe $_ } | `
+                ? { $_.Paths.LongID.Contains("{90AE357F-6171-4EA9-808C-5600B678F726}") } | `
+                ? { [Sitecore.XA.Foundation.SitecoreExtensions.Extensions.ItemExtensions]::DoesItemInheritFrom($_, [Sitecore.XA.Foundation.Theming.Templates+Theme]::ID) `
+                    -or [Sitecore.XA.Foundation.SitecoreExtensions.Extensions.ItemExtensions]::DoesItemInheritFrom($_, [Sitecore.XA.Foundation.Theming.Templates+BaseTheme]::ID) } | `
+                ? { !$_.BaseLayout.Contains("$gridThemeId") -or !$_.BaseLayout.Contains("$jsonThemeId") }
+        }
+        
+        end {
+            Write-Verbose "Cmdlet Get-AffectedEditingThemes - End"
+        }
+    }
+        
+    function Get-SiteActions {
+        [CmdletBinding()]
+        param(
+        )
+        
+        begin {
+            Write-Verbose "Cmdlet Get-SiteActions - Begin"
+            Import-Function Get-Action
+            Import-Function Get-SiteDefinitions
+        }
+        
+        process {
+            Write-Verbose "Cmdlet Get-SiteActions - Process"
+        
+            Get-SiteDefinitions "Feature/#Experience Accelerator#/Json" | Get-Action
+            Get-SiteDefinitions "Foundation/#Experience Accelerator#/Grid" | Get-Action
+        }
+        
+        end {
+            Write-Verbose "Cmdlet Get-SiteActions - End"
+        }
+    }
+        
+    function Get-AffectedSiteItems {
+        [CmdletBinding()]
+        param(
+        )
+        
+        begin {
+            Write-Verbose "Cmdlet Get-AffectedSiteItems - Begin"
+        }
+        
+        process {
+            Write-Verbose "Cmdlet Get-AffectedSiteItems - Process"
+            $siteTemplates = $db.DataManager.DataSource.SelectIDs("", [Sitecore.TemplateIDs]::Template) | `
+                % { Get-ItemByIdSafe $_ }  | `
+                ? { $_.Name -ne '__Standard Values' }  | `
+                ? { [Sitecore.XA.Foundation.SitecoreExtensions.Extensions.ItemExtensions]::DoesTemplateInheritFrom($_,[Sitecore.XA.Foundation.Multisite.Templates+Site]::ID) }        
+        
+            $siteTemplates | % {
+                $id = $_.ID
+                $db.DataManager.DataSource.SelectIDs("", $id) | % { Get-ItemByIdSafe $_ } | ? { $_.Paths.IsContentItem }
+            } | ? { !(Test-Path "$($_.Paths.Path)/presentation/available renderings/json") }
+        }
+        
+        end {
+            Write-Verbose "Cmdlet Get-AffectedSiteItems - End"
+        }
+    }
+        
+        
+    function Add-JsonLayout {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            [Item[]]$TenantTemplates
+        )
+        
+        begin {
+            Write-Verbose "Cmdlet Add-JsonLayout - Begin"
+        }
+        
+        process {
+            $item = $TenantTemplates[0]
+            [Sitecore.XA.Feature.Json.Scaffolding.UpdatePageLayout]::Update($item, $TenantTemplates)
+        }
+        
+        end {
+            Write-Verbose "Cmdlet Add-JsonLayout - End"		
+        }
+    }
+        
+    function Check-JsonLayoutAssigned {
+        param([Item]$item)
+        $jsonLayoutId = "{72C595AD-68BB-44BC-B5CD-2A857039515F}"
+        if ($item."__Renderings".Contains($jsonLayoutId) -or $item."__Final Renderings".Contains($jsonLayoutId)) {
+            return $true
+        }
+        $false
+    }
+        
+    function Get-AffectedTemplates () {
+        $pageId = [Sitecore.XA.Foundation.Multisite.Templates+Page]::ID
+        $pageDesignId = [Sitecore.XA.Foundation.Presentation.Templates+Design]::ID
+        $partialDesignId = [Sitecore.XA.Foundation.Presentation.Templates+PartialDesign]::ID
+        $metadataPartialDesignId = [Sitecore.XA.Foundation.Presentation.Templates+MetadataPartialDesign]::ID
+        
+        $db = Get-Database master
+        
+        $standardValues = $db.DataManager.DataSource.SelectIDs("__Standard Values", $null)  | `
+            % { Get-ItemByIdSafe $_ } | `
+            ? { $_.Paths.LongID.Contains("{825B30B4-B40B-422E-9920-23A1B6BDA89C}") }
+        
+        $affected = $standardValues | ? {
+            $id = $_.Parent.ID
+            $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($id, $db)
+            $template.InheritsFrom($pageId) -or $template.InheritsFrom($pageDesignId) -or $template.InheritsFrom($partialDesignId) `
+     -and -not ($template.InheritsFrom($metadataPartialDesignId)) `
+     -and -not (Check-JsonLayoutAssigned $_)
+        } | % { $_.Parent }
+        
+        $affected
+    }
+        
+    function ShouldRun () {
+        $templates = Get-AffectedTemplates
+        $templates.Count -gt 0
+    }
+        
+        
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            $arguments
+        )
+        
+        begin {
+            Import-Function Invoke-EditTheme
+            Import-Function Invoke-AddItem
+        }
+    
+        process {
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                if ($pscmdlet.ShouldProcess("Update tenant templates to add JSON layout reference into presentation")) {
+                    Write-Verbose "Getting affected templates . . ."
+                    $affectedTemplates = Get-AffectedTemplates
+                    Write-Verbose "Found $($affectedTemplates.Count) templates."
+        		
+                    if ($affectedTemplates.Count -gt 0) {
+                        Add-JsonLayout $affectedTemplates
+                    }
+        
+                    Write-Verbose "Getting actions . . ."
+                    $actions = Get-SiteActions
+                    Write-Verbose "Found $($actions.Count) actions."
+                        
+                    #process sites
+                    Write-Verbose "Getting affected sites . . ."
+                    $siteItems = Get-AffectedSiteItems
+                    Write-Verbose "Found $($siteItems.Count) sites."
+                    if ($siteItems.Count -gt 0) {
+                        foreach ($site in $siteItems) {
+                            foreach ($actionItem in $actions) {
+                                switch ($actionItem.TemplateName) {
+                                    "AddItem" {
+                                        Write-Verbose "Processing site: $($site.ID) $($site.Paths.Path)"
+                                        Invoke-AddItem $site $actionItem
+                                    }
+                                    Default {}
+                                }
+                            }
+                        }
+                    }
+        
+                    #process themes
+                    Write-Verbose "Getting affected themes . . ."
+                    $editingThemes = Get-AffectedEditingThemes
+                    Write-Verbose "Found $($editingThemes.Count) themes."
+                    if ($editingThemes.Count -gt 0) {
+                        foreach ($editingTheme in $editingThemes) {
+                            foreach ($actionItem in $actions) {
+                                switch ($actionItem.TemplateName) {
+                                    "EditEditingTheme" {
+                                        if ($editingTheme -ne $null) {
+                                            Write-Verbose "Processing theme: $($editingTheme.ID) $($editingTheme.Paths.Path)"
+                                            Invoke-EditTheme $editingTheme $actionItem
+                                        }
+                                    }
+                                    Default {}
+                                }
+                            }
+                        }
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1206
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170313T081805Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: JSON support
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Adds a JSON Data Modeling feature to your sites.

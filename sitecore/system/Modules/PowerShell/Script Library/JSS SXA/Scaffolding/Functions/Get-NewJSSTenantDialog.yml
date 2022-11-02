@@ -1,0 +1,125 @@
+---
+ID: "7f3010a8-7be2-454a-9135-3d026fa21d35"
+Parent: "7d8d6e32-75e6-4822-8491-f3c0a7a1577f"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/JSS SXA/Scaffolding/Functions/Get-NewJSSTenantDialog"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-NewJSSTenantDialog {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$TenantLocation
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-NewJSSTenantDialog - Begin"
+            Import-Function Get-JSSTenantDefinition
+            Import-Function Get-OrderedDictionaryByKey
+            Import-Function Invoke-InputValidationStep
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-NewJSSTenantDialog - Process"
+    
+            $dialogOptions = New-Object System.Collections.Specialized.OrderedDictionary
+    
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::GettingValidTenantDefinitions)) -PercentComplete 0
+            [Item[]]$allDefinitions = Get-JSSTenantDefinition "*"
+            Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::PreparingDialogOptions)) -PercentComplete 60
+            $nonSystemDefinitions = $allDefinitions | ? { ([Sitecore.Data.Fields.CheckboxField]$_.Fields['IsSystemModule']).Checked -eq $false }
+            $nonSystemDefinitions | % {
+                $contextItem = Get-Item -Path master: -ID $_.ID
+                $key = "$($_.Fields['Name'].Value)"
+                $translatedFeatureName = $contextItem.Fields['Name'].Value
+    
+                if ([string]::IsNullOrEmpty($translatedFeatureName)) {
+                    $translatedFeatureName = $key
+                }
+                if ($dialogOptions.Contains($translatedFeatureName)) {
+                    $index = 2
+                    do {
+                        $translatedFeatureName = $translatedFeatureName + " [$index]"
+                        $index++
+                    } while ($dialogOptions.Contains($translatedFeatureName))
+                }
+    
+                $dialogOptions.Add($translatedFeatureName, $_.ID)
+            }
+    
+            $dialogOptions = Get-OrderedDictionaryByKey $dialogOptions
+            $preSelectedDefinitions = $nonSystemDefinitions | ? { ([Sitecore.Data.Fields.CheckboxField]$_.Fields['IncludeByDefault']).Checked -eq $true } | % { $_.ID }
+    
+            $tenantName = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::NewTenant)
+            $parameters = @()
+            $parameters += @{ Name = "tenantName"; Title = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::TenantName)}
+            if($dialogOptions.Count -gt 0){
+                $parameters += @{ Name = "preSelectedDefinitions"; Title = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::Features); Options = $dialogOptions; Editor = "checklist"; Tip = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::SelectTheFeaturesWhichShouldBeUsedInTenant); Height = "330px"}
+            }
+            do {
+                Write-Progress -Activity ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::CreatingNewTenant)) -CurrentOperation ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::OpeningNewTenantDialog)) -PercentComplete 100
+                $result = Read-Variable -Parameters $parameters `
+                    -Description $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.JSS.Foundation.Scaffolding.Texts]::ThisScriptCreatesANewJSSTenantWithinYourSxaEnabledInstance)) `
+                    -Title $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.JSS.Foundation.Scaffolding.Texts]::CreateAJSSTenant)) -Width 500 -Height 600 `
+                    -OkButtonName $([Sitecore.Globalization.Translate]::Text("OK")) -CancelButtonName $([Sitecore.Globalization.Translate]::Text("Cancel")) `
+                    -Validator {
+                    $tenantName = $variables.tenantName.Value;
+                    $pattern = "^[\w][\w\s\-]*(\(\d{1,}\)){0,1}$"
+                    if ($tenantName.Length -gt 100) {
+                        $variables.tenantName.Error = $([Sitecore.Globalization.Translate]::Text([Sitecore.Texts]::ThelengthofthevalueistoolongPleasespecifyavalueoflesstha)) -f 100
+                        continue
+                    }
+                    if ([System.Text.RegularExpressions.Regex]::IsMatch($tenantName, $pattern, [System.Text.RegularExpressions.RegexOptions]::ECMAScript) -eq $false) {
+                        $variables.tenantName.Error = $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::IsNotAValidName)) -f $tenantName
+                        continue
+                    }
+                    if ($forbiddenTenantNames -contains $tenantName -eq $true) {
+                        $variables.tenantName.Error = $([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Scaffolding.Texts]::TenantWithThatNameAlreadyExists))
+                        continue
+                    }
+                } `
+                    -ValidatorParameters @{forbiddenTenantNames = ($TenantLocation.Children | ? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_).InheritsFrom([Sitecore.XA.Foundation.Multisite.Templates+_BaseTenant]::ID.ToString()) } | % { $_.Name} )}
+    
+                if ($result -ne "ok") {
+                    Close-Window
+                    Exit
+                }
+    
+                $definitionItems = New-Object System.Collections.ArrayList($null)
+                if ($preSelectedDefinitions ) {
+                    Write-Verbose "Adding pre-selected features"
+                    [Item[]]$preSelectedDefinitionItems = ($preSelectedDefinitions | % { Get-Item -Path master: -ID $_ })
+                    $definitionItems.AddRange($preSelectedDefinitionItems)
+                }
+                [Item[]]$systemFeatures = $allDefinitions | ? { ([Sitecore.Data.Fields.CheckboxField]$_.Fields['IsSystemModule']).Checked -eq $true }
+                if ($systemFeatures) {
+                    Write-Verbose "Adding system features"
+                    $definitionItems.AddRange($systemFeatures)
+                }
+            
+                $model = New-Object Sitecore.XA.JSS.Foundation.Scaffolding.Models.CreateNewJSSTenantModel
+                $model.TenantName = $tenantName.TrimEnd(" ")
+                $model.DefinitionItems = $definitionItems
+                $model.TenantLocation = $TenantLocation
+                $inputValidationResult = Invoke-InputValidationStep $model.DefinitionItems $model
+            } while (-not($inputValidationResult))
+    
+            
+            $model
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Get-NewJSSTenantDialog - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181113T130006Z

@@ -1,0 +1,99 @@
+---
+ID: "8545385d-6570-4018-b259-1ce522f733f7"
+Parent: "36f2533d-ed63-4446-98dd-16f68fe4ea91"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Creative Exchange/Functions/CI/Get-CreativeExchangeExportResponse"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-CreativeExchangeExportResponse {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true)]
+            [Item]$CurrentItem,
+            [Parameter(Mandatory = $false)]
+            [Sitecore.XA.Feature.CreativeExchange.Storage.CreativeExchangeStorageDefinition]$StorageDefinition,
+            [Parameter(Mandatory = $false )]        
+            [Sitecore.XA.Feature.CreativeExchange.Enums.MarkupMode]$MarkupMode,
+            [Parameter(Mandatory = $false)]
+            [Sitecore.XA.Feature.CreativeExchange.Enums.ExportScope]$ExportScope,
+            [Parameter(Mandatory = $false)]
+            [Sitecore.XA.Feature.CreativeExchange.Enums.BucketExportMode]$BucketExportMode,
+            [Parameter(Mandatory = $false)]
+            [string]$Language = "en",
+            [Parameter(Mandatory = $false )]
+            [int]$FileSizeLimit = 0,
+            [Parameter(Mandatory = $false)]
+            [Sitecore.Data.ID]$DeviceId = "{FE5D7FDF-89C0-4D99-9AA3-B5FBD009C9F3}",
+            [Parameter(Mandatory = $false)]
+            [string]$UserName = "sitecore\\admin"
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-CreativeExchangeExportResponse - Begin"
+            # switch off Write-Progress used in Invoke-WebRequest
+            $progressPreference = 'silentlyContinue'
+            Import-Function Get-StorageDefinition        
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-CreativeExchangeExportResponse - Process"
+            $instance = [Sitecore.DependencyInjection.ServiceLocator]::ServiceProvider
+    
+            # assign default parameters
+            if ($StorageDefinition -eq $null) {
+                $StorageDefinition = Get-StorageDefinition $CurrentItem "Folder on server"
+            }
+    
+            if ($MarkupMode -eq $null) {
+                $MarkupMode = [Sitecore.XA.Feature.CreativeExchange.Enums.MarkupMode]::AgencyDrop
+            }
+            
+            if ($ExportScope -eq $null) {
+                $ExportScope = [Sitecore.XA.Feature.CreativeExchange.Enums.ExportScope]::Site
+            }
+            
+            if ($BucketExportMode -eq $null) {
+                $BucketExportMode = [Sitecore.XA.Feature.CreativeExchange.Enums.BucketExportMode]::OneOfTemplate
+            }
+    
+            $site = $instance.GetType().GetMethod('GetService').Invoke($instance, [Sitecore.XA.Foundation.Multisite.IMultisiteContext]).GetSiteItem($CurrentItem)            
+            $exportArgs = New-Object -TypeName "Sitecore.XA.Feature.CreativeExchange.Pipelines.Export.Export.ExportArgs"
+            $exportArgs.HttpContextData = New-Object -TypeName "Sitecore.XA.Feature.CreativeExchange.Models.Export.HttpContextData" -ArgumentList ([System.Web.HttpContext]::Current)
+    
+            $args = New-Object -TypeName "Sitecore.XA.Feature.CreativeExchange.Pipelines.Export.GetExportContext.GetExportContextArgs"
+            $args.ExportContext = New-Object -TypeName "Sitecore.XA.Feature.CreativeExchange.Models.Export.ExportContext"
+            $args.ExportContext.ExportOptions.DeviceId = $DeviceId
+            $args.ExportContext.ExportOptions.Language = $Language
+            $args.ExportContext.ExportOptions.MarkupMode = $MarkupMode
+            $args.ExportContext.ExportOptions.ExportScope = $ExportScope
+            $args.ExportContext.StorageServiceDefinition = $StorageDefinition
+            $args.ExportContext.ExportOptions.StartItem = $item
+            $args.ExportContext.ExportOptions.SiteName = $site.Name
+            $args.ExportContext.ExportOptions.SiteID = $site.ID
+            $args.ExportContext.ExportOptions.FileSizeLimit = $FileSizeLimit
+            $args.ExportContext.ExportOptions.BucketExportMode = $BucketExportMode
+            $args.ExportContext.Host.Authorization = $exportArgs.HttpContextData.Authorization
+            $args.ExportContext.Host.Cookies = $exportArgs.HttpContextData.RequestCookies
+            $args.ExportContext.Host.HostName = $exportArgs.HttpContextData.UrlHostName
+            $args.ExportContext.Host.Port = $exportArgs.HttpContextData.UrlPort
+            $exportArgs.ExportContext = $args.ExportContext
+    
+            [Sitecore.Pipelines.CorePipeline]::Run("ceExport.export", $exportArgs);
+            $exportArgs
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Get-CreativeExchangeExportResponse - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20190820T074311:637018837911107033Z"

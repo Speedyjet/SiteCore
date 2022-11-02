@@ -1,0 +1,14 @@
+---
+ID: "7bfc554d-a4c2-4140-8b76-111412da092c"
+Parent: "6ae2f5aa-55bc-4e76-bc80-0bff795566ff"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Multisite/Internal"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180528T100641Z

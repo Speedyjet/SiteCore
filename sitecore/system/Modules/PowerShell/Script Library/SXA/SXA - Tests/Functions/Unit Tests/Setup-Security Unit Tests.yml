@@ -1,0 +1,208 @@
+---
+ID: "b9f41d37-30fd-4e28-9457-10cb7d165fdc"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Setup-Security Unit Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function New-Tenant
+    Import-Function New-Site
+    Import-Function Set-SxaSecurity
+    
+    function CleanSecurityRoles($roleItems) {
+        if ($roleItems) {
+            $roleItems | % {
+                $roleName = "$($_.RoleDomain)\$($_.RoleName)"
+                if (Get-Role -Name $roleName -ErrorAction SilentlyContinue) {
+                    Remove-Role -Name $roleName
+                }            
+            }
+        }
+    }
+    
+    function CleanDomain($domainName) {
+        $domain = Get-Domain -Name $domainName -ErrorAction SilentlyContinue
+        if ($domain) {
+            (Get-Domain -Name $domainName).GetRoles() | % {
+                Remove-Role $_.Name
+            }
+            [Sitecore.SecurityModel.DomainManager]::RemoveDomain($domainName)
+        }    
+    }
+    
+    Describe "Setup Security" {
+        Mock Run-SiteManager {}
+        BeforeEach {
+            $testDomain = "test"
+            $global:ctx_TenantDomain = $testDomain
+            
+            # clean before test
+            CleanDomain "SXA"
+            CleanDomain $testDomain
+            New-Domain -Name $testDomain > $null
+            $roleItems = Get-ChildItem -path "/sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/Tenant"
+            CleanSecurityRoles $roleItems
+            
+            $testItemPath = "master:/sitecore/media library/test_sxa_security"
+            if(Test-Path -Path $testItemPath){
+                Remove-Item $testItemPath
+            }
+        }
+        It "check Set-SxaSecurity" {
+            # validate that state is correct
+            Get-Domain -Name "SXA" -ErrorAction SilentlyContinue | Should Be $null
+            Get-Role -Name "SXA\Admin" -ErrorAction SilentlyContinue | Should Be $null
+            Get-Role -Name "SXA\Author" -ErrorAction SilentlyContinue | Should Be $null
+            Get-Role -Name "SXA\Designer" -ErrorAction SilentlyContinue | Should Be $null
+                
+            # run tested method
+            Set-SxaSecurity
+                
+            # assert
+            Get-Domain -Name "SXA" -ErrorAction SilentlyContinue | Should Not BeNullOrEmpty
+            $adminRole = Get-Role -Name "SXA\Admin" -ErrorAction SilentlyContinue
+            $authorRole = Get-Role -Name "SXA\Author" -ErrorAction SilentlyContinue
+            $designerRole = Get-Role -Name "SXA\Designer" -ErrorAction SilentlyContinue
+            $adminRole | Should Not BeNullOrEmpty
+            $authorRole | Should Not BeNullOrEmpty
+            $designerRole | Should Not BeNullOrEmpty
+                
+            $adminRole.MemberOf.Count | Should BeExactly 1 
+            $adminRole.MemberOf.Name | Should BeExactly "SXA\Designer"
+                
+            $authorRole.MemberOf.Count | Should BeExactly 2
+            $authorRole.MemberOf.Name[0] | Should BeExactly "sitecore\Author"
+            $authorRole.MemberOf.Name[1] | Should BeExactly "sitecore\Designer"
+                
+            $designerRole.MemberOf.Count | Should BeExactly 1
+            $designerRole.MemberOf.Name | Should BeExactly "SXA\Author"
+        }
+        It "check Get-RoleObjects cmldet" {
+            # get test data
+            $roleItems = Get-ChildItem -path "/sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/Tenant"
+                
+            # run tested method
+            $roleObjects = Get-RoleObjects $roleItems            
+                
+            # assert
+            $roleObjects.Count | Should BeExactly $roleItems.Count
+                
+            for ($i = 0; $i -lt $roleItems.Count; $i++) {
+                $obj = $roleObjects[$i]
+                $item = $roleItems[$i]
+                $obj.RoleItem | Should BeExactly $item
+                $obj.RoleName | Should BeExactly $item.Fields["RoleName"].Value
+                $obj.RoleDomain | Should BeExactly $testDomain
+                $obj.RoleType | Should BeExactly (Get-Item master: -id $item.Fields["RoleType"].Value).Name
+            }
+        }
+        It "check Add-Roles cmdlet" {
+            # get test data
+            $roleItems = Get-ChildItem -path "/sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/Tenant"
+                
+            # validate that state is correct
+            $roleItems | % {
+                $roleName = "$($_.RoleDomain)\$($_.RoleName)"
+                Get-Role -Name $roleName -ErrorAction SilentlyContinue | Should Be $null            
+            }
+                
+            # run tested method
+            Add-Roles $roleItems
+                
+            # assert
+            $roleItems | % {
+                $roleName = "$($_.RoleDomain)\$($_.RoleName)"
+                Get-Role -Name $roleName -ErrorAction SilentlyContinue | Should Not BeNullOrEmpty
+            }
+        }
+        It "check Add-RoleMembers cmdlet" {
+            # get test data
+            $roleItems = Get-ChildItem -path "/sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/Tenant"
+    
+            # validate that state is correct
+            $roleItems | % {
+                $roleName = "$($_.RoleDomain)\$($_.RoleName)"
+                Get-Role -Name $roleName -ErrorAction SilentlyContinue | Should Be $null            
+            }
+                
+            # init variables
+            $roleItems = Get-RoleObjects $roleItems
+            Set-SxaSecurity
+                
+            # run tested method
+            Add-Roles $roleItems
+            Add-RoleMembers $roleItems
+                
+            # assert created roles with memebers
+            $roleItems | % {
+                $roleItem = $_
+                $roleName = "$($testDomain)\$($roleItem.RoleName)"
+                    
+                # check if role was created
+                $role = Get-Role -Name $roleName -ErrorAction SilentlyContinue
+                $role | Should Not BeNullOrEmpty
+                    
+                # check if number of members is valid
+                [Sitecore.Data.Fields.MultilistField]$membersField = $roleItem.RoleItem.Fields['MemberOf']
+                $role.MemberOf.Count | Should BeExactly $membersField.TargetIDs.Count
+                    
+                # check if all members match
+                $membersField.TargetIDs | % {
+                    $memberItem = Get-Item master: -id $_
+                    $exp = "$($memberItem.RoleDomain)\$($memberItem.RoleName)".Replace("`$tenantDomain", $testDomain)
+                    $role.MemberOf.Name.Contains($exp) | Should BeExactly $true
+                }
+            }            
+        }
+        It "check Get-RoleIdentity cmdlet" {
+            Import-Function Get-RoleIdentity
+            Get-RoleIdentity "role" "domain" | Should BeExactly "domain\role"
+        }
+        It "check Get-ResolvedDomainTokens cmdlet" {
+            Import-Function Get-ResolvedDomainTokens
+            
+            $global:ctx_TenantDomain = "T1"
+            Get-ResolvedDomainTokens "`$tenantDomain\X"| Should BeExactly "T1\X"
+            $global:ctx_SiteDomain = "S1"
+            Get-ResolvedDomainTokens "`$siteDomain\Y"| Should BeExactly "S1\Y"
+        }
+        It "check Set-ItemsSecurityMapping cmdlet" {
+            Import-Function Set-ItemsSecurityMapping
+            
+            # validate that state is correct
+            Test-Path -Path $testItemPath | Should Be $false
+            
+            # create test data
+            $testItem = New-Item -Path $testItemPath -ItemType "Common/Folder"
+            $mappingItem =  Get-Item -Path "master:/sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/Mappings/Site/Site MediaFolder"     
+            
+            # validate state before test
+            $testItem.__Security | Should BeNullOrEmpty
+            $mappingItem.__Security | Should Not BeNullOrEmpty
+            
+            # assign
+            $global:ctx_TenantDomain = "`$tenantDomain"
+            $global:ctx_SiteDomain = "`$siteDomain"        
+            
+            # act
+            Set-ItemsSecurityMapping $testItem $mappingItem
+            
+            # assert
+            (Get-Item -Path $testItemPath).__Security | Should BeExactly $mappingItem.__Security
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170727T062642Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

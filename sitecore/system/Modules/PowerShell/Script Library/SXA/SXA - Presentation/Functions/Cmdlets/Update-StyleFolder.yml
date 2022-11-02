@@ -1,0 +1,80 @@
+---
+ID: "db53842b-e28e-4cc1-a0ea-4be855d9f51c"
+Parent: "051ab794-1d86-4596-a368-dae1eeae1a12"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Presentation/Functions/Cmdlets/Update-StyleFolder"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Update-StyleFolder {
+    	[CmdletBinding()]
+    	param(
+    		[Parameter(Mandatory = $true,Position = 0)]
+    		[item]$style,
+    		[Parameter(Mandatory = $true,Position = 1)]
+    		[object]$renderings,
+    		[Parameter(Mandatory = $true,Position = 2)]
+    		[object]$sxaRenderings
+    	)
+    
+    
+    	begin {
+    		Import-Function Create-StyleFolders
+    		Write-Verbose "Cmdlet Update-StyleFolder - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Update-StyleFolder - Process"
+    		$renderings = $renderings | ? { $_.ID -ne $null }
+    		if ($renderings.count -eq 1) {
+    			#single rendering uses style
+    			$renderingInfo = $sxaRenderings | ? { $_.Rendering.ID -eq $renderings.ID } | Select-Object -First 1
+    
+    			$folder = Create-StyleFolders $style $renderingInfo
+    		} else {
+    			#few renderings use the style
+    			$infoList = New-Object System.Collections.ArrayList
+    			$sectionPaths = New-Object System.Collections.ArrayList
+    			foreach ($rendering in $renderings) {
+    				$renderingInfo = $sxaRenderings | ? { $_.Rendering.ID -eq $rendering.ID } | Select-Object -First 1
+    				if ($infoList.Contains($renderingInfo) -eq $false)
+    				{
+    				    $infoList.Add($renderingInfo) > $null
+    				}
+    				if ($sectionPaths.Contains($renderingInfo.SectionFolder) -eq $false)
+    				{
+    				    $sectionPaths.Add($renderingInfo.SectionFolder) > $null
+    				} 
+    			}
+    			if ($sectionPaths.count -eq 1) {
+    				$folder = Create-StyleFolders $style $($infoList[0])
+    				$folder = $folder.Parent | Wrap-Item
+    			} else {
+    				$otherFolderInfo = $sxaRenderings | ? { $_.DestinationFolder.ToLower().Contains("/presentation/styles/other") }
+    				$folder = Create-StyleFolders $style $otherFolderInfo
+    			}
+    		}
+    		if ($style.Parent.Paths.Path -ne $folder.ItemPath) {
+    			Write-Verbose "Moved $($style.ItemPath) style into $($folder.ItemPath)"
+    			Move-Item -Path $style.ItemPath $folder.ItemPath
+    		}
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Update-StyleFolder - End"
+    	}
+    } 
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170801T104409Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

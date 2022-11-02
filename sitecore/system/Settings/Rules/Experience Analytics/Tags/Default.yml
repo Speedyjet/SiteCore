@@ -1,0 +1,36 @@
+---
+ID: "3150749d-210a-41fd-a448-f8d63fb1c2cc"
+Parent: "ca44d2e0-c7d8-447a-b8c6-376e78d6fa2c"
+Template: "854ba861-63ea-4a0c-8c7b-541e9a7ec4c1"
+Path: /sitecore/system/Settings/Rules/Experience Analytics/Tags/Default
+DB: master
+BranchID: "bdc41fdd-a3ac-4b69-a0ba-471c425cb083"
+SharedFields:
+- ID: "42f77151-098f-496a-94cf-590b7edeeabe"
+  Hint: Tags
+  Type: Multilist
+  Value: |
+    {18C2D156-9B7B-494F-ADB2-2D0D9113000E}
+    {75A9275C-7975-4677-B197-14617DF58635}
+    {3AF2D2D8-D92C-49D8-832D-4C4C1F53D573}
+- ID: "f6d8a61c-2f84-4401-bd24-52d2068172bc"
+  Hint: __Originator
+  Value: 
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20140618T124428
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "628186be-0d52-48f7-b6e7-a9ceef2e91d5"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20140929T195316:635476171963400937Z"

@@ -1,0 +1,29 @@
+---
+ID: "edd2f78d-b57c-4e14-aadf-9fe1204a45ae"
+Parent: "ffb4e220-3181-4c22-b0ba-8400b56ba200"
+Template: "8bcdab89-5885-4005-8256-30982f406a49"
+Path: /sitecore/system/Marketing Control Panel/Path Analyzer/Maps/Default maps/Site maps
+DB: master
+SharedFields:
+- ID: "1172f251-dad4-4efb-a329-0c63500e4f1e"
+  Hint: __Masters
+  Type: TreelistEx
+  Value: "{761891ED-68CC-4F35-BF4C-C48A0DB328E9}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20150623T140528Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "f6ced6b8-4793-41ef-9fa6-cd0449c9f6ee"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20160604T235402Z

@@ -1,0 +1,18 @@
+---
+ID: "ab95c04f-a3c7-4e04-b2be-75f35a61049e"
+Parent: "132024a9-fc2b-4908-a9a8-d48563372492"
+Template: "dda66314-03f3-4c89-84a9-39dffb235b06"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Search/Boosting/Boosting Rules
+DB: master
+SharedFields:
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 0
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180208T123921Z

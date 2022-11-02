@@ -1,0 +1,14 @@
+---
+ID: "49886d9c-49ca-4827-b2ba-88f66fe501b0"
+Parent: "9a4c168e-c691-4e66-99c3-95ddefff23cc"
+Template: "0a92feee-0e15-4e81-b044-2ad901b88ddd"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Editing/DatasourceBehaviour
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160816T140216Z

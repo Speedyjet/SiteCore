@@ -1,0 +1,46 @@
+---
+ID: "1873915c-d1c0-4bc0-afb3-da6c3fa479a4"
+Parent: "515fa3ce-65eb-4564-80c0-aa4a62eb2b60"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Site/New-MappingString"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function New-MappingString {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [System.Collections.Hashtable]$hashTable
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet New-MappingString - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet New-MappingString - Process"
+            $obj = New-Object "Sitecore.Text.UrlString"
+            $hashTable.GetEnumerator() | ForEach-Object {
+                $obj[$_.Name] = $_.Value
+            }
+            [System.Web.HttpUtility]::UrlEncode($obj.ToString())
+        }
+    
+        end {
+            Write-Verbose "Cmdlet New-MappingString - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170509T085232Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

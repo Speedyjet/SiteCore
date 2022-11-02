@@ -1,0 +1,88 @@
+---
+ID: "64c914b7-e128-42a9-acd1-e114d9b7e8dc"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Change Editing Themes template"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1207
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ItemByIdSafe
+    
+    $editingThemeBaseThemeID = "{BB9FCC9B-9302-41B4-B75E-849A1870E6ED}"
+    [Sitecore.Data.ID]$baseThemeTemplateID = [Sitecore.XA.Foundation.Theming.Templates+BaseTheme]::ID
+    $themeTemplate = '{F7653F31-6F17-4DAA-9217-8E116BABC927}'
+    $baseLayoutFieldId = '{384C2D3C-3E34-4493-9CB2-ADE68CAF0DA2}'
+    $baseThemeTemplateItem = Get-Item master: -ID $baseThemeTemplateID
+    
+    function Get-AffectedThemes() {
+        $db = Get-Database "master"
+        $db.DataManager.DataSource.SelectIDs($null, $themeTemplate, $baseLayoutFieldId, "*$editingThemeBaseThemeID*", $true) | % { Get-ItemByIdSafe $_} | ? { $_.Paths.IsMediaItem }
+    }
+    
+    function ShouldRun () {
+        $outdatedTemplates = Get-AffectedThemes
+        $outdatedTemplates.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Set-ItemTemplate($themeItem) {
+        $themeItem.ChangeTemplate($baseThemeTemplateItem)
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $arguments
+        )
+    
+        process {
+            Write-Verbose "Getting affected themes . . ."
+            $affectedThemes = Get-AffectedThemes
+            Write-Verbose "Found $($affectedThemes.Count) editing themes that have to have different template."
+    
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $affectedThemes | ForEach-Object {
+                    Write-Verbose "Processing '$($_.Name)' theme [$($_.ID)]"
+                    $currentItemPath = $($_.Paths.Path)
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Changing the item template from 'Theme' to 'Base Theme'")) {
+                        Set-ItemTemplate $_
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1207
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170203T091206Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Editing Themes template
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Changes the template of all Editing Themes from 'Theme' to 'Base Theme'

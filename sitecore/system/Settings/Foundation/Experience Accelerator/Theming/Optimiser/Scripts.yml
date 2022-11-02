@@ -1,0 +1,18 @@
+---
+ID: "4110d103-861e-464f-a258-130a8fcf4c61"
+Parent: "efb8ea9e-0cd3-41c3-9371-9b8c2a4dd055"
+Template: "e3ba8ca1-0b54-4e56-9e24-0e2e1d229dc1"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Theming/Optimiser/Scripts
+DB: master
+SharedFields:
+- ID: "c7497433-25dc-4b54-acdc-18cb68f7969a"
+  Hint: Mode
+  Value: "{9CABBD52-0EB7-4604-B324-D563C25F3B26}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160425T120312Z

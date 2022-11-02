@@ -1,0 +1,25 @@
+---
+ID: "46d2f427-4ce5-4e1f-ba10-ef3636f43534"
+Parent: "e18f4bc6-46a2-4842-898b-b6613733f06f"
+Template: "b6f7eeb4-e8d7-476f-8936-5ace6a76f20b"
+Path: /sitecore/layout/Devices/Print
+DB: master
+BranchID: "2194a3b3-a357-4404-83d4-123782fc3a12"
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: /sitecore/shell/themes/standard/people/16x16/printer.png
+- ID: "32326f99-c0da-4817-9dbe-79e6de8005e4"
+  Hint: Query string
+  Value: p=1
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 30
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "265C88A7-78AA-4D85-8BD7-8249EE88521C"

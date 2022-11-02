@@ -1,0 +1,14 @@
+---
+ID: "b691da17-c060-4c38-a9cc-08a56d54d06b"
+Parent: "6cea6ab0-9341-4420-8fbf-883db1977189"
+Template: "fe5dd826-48c6-436d-b87a-7c4210c7413b"
+Path: "/sitecore/media library/Themes/Wireframe-deprecated/sass/variants/navigation"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170707T131453Z

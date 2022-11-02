@@ -1,0 +1,52 @@
+---
+ID: "008ff5db-5360-4e42-9121-c6f58b9f3892"
+Parent: "5d2b7a41-82a3-4a73-9560-951b366527f9"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Cmdlets/Action Invoking/Invoke-PostDeleteStep"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Invoke-PostDeleteStep {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item[]]$DefinitionItems,
+            [Parameter(Mandatory = $true, Position = 1 )]
+            $Model
+        )
+        
+        begin {
+            Write-Verbose "Cmdlet Invoke-PostDeleteStep - Begin"
+        }
+        
+        process {
+            Write-Verbose "Cmdlet Invoke-PostDeleteStep - Process"
+            $DefinitionItems | ? {
+                $actions = Get-ChildItem -Path $_.Paths.Path -Recurse | ? { $_.TemplateName -eq "PostDeleteStep" } 
+                $actions | % {
+                    $script = Get-Item -Path . -ID $_.Script
+                    Invoke-Script $script
+                    try {
+                        Invoke-Step $Model > $null
+                    }
+                    catch [System.Exception] {
+                        Write-Error $_
+                    }        
+                }    
+            }
+        }
+        
+        end {
+            Write-Verbose "Cmdlet Invoke-PostDeleteStep - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171130T073858Z

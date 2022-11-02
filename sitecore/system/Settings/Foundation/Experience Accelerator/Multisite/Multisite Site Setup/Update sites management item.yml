@@ -1,0 +1,26 @@
+---
+ID: "dd9d34e6-f04f-48e5-aa76-beb87c1d5df5"
+Parent: "8fb3468d-247d-4297-928f-1b38ff270ca2"
+Template: "b06460c2-8b7b-47a5-9e2c-f966f689b6ca"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Multisite/Multisite Site Setup/Update sites management item
+DB: master
+SharedFields:
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 0
+- ID: "ff1383bb-f095-4958-9b6d-e555db653c44"
+  Hint: Script
+  Type: Treelist
+  Value: "{5F6F490A-9121-4BF1-ABB2-F8D960550E97}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170526T152730Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

@@ -1,0 +1,14 @@
+---
+ID: "7fd5635f-6233-4bae-82f3-1f8dd7cbaf2a"
+Parent: "ee635f3f-18ed-4023-b136-dda26f470db6"
+Template: "39a9ed72-407d-4440-ba50-30956834794e"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Presentation/Available Renderings
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160419T081757Z

@@ -1,0 +1,59 @@
+---
+ID: "2ba45688-f3d7-4d94-9996-ac22435faa9f"
+Parent: "0bfb89b6-c751-4a99-9ba8-67f5c2e3df53"
+Template: "b0bd1136-7f76-426c-8eae-4fb4998b4d2c"
+Path: /sitecore/system/Marketing Control Panel/Experience Analytics/Dimensions/Pages/By exit page
+DB: master
+SharedFields:
+- ID: "572b00c2-3d74-4d4f-976f-dcae76297a85"
+  Hint: Metrics
+  Type: Multilist
+  Value: |
+    {EBAD58EC-69F8-4E15-AACC-6D705BB13C3E}
+    {6BE51ECC-FC63-4C96-A8EB-AAE0CBC59584}
+    {56920180-C393-4C71-82F2-BC65C4BE7925}
+    {D9071B27-9B3A-4A79-A73F-44ED51ACC9D2}
+    {C64E866F-684C-4D58-832E-7E9E0F9D9BA3}
+    {6505EA17-E36D-4DCD-9337-943E2E47B212}
+    {056EF1F1-13F4-45EF-B807-B544C152495F}
+    {53ED8297-5C4B-4496-89D4-E19F6E9F1E7A}
+    {0C27B583-799B-4728-A700-F3C069830D2C}
+    {84C79DEA-BF76-47B0-A9A8-25B793DB4371}
+    {5D1B1338-8D13-4DAB-A5CF-D626541D587C}
+    {D0F260A7-4839-4C4D-94AA-745DC8BCDF13}
+    {5DC58DE8-E219-4BF0-8C67-D1DF8BC55095}
+    {DF041885-2C4E-4FEF-BC64-03D8B210F393}
+    {452E2737-75A1-4D1A-AC80-46928CC033EB}
+    {108C2BC3-171A-4F0B-9663-682B34E9C4AD}
+- ID: "632e369b-3c22-4dd4-b6e9-0c6648a97ec3"
+  Hint: MetricType
+  Value: ExitPageMetrics
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20161227T030414Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "db15a1e6-bdde-42a4-a989-23a8273c1647"
+    - ID: "a6302f86-e82b-4bda-ab63-639395e1b614"
+      Hint: Name
+      Value: By exit page
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20190509T035322Z

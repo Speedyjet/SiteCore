@@ -1,0 +1,39 @@
+---
+ID: "e848ad16-1ee6-426f-9531-7bbfb21903b3"
+Parent: "80ef4164-f154-4e7d-9922-b3cfc8d74ddc"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Cmdlets/MultisiteContext/Get-SiteMediaItem"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-SiteMediaItem {
+    	[CmdletBinding()]
+        param(
+    	    [Parameter(Mandatory=$true, Position=0 )]
+    		[Item]$CurrentItem
+        )
+    
+    	begin {
+    		Write-Verbose "Cmdlet Get-SiteMediaItem - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Get-SiteMediaItem - Process"
+            $instance = [Sitecore.DependencyInjection.ServiceLocator]::ServiceProvider
+            $instance.GetType().GetMethod('GetService').Invoke($instance, [Sitecore.XA.Foundation.Multisite.IMultisiteContext]).GetSiteMediaItem($CurrentItem) | ? { $_ -ne $null} | Wrap-Item
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Get-SiteMediaItem - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160711T140935Z

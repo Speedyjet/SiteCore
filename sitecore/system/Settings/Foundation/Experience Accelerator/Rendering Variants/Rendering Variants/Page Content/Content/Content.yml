@@ -1,0 +1,18 @@
+---
+ID: "97e7b8e3-0f2f-4cf6-9828-f2a07369627d"
+Parent: "2d27f43e-f2e8-4aa5-99a5-6ab0d7ceeb74"
+Template: "fcd285da-9ab2-4c8d-b185-5a7487a9ba1b"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Rendering Variants/Rendering Variants/Page Content/Content/Content
+DB: master
+SharedFields:
+- ID: "4753764c-c05a-4623-841b-97f85135241c"
+  Hint: FieldName
+  Value: Content
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160426T130650Z

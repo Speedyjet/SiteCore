@@ -1,0 +1,290 @@
+---
+ID: "4ecc90e3-b01f-436a-b88f-f527db2613b7"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/New-Tenant Unit Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function New-Tenant
+    Import-Function Remove-TenantFolder
+    Import-Function Clear-ContentTree
+    Import-Function Get-NewTestTenantModel
+    
+    Describe "New-Tenant" {
+        BeforeEach {
+            $tenantName = "T"
+            $contentPath = "master:\content\Unit Tests"
+            $tenantPath = "$contentPath\$tenantName"
+            $mediaLibraryPath = "master:\media library\Project\Unit Tests"
+            $themesPath = "master:\media library\Themes\Unit Tests"
+            $templatesPath = "master:\templates\Project\Unit Tests"
+        }
+        Context "Create tenant with default settings" {
+            It "clean the content tree" {
+                Clear-ContentTree $contentPath
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                Test-Path -Path $contentPath | Should BeExactly $true
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "create tenant with all default settings" {
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                
+                New-Tenant $model
+            }
+            It "check content location" {
+                Test-Path "$contentPath\$tenantName" | Should BeExactly $true
+            }
+            It "check media library location" {
+                Test-Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+    
+                $tenantItem = Get-Item -Path $tenantPath
+                $tenantMediaLibraryItem = Get-Item -Path "$mediaLibraryPath\$tenantName"
+                $tenantMediaLibraryItem.ID | Should BeExactly $tenantItem.MediaLibrary
+            }
+            It "check shared media library location" {
+                Test-Path "$mediaLibraryPath\$tenantName\shared" | Should BeExactly $true
+    
+                $tenantItem = Get-Item -Path $tenantPath
+                $sharedTenantMediaLibraryItem = Get-Item -Path "$mediaLibraryPath\$tenantName\shared"
+                $sharedTenantMediaLibraryItem.ID | Should BeExactly $tenantItem.SharedMediaLibrary
+            }
+            It "check tenant templates location" {
+                Test-Path "$templatesPath\$tenantName" | Should BeExactly $true
+    
+                $tenantItem = Get-Item -Path $tenantPath
+                $tenantTemplatesRootItem = Get-Item -Path "$templatesPath\$tenantName"
+                $tenantTemplatesRootItem.ID | Should BeExactly $tenantItem.Templates            
+            }
+            It "check themes location" {
+                Test-Path "$themesPath\$tenantName" | Should BeExactly $true
+    
+                $tenantItem = Get-Item -Path $tenantPath
+                $themesRootItem = Get-Item -Path "$themesPath\$tenantName"
+                $themesRootItem.ID | Should BeExactly $tenantItem.Themes            
+            }        
+            It "check default tenant item field values" {
+                $tenantItem = Get-Item -Path $tenantPath
+                $tenantItem.SharedSites | Should BeNullOrEmpty
+                $tenantItem.RoleDomain | Should BeNullOrEmpty
+            }
+            It "check modules field" {
+                $tenantItem = Get-Item -Path $tenantPath
+                [Sitecore.Data.Fields.MultilistField]$field = $tenantItem.Fields["Modules"]
+                
+                $field.Count | Should Not Be 0
+                
+                Import-Function Get-Modules
+                $api = Get-Modules $tenantItem
+                $field.Count | Should Be $api.Count
+            }        
+            It "check tenant templates number and existence" {
+                $tenantTemplates = Get-ChildItem -Path "$templatesPath\$tenantName"
+                $tenantTemplates.Length | Should BeExactly 11
+    
+                Test-Path "$templatesPath\$tenantName\Home" | Should BeExactly $true
+                Test-Path "$templatesPath\$tenantName\Page" | Should BeExactly $true
+                Test-Path "$templatesPath\$tenantName\Page Design" | Should BeExactly $true
+                Test-Path "$templatesPath\$tenantName\Page Design Folder" | Should BeExactly $true
+                Test-Path "$templatesPath\$tenantName\Page Designs" | Should BeExactly $true
+                Test-Path "$templatesPath\$tenantName\Partial Design" | Should BeExactly $true
+                Test-Path "$templatesPath\$tenantName\Partial Design Folder" | Should BeExactly $true
+                Test-Path "$templatesPath\$tenantName\Partial Designs" | Should BeExactly $true
+                Test-Path "$templatesPath\$tenantName\Settings" | Should BeExactly $true
+                Test-Path "$templatesPath\$tenantName\Site" | Should BeExactly $true
+                Test-Path "$templatesPath\$tenantName\Tenant" | Should BeExactly $true
+            }
+            It "check template: Home" {
+                $item = Get-Item -Path "$templatesPath\$tenantName\Home"
+                $pageTemplateItem = Get-Item -Path "$templatesPath\$tenantName\Page"
+                $baseTemplates = $item."__Base template".Split("|")
+                
+                # check base themes
+                $baseTemplates.Length | Should BeExactly 2
+                $baseTemplates -contains $pageTemplateItem.ID | Should BeExactly $true
+                $baseTemplates -contains "{E9272B0E-3BBA-445F-8634-224D68966BB9}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Multisite/Content/Home
+    
+                # check standard values
+                $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item.ID, $item.Database)
+                $item.Database.GetItem($template.StandardValueHolderId).Parent.Paths.Path | Should BeExactly $item.Paths.Path            
+            }
+            It "check template: Page" {
+                $item = Get-Item -Path "$templatesPath\$tenantName\Page"
+                $baseTemplates = $item."__Base template".Split("|")
+                
+                # check base themes
+                $baseTemplates.Length | Should BeExactly 15
+                $baseTemplates -contains "{3F8A6A5D-7B1A-4566-8CD4-0A50F3030BD8}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Multisite/Content/Page
+                $baseTemplates -contains "{A5F4B9CC-25D9-4EDA-A63D-E4CD0C6C6E24}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/SiteMetadata/_Custom Metadata
+                $baseTemplates -contains "{49B99587-1114-4BEB-894B-1455EBDC0C41}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/SiteMetadata/_OpenGraph Metadata
+                $baseTemplates -contains "{9B5B9E0E-1CEF-4D54-8C47-27F241CE075B}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/SiteMetadata/_Seo Metadata
+                $baseTemplates -contains "{4414A1F9-826A-4647-8DF4-ED6A95E64C43}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/SiteMetadata/Sitemap/_Sitemap
+                $baseTemplates -contains "{0EC7A941-BB98-4A56-BD1A-9CDFE12896E9}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/SiteMetadata/_Twitter Metadata
+                $baseTemplates -contains "{8114D1CE-CB6C-4DC7-930E-173345CB4746}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Search/Computed Fields/_Page Search Scope
+                $baseTemplates -contains "{E94D0466-BC9A-47AA-B0B0-1D626B10BFD6}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Search/Computed Fields/_Searchable
+                $baseTemplates -contains "{DFD71B66-796C-4BDE-A2BB-B60958D7BAF8}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Theming/_Styleable
+                $baseTemplates -contains "{11AB06B6-1F36-42D1-8065-77D7CE0FE085}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/StickyNotes/_Sticky Note
+                $baseTemplates -contains "{0A7DA0A0-FCD9-4B7B-A725-E159FA3E7E6C}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Content Validation/_HasValidUrlName
+                $baseTemplates -contains "{F39A594A-7BC9-4DB0-BAA1-88543409C1F9}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/Taxonomy/_Taggable
+                $baseTemplates -contains "{6650FB34-7EA1-4245-A919-5CC0F002A6D7}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Presentation/_Designable
+                $baseTemplates -contains "{371D5FBB-5498-4D94-AB2B-E3B70EEBE78C}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/Navigation/_Navigable
+                $baseTemplates -contains "{9B6DFD34-7101-4BD5-BBFD-3E23CA8A2CAC}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Local Datasources/Base/_LocalDataLink
+    
+                # check standard values
+                $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item.ID, $item.Database)
+                $item.Database.GetItem($template.StandardValueHolderId).Parent.Paths.Path | Should BeExactly $item.Paths.Path            
+            }
+            It "check template: Page Design" {
+                $item = Get-Item -Path "$templatesPath\$tenantName\Page Design"
+                $baseTemplates = $item."__Base template".Split("|")
+                
+                # check base themes
+                $baseTemplates.Length | Should BeExactly 3
+                $baseTemplates -contains "{EBCFFAE1-B6B4-4B50-B722-155E869FC430}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Presentation/Page Design
+                $baseTemplates -contains "{E105BB00-8920-4B3E-A22C-CEECF36DB614}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Theming/_Page Design Theme
+                $baseTemplates -contains "{11AB06B6-1F36-42D1-8065-77D7CE0FE085}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/StickyNotes/_Sticky Note            
+    
+                # check standard values
+                $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item.ID, $item.Database)
+                $item.Database.GetItem($template.StandardValueHolderId).Parent.Paths.Path | Should BeExactly $item.Paths.Path            
+            }
+            It "check template: Page Design Folder" {
+                $item = Get-Item -Path "$templatesPath\$tenantName\Page Design Folder"
+                $baseTemplates = $item."__Base template".Split("|")
+                
+                # check base themes
+                $baseTemplates.Length | Should BeExactly 1
+                $baseTemplates -contains "{EC7CC4E4-3A6E-4512-808B-691A8B46045E}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Presentation/Folders/Page Design Folder
+    
+                # check standard values
+                $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item.ID, $item.Database)
+                $item.Database.GetItem($template.StandardValueHolderId).Parent.Paths.Path | Should BeExactly $item.Paths.Path            
+            }
+            It "check template: Page Designs" {
+                $item = Get-Item -Path "$templatesPath\$tenantName\Page Designs"
+                $baseTemplates = $item."__Base template".Split("|")
+                
+                # check base themes
+                $baseTemplates.Length | Should BeExactly 3
+                $baseTemplates -contains "{4A27A071-4D99-408F-B97E-2C9852C8D137}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Presentation/Page Designs
+                $baseTemplates -contains "{CA64FCD7-7CA9-415A-824B-28B0FEAC1EF7}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Theming/_Assets Optimization
+                $baseTemplates -contains "{1479D1EC-DE94-4546-B02F-84636B2061C2}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Theming/_Site Theme
+    
+                # check standard values
+                $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item.ID, $item.Database)
+                $item.Database.GetItem($template.StandardValueHolderId).Parent.Paths.Path | Should BeExactly $item.Paths.Path            
+            }
+            It "check template: Partial Design" {
+                $item = Get-Item -Path "$templatesPath\$tenantName\Partial Design"
+                $baseTemplates = $item."__Base template".Split("|")
+                
+                # check base themes
+                $baseTemplates.Length | Should BeExactly 2
+                $baseTemplates -contains "{BF680756-B2FA-4CAE-8B69-EE361080616F}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Presentation/Partial Design
+                $baseTemplates -contains "{11AB06B6-1F36-42D1-8065-77D7CE0FE085}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/StickyNotes/_Sticky Note
+    
+                # check standard values
+                $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item.ID, $item.Database)
+                $item.Database.GetItem($template.StandardValueHolderId).Parent.Paths.Path | Should BeExactly $item.Paths.Path            
+            }
+            It "check template: Partial Design Folder" {
+                $item = Get-Item -Path "$templatesPath\$tenantName\Partial Design Folder"
+                $baseTemplates = $item."__Base template".Split("|")
+                
+                # check base themes
+                $baseTemplates.Length | Should BeExactly 1
+                $baseTemplates -contains "{6A4620BB-19F5-4995-837A-7BAA61231C52}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Presentation/Folders/Partial Design Folder
+    
+                # check standard values
+                $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item.ID, $item.Database)
+                $item.Database.GetItem($template.StandardValueHolderId).Parent.Paths.Path | Should BeExactly $item.Paths.Path            
+            }
+            It "check template: Partial Designs" {
+                $item = Get-Item -Path "$templatesPath\$tenantName\Partial Designs"
+                $baseTemplates = $item."__Base template".Split("|")
+                
+                # check base themes
+                $baseTemplates.Length | Should BeExactly 1
+                $baseTemplates -contains "{3B4F7E7A-9B8B-4DFD-BCDD-6ADD1DF49613}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Presentation/Partial Designs
+    
+                # check standard values
+                $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item.ID, $item.Database)
+                $item.Database.GetItem($template.StandardValueHolderId).Parent.Paths.Path | Should BeExactly $item.Paths.Path            
+            }
+            It "check template: Settings" {
+                $item = Get-Item -Path "$templatesPath\$tenantName\Settings"
+                $baseTemplates = $item."__Base template".Split("|")
+                
+                # check base themes
+                $baseTemplates.Length | Should BeExactly 12
+                $baseTemplates -contains "{8517DBE7-68BC-4700-AD41-379C4EBB76A0}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Multisite/Settings
+                $baseTemplates -contains "{03CA361C-8524-4505-8EED-2DF7E3C37159}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/SiteMetadata/_Favicon
+                $baseTemplates -contains "{A7228B46-610D-4A17-9F61-649F3A30AAAE}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/SiteMetadata/_Robots Content
+                $baseTemplates -contains "{59F55DFC-4DB7-422F-9D40-F2ECF66C8499}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/SiteMetadata/Sitemap/_SitemapSettings
+                $baseTemplates -contains "{CBC14160-BED0-4AA2-9387-4C13179205B9}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/Error Handling/_Error Handling
+                $baseTemplates -contains "{D81B405A-B997-4ACE-9068-A15E179A5419}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Search/Computed Fields/_Search Criteria
+                $baseTemplates -contains "{C6E5A68F-8493-42F3-A8B4-C7FA8A5FB31D}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Theming/_Compatible themes
+                $baseTemplates -contains "{9D81C61A-0341-4312-816D-E5204385EA3C}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Grid/_Grid Mapping
+                $baseTemplates -contains "{E34966E9-E83A-4C9C-A191-6B54B8DE0254}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/Composites/_Composite Theme
+                $baseTemplates -contains "{35EBD280-C9BE-4E49-BFAE-F90A32C019DD}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Editing/_Datasource Behaviour
+                $baseTemplates -contains "{6175F4C7-F87F-4F7F-928E-4C5CA5DFFAF4}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Editing/_Editing Theme            
+                $baseTemplates -contains "{46B0CB86-9B0F-4650-A06A-2E1CAC0F2ADC}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/MVC/_CustomRenderingViewPath
+    
+                # check standard values
+                $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item.ID, $item.Database)
+                $item.Database.GetItem($template.StandardValueHolderId).Parent.Paths.Path | Should BeExactly $item.Paths.Path            
+            }
+            It "check template: Site" {
+                $item = Get-Item -Path "$templatesPath\$tenantName\Site"
+                $baseTemplates = $item."__Base template".Split("|")
+                
+                # check base themes
+                $baseTemplates.Length | Should BeExactly 4
+                $baseTemplates -contains "{6669DC16-F106-44B5-96BE-7A31AE82B5B5}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Multisite/Site
+                $baseTemplates -contains "{DCB42A80-68C9-46F9-B036-BC44A27D96FE}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/Security/Security/Base/_Role Domain
+                $baseTemplates -contains "{3BC304DB-FE8F-4AA8-B95C-8C331E823F4C}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Scaffolding/_Modules
+                $baseTemplates -contains "{75A9D420-5F3A-4ED8-9AEA-F58DEBB74786}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/Forms/Base/_Forms Folder Location
+    
+                # check standard values
+                $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item.ID, $item.Database)
+                $item.Database.GetItem($template.StandardValueHolderId).Parent.Paths.Path | Should BeExactly $item.Paths.Path            
+            }
+            It "check template: Tenant" {
+                $item = Get-Item -Path "$templatesPath\$tenantName\Tenant"
+                $baseTemplates = $item."__Base template".Split("|")
+                
+                # check base themes
+                $baseTemplates.Length | Should BeExactly 4
+                $baseTemplates -contains "{215F8C54-68B3-4481-A20B-A5716F06081F}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Multisite/Tenant
+                $baseTemplates -contains "{DCB42A80-68C9-46F9-B036-BC44A27D96FE}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/Security/Security/Base/_Role Domain   
+                $baseTemplates -contains "{3BC304DB-FE8F-4AA8-B95C-8C331E823F4C}" | Should BeExactly $true #/sitecore/templates/Foundation/Experience Accelerator/Scaffolding/_Modules
+                $baseTemplates -contains "{75A9D420-5F3A-4ED8-9AEA-F58DEBB74786}" | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/Forms/Base/_Forms Folder Location
+                
+                # check standard values
+                $template = [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item.ID, $item.Database)
+                $item.Database.GetItem($template.StandardValueHolderId).Parent.Paths.Path | Should BeExactly $item.Paths.Path            
+            }
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170714T101858Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

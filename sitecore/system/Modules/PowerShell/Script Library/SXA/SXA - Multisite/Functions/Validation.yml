@@ -1,0 +1,14 @@
+---
+ID: "827737d6-a721-4a3e-a666-c7f596340ecd"
+Parent: "8ff2c9dc-e428-4a48-9583-ff4d04869e94"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Multisite/Functions/Validation"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170919T133924Z

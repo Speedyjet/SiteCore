@@ -1,0 +1,23 @@
+---
+ID: "a276fec2-f6fa-478f-b87d-6dad03cf027b"
+Parent: "c6ce5613-d7b8-441b-a306-63de8760273b"
+Template: "3d4e4577-ab33-4ca6-ae43-b98d1ec6472f"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Multisite/Multisite Tenant Setup/Home base template
+DB: master
+SharedFields:
+- ID: "ceda3e7f-7406-40d0-a154-7cf7e3e7e85b"
+  Hint: Script
+  Type: Treelist
+  Value: "{403772FA-2819-4CB6-BA28-C8EE2CDC14AF}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160712T062256Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

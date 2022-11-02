@@ -1,0 +1,145 @@
+---
+ID: "c8328b84-861d-43d5-b171-aafb562cb348"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Copy-Rendering Unit Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Remove-TenantFolder
+    Import-Function Copy-Rendering
+    Import-Function Get-RenderingViewPath
+    
+    Describe "Copy-Rendering" {
+        BeforeEach {
+            $destinationModulePath = "master:\sitecore\layout\Renderings\Feature\Experience Accelerator\Page Content"
+            $sourceRenderingPath = "master:\sitecore\layout\Renderings\Feature\Experience Accelerator\Page Content\Page Content"
+            $renderingName = "CopyOfPageContent"
+            $renderingPath = "$destinationModulePath\$renderingName"
+            $renderingClass = "copypagecontent"
+            $siteLevelSourceRenderingVariant = "master:\sitecore\system\Settings\Feature\Experience Accelerator\Page Content\Page Content Site Setup\Rendering Variants\PageContent"
+            $siteLevelTargetRenderingVariant = "master:\sitecore\system\Settings\Feature\Experience Accelerator\Page Content\Page Content Site Setup\Rendering Variants\CopyOfPageContent"
+            $renderingParametersPath = "master:\sitecore\templates\Feature\Experience Accelerator\Page Content\Rendering Parameters\$renderingName" 
+            $renderingVariantBranch = "master:\sitecore\templates\Branches\Feature\Experience Accelerator\Page Content\Default $renderingName Variant"
+            $pageContentAvailableRenderingBranchPath = "{CA286DD9-63AC-4509-AC4D-DA339B936AFA}"
+            $model = New-Object Sitecore.XA.Foundation.Scaffolding.Models.CopyRenderingModel
+            $testViewPath = "testPath"
+        }
+        Context "Copy rendering Inherit parameters" {
+            It "clean the content tree" {
+                Remove-Item $renderingPath -Recurse -Force
+                Remove-Item $renderingParametersPath -Recurse -Force
+                Remove-Item $siteLevelTargetRenderingVariant -Recurse -Force
+                Remove-Item $renderingVariantBranch -Recurse -Force
+                Test-Path -Path $renderingPath | Should BeExactly $false
+                Test-Path -Path $renderingParametersPath | Should BeExactly $false
+                Test-Path -Path $siteLevelTargetRenderingVariant | Should BeExactly $false
+                Test-Path $renderingVariantBranch | Should BeExactly $false
+            }
+            
+            It "initialize content tree" {
+                $pageContentRendering = Get-Item -Path $sourceRenderingPath
+                $pageContentModule = Get-Item -Path $destinationModulePath
+                $model.SourceRenderingItem = $pageContentRendering
+                $model.RenderingName = $renderingName
+                $model.TargetModule = $pageContentModule
+                $model.Class = $renderingClass
+    
+                if ($model -ne $null){
+                    Copy-Rendering $model
+                }
+            }
+            
+            It "should create rendering under destination module" {
+                $destinationModule = Get-Item -Path $destinationModulePath
+                ($destinationModule.Children | ? { $_.Name -eq $renderingName}) -ne $null | Should Be $true
+            }
+            
+            It "rendering should have appropriate class"{
+                $renderingItem = Get-Item -Path $renderingPath
+                $renderingItem.RenderingCssClass | Should BeExactly $renderingClass
+            }
+            
+            It "rendering parameters should be created"{
+                Test-Path $renderingParametersPath | Should Be $true
+            }
+            
+            It "rendering parameters should inherit source parameters"{
+                $targetRendering = Get-Item -Path $renderingPath 
+                $sourceRendering = Get-Item -Path $sourceRenderingPath
+                $renderingParametrs = Get-Item $renderingParametersPath
+                $targetRendering."Parameters Template" | Should Match $renderingParametrs.ID
+                $renderingParametrs."__Base template" | Should Match $sourceRendering."Parameters Template"
+            }
+            
+            It "rendering shold be added to availablerendering branch"{
+                $targetRendering = Get-Item -Path $renderingPath
+                $branch = Get-Item -Path master: -ID $pageContentAvailableRenderingBranchPath
+                $branch.Renderings | Should Match $targetRendering.ID
+            }
+            
+            It "rendering view should be the same as source rendering"{
+                $targetRendering = Get-Item -Path $renderingPath
+                $sourceRendering = Get-Item -Path $sourceRenderingPath
+                $renderingViewPath = Get-RenderingViewPath $sourceRendering
+                $renderingViewPath = if ($renderingViewPath -eq $null) {""} else {$renderingViewPath}
+                $targetRendering.RenderingViewPath | Should BeExactly $renderingViewPath
+            }
+            
+            It "rendering variant branch is created"{
+                Test-Path $renderingVariantBranch | Should BeExactly $true
+            }
+            
+            It "rendering variant copied"{
+                Test-Path $siteLevelTargetRenderingVariant | Should BeExactly $true
+                $siteAction = Get-Item -Path $siteLevelTargetRenderingVariant
+                $siteAction._Name | Should BeExactly $renderingName
+                $branch = Get-Item -Path $renderingVariantBranch
+                $siteAction._Template | Should BeExactly $branch.ID.ToString()
+            }
+        }
+         Context "Copy rendering Select view mode" {
+             It "clean the content tree" {
+                Remove-Item $renderingPath -Recurse -Force
+                Remove-Item $renderingParametersPath -Recurse -Force
+                Remove-Item $siteLevelTargetRenderingVariant -Recurse -Force
+                Remove-Item $renderingVariantBranch -Recurse -Force
+                Test-Path -Path $renderingPath | Should BeExactly $false
+                Test-Path -Path $renderingParametersPath | Should BeExactly $false
+                Test-Path -Path $siteLevelTargetRenderingVariant | Should BeExactly $false
+                Test-Path $renderingVariantBranch | Should BeExactly $false
+            }
+            
+            It "initialize content tree" {
+                $pageContentRendering = Get-Item -Path $sourceRenderingPath
+                $pageContentModule = Get-Item -Path $destinationModulePath
+                $model.SourceRenderingItem = $pageContentRendering
+                $model.RenderingName = $renderingName
+                $model.TargetModule = $pageContentModule
+                $model.Class = $renderingClass
+                $model.ViewMode = [Sitecore.XA.Foundation.Scaffolding.Models.ViewMode]::Select
+                $model.View = $testViewPath
+    
+                if ($model -ne $null){
+                    Copy-Rendering $model
+                }
+            }
+            
+            It "rendering view should be the same as source rendering"{
+                $targetRendering = Get-Item -Path $renderingPath
+                $targetRendering.RenderingViewPath | Should BeExactly $testViewPath
+            }
+            
+            
+         }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20171228T212321:636500930016004221Z"

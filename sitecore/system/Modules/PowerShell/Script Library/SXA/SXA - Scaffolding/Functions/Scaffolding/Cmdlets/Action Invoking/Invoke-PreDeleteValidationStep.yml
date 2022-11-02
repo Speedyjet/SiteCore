@@ -1,0 +1,56 @@
+---
+ID: "67536109-e404-4e72-be1d-8ecc53fa652c"
+Parent: "5d2b7a41-82a3-4a73-9560-951b366527f9"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Cmdlets/Action Invoking/Invoke-PreDeleteValidationStep"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Invoke-PreDeleteValidationStep {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item[]]$DefinitionItems,
+            [Parameter(Mandatory = $true, Position = 1 )]
+            $Model
+        )
+        
+        begin {
+            Write-Verbose "Cmdlet Invoke-PreDeleteValidationStep - Begin"
+        }
+        
+        process {
+            Write-Verbose "Cmdlet Invoke-PreDeleteValidationStep - Process"
+            $result = $true
+            $DefinitionItems | % {
+                $actions = Get-ChildItem -Path $_.Paths.Path -Recurse | ? { $_.TemplateName -eq "PreDeleteValidationStep" } 
+                $actions | % {
+                    $script = Get-Item -Path . -ID $_.ValidationScript
+                    Write-Verbose "Processing: $($script.Paths.path)"
+                    Invoke-Script $script
+                    try {
+                        [bool]$validatorResult = Invoke-Validation $Model
+                        $result = $validatorResult -and $result
+                    }
+                    catch [System.Exception] {
+                        Write-Error $_
+                    }        
+                }    
+            }
+            $result
+        }
+        
+        end {
+            Write-Verbose "Cmdlet Invoke-PreDeleteValidationStep - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171130T073917Z

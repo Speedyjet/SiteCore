@@ -1,0 +1,58 @@
+---
+ID: "9fc2476f-c754-45d9-add3-25edd85177f3"
+Parent: "bb8a3f2e-b5ad-48ed-a083-0eb106301da7"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Multisite/Functions/Site cloning/Set-CreativeExchangeFileStorageReference"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Set-CreativeExchangeFileStorageReference {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Site,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [string]$newSiteName
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Set-CreativeExchangeFileStorageReference - Begin"
+            Import-Function Get-SettingsItem
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Set-CreativeExchangeFileStorageReference - Process"
+            
+            $settingsItem = Get-SettingsItem $Site
+            $creativeExchangeStoragesFolderTemplateId = "{0D792404-79AA-483D-BB0C-50785F2E295B}"
+            $creativeExchangeFileStorageTemplateId = "{BCA27DE4-A869-4282-B3FB-4FBD7BA1B87B}"
+            $creativeExchangeStoragesFolderItem = $settingsItem.Children |? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_).InheritsFrom($creativeExchangeStoragesFolderTemplateId) } | Select-Object -First 1
+            if($creativeExchangeStoragesFolderItem){
+                $creativeExchangeFileStorage = $creativeExchangeStoragesFolderItem.Children | ? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_).InheritsFrom($creativeExchangeFileStorageTemplateId) } | Select-Object -First 1 | Wrap-Item
+                $folder = "`$(creativeExchangeFolder)/FileStorage/$newSiteName"
+                Write-Verbose "Set creative exchange file storage destination folder to '$folder'"
+                $creativeExchangeFileStorage."Destination Path" = $folder
+            }else{
+                Write-Verbose "Creative Exchange folder cannot be found. Skipping 'Set-CreativeExchangeFileStorageReference'"
+            }
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Set-CreativeExchangeFileStorageReference - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170608T063534Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

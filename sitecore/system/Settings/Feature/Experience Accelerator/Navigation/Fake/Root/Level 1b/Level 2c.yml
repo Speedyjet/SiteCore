@@ -1,0 +1,29 @@
+---
+ID: "6ab11150-aae7-42c6-ba7d-5d3b8beed773"
+Parent: "4a725c5f-38c2-4575-b253-1b87a65811b8"
+Template: "c7ddd6b8-90fd-4097-82d5-792afd6777e6"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Navigation/Fake/Root/Level 1b/Level 2c
+DB: master
+SharedFields:
+- ID: "9135200a-5626-4dd8-ab9d-d665b8c11748"
+  Hint: __Never publish
+  Type: checkbox
+  Value: 1
+- ID: "9c6106ea-7a5a-48e2-8cad-f0f693b1e2d4"
+  Hint: __Read Only
+  Type: Checkbox
+  Value: 1
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "1ab993c6-6e09-4367-aaf2-9372b017910b"
+      Hint: Title
+      Value: Level 2
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171006T115232Z
+    - ID: "4e0720e9-9d50-4ddc-87cf-ecd65e8e94c8"
+      Hint: NavigationTitle
+      Value: Level 2

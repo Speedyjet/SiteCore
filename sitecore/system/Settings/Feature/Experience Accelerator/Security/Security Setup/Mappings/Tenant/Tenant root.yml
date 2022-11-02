@@ -1,0 +1,23 @@
+---
+ID: "7c4a362b-4813-40db-8167-7aa5190726ff"
+Parent: "be36ed25-d6ac-467a-a34a-ea5143a5497d"
+Template: "215f8c54-68b3-4481-a20b-a5716f06081f"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/Mappings/Tenant/Tenant root
+DB: master
+SharedFields:
+- ID: "dec8d2d5-e3cf-48b6-a653-8e69e2716641"
+  Hint: __Security
+  Value: |
+    ar|$siteDomain\Site Admin|pe|+item:create|+item:read|+item:rename|+item:delete|+item:write|+item:admin|pd|+item:create|+item:read|+item:rename|+item:delete|+item:write|+item:admin|
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170410T105726Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

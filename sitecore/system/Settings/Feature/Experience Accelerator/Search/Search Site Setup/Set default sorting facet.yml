@@ -1,0 +1,23 @@
+---
+ID: "6c1d9fda-a4a7-4a47-a853-a30da614460f"
+Parent: "53bdaf49-b151-4f42-a1e7-043c397123d9"
+Template: "b06460c2-8b7b-47a5-9e2c-f966f689b6ca"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Search/Search Site Setup/Set default sorting facet
+DB: master
+SharedFields:
+- ID: "ff1383bb-f095-4958-9b6d-e555db653c44"
+  Hint: Script
+  Type: Treelist
+  Value: "{50F421DF-C311-45C6-9EBF-A03885864FFC}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160830T132850Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

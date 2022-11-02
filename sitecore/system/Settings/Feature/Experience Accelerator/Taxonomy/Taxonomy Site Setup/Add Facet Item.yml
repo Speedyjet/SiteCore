@@ -1,0 +1,30 @@
+---
+ID: "a4bbdcdc-1ae5-4145-99e2-18a9e19b0bdb"
+Parent: "4e3a13d1-df8f-4c7f-9405-ac74af29c47b"
+Template: "ea8a3f26-9ccd-443a-95f5-71b868a94bd0"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Taxonomy/Taxonomy Site Setup/Add Facet Item
+DB: master
+SharedFields:
+- ID: "4795a7c6-08a9-4248-86c3-d460062c3a22"
+  Hint: Location
+  Type: Treelist
+  Value: "{059EF32B-7C81-495A-8FD4-3B24919B408D}"
+- ID: "7868e6bc-525c-4fce-ab8a-77da3e09b171"
+  Hint: Name
+  Value: SxaTags
+- ID: "e62c28f0-9d3b-46e2-8bec-a5e120542499"
+  Hint: Template
+  Type: Treelist
+  Value: "{BD75AFF8-0E85-4013-AF3B-7187E8B952F0}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180216T084529Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

@@ -1,0 +1,33 @@
+---
+ID: "0567aae6-7f2f-4be8-8df3-2317de97f40a"
+Parent: "8f7f3519-7214-48da-8544-ba45aff7c9ed"
+Template: "98e1c490-65e2-4f23-a4fd-d2d496cb387b"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Rendering Variants/Rendering Variants/Gallery/Default/Gallery Image Edit Frame
+DB: master
+SharedFields:
+- ID: "0a98d4be-ed1c-4388-b156-5b586c0ba10a"
+  Hint: Buttons
+  Value: Gallery Image
+- ID: "9649a336-0dc1-4133-89ed-6d76beb4c32e"
+  Hint: EnableRule
+  Type: Rules
+  Value: |
+    <ruleset>
+      <rule
+        uid="{8C73BD53-DB34-46B0-A98B-69AD16BD3DC3}">
+        <conditions>
+          <condition
+            id="{D0810F9D-734C-452D-BBB6-4730368D68F1}"
+            uid="8D023C58AAE745B0992B5D519E8504DF"
+            templateid="{9D77C212-A828-4792-8E72-749F19C0154D}" />
+        </conditions>
+      </rule>
+    </ruleset>
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171128T101431Z

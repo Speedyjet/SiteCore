@@ -1,0 +1,14 @@
+---
+ID: "b859911e-c885-428f-b0e8-a4482f0094a6"
+Parent: "18d5ef71-93e2-4d73-bf29-bbd229fe4ca1"
+Template: "a87a00b1-e6db-45ab-8b54-636fec3b5523"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/SXA
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170404T122431Z

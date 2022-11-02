@@ -1,0 +1,37 @@
+---
+ID: "95b7e2b0-479b-4bc4-a2f0-7e0a85eace4f"
+Parent: "e16592de-c9cd-4926-8f39-beb3db067d0a"
+Template: "6ea02006-b973-4826-bdfc-c8122c7b865a"
+Path: /sitecore/system/Settings/Analytics/Marketing Automation/Activity Types/Decision Point/Parameters
+DB: master
+BranchID: "922570a5-c76a-424a-9e2c-e2d7c2d7ec0e"
+SharedFields:
+- ID: "f6d8a61c-2f84-4401-bd24-52d2068172bc"
+  Hint: __Originator
+  Value: "{F9952D92-6CE6-43FF-A322-186650462DF6}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170124T034428Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "2e22532d-591b-497e-8483-a1ea7b5b9472"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20170124T034428Z

@@ -1,0 +1,18 @@
+---
+ID: "51ebe791-89cf-4bfd-b43a-e27d958c50b5"
+Parent: "7fd5635f-6233-4bae-82f3-1f8dd7cbaf2a"
+Template: "76da0a8d-fc7e-42b2-af1e-205b49e43f98"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Presentation/Available Renderings/SXA
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160419T082505Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

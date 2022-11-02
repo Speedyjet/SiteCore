@@ -1,0 +1,71 @@
+---
+ID: "4a3a3bae-4bb1-463d-987b-9eb8d0e142d4"
+Parent: "ff0bc016-2d01-4f55-a020-ef6fc2fe7559"
+Template: "664e5035-eb8c-4ba1-9731-a098fcc9127a"
+Path: /sitecore/system/Settings/Rules/Insert Options/Rules/Scriban Insert Rule
+DB: master
+SharedFields:
+- ID: "fa307b86-da2a-44bd-887d-e2057cdb4948"
+  Hint: Rule
+  Type: Rules
+  Value: |
+    <ruleset>
+      <rule
+        uid="{73C892CD-6A0E-44F7-A75B-3BA9BCD1B7D5}">
+        <conditions>
+          <or
+            uid="95A7DE99031C4601B377B4D887A613C7">
+            <or
+              uid="A998A14D31B24DB8ACB6B07627EAE6B7">
+              <or
+                uid="6FEF48639CD946589CAA56E4E09A0A02">
+                <or
+                  uid="8D2D4ABFBA7846C3AD3963A2D969767E">
+                  <condition
+                    id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}"
+                    uid="4827FFB7A6D445D7B74DD9EDEEE0FB8E"
+                    templateid="{98B41352-5A4B-4067-B924-18A4B50F0A53}" />
+                  <condition
+                    id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}"
+                    uid="F276133DD40446128C507ABEC9B58B0F"
+                    templateid="{98E1C490-65E2-4F23-A4FD-D2D496CB387B}" />
+                </or>
+                <condition
+                  id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}"
+                  uid="1D00DA2B6B244F6F8FD2A79D42A520CF"
+                  templateid="{6354D18E-54E9-45AD-9EC7-510769DB4809}" />
+              </or>
+              <condition
+                id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}"
+                uid="CC998BC368534AD68AE80197E530FB4D"
+                templateid="{ACA5C9A3-CDA0-49B6-893F-1D4A7CB595B0}" />
+            </or>
+            <condition
+              id="{5DE6D53E-EA62-4D17-8BDD-FEBCD80AC07B}"
+              uid="A5CF646C1EE14BC9800941A89D8501B7"
+              templateid="{FB3E3034-33F8-4CE8-BE98-DD05010F4C22}" />
+          </or>
+        </conditions>
+        <actions>
+          <action
+            id="{918FFCF0-F9E1-4DB6-A191-3EFA5A91C583}"
+            uid="1431017CE1264AB28437855F9DFC72D5"
+            insertoptionid="{8FCD3CFE-8B3B-423E-8176-6A7C72CB43FC}" />
+        </actions>
+      </rule>
+    </ruleset>
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190607T070016Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "9e0287d9-af90-41ad-8d36-332375e194d6"
+      Hint: Name
+      Value: Scriban variant item insert rule

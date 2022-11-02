@@ -1,0 +1,14 @@
+---
+ID: "c1b9d8e8-4b4b-4d98-ad42-413f8797f77b"
+Parent: "48358d62-f2e0-4fe0-be8e-bd9a0e84c7b1"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Theming/Functions/Cmdlets"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180620T131352Z

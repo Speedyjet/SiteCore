@@ -1,0 +1,14 @@
+---
+ID: "f41379c4-96dc-4efc-9ab7-e62bf7c8a444"
+Parent: "18d5ef71-93e2-4d73-bf29-bbd229fe4ca1"
+Template: "a87a00b1-e6db-45ab-8b54-636fec3b5523"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/Tenant
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170404T120955Z

@@ -1,0 +1,14 @@
+---
+ID: "ff7a3a94-09ae-4e05-8364-7fc12a6ade1a"
+Parent: "ff60e4a9-f972-4791-b21b-f6aa0fbf4e6e"
+Template: "daaf41fd-96db-4892-be99-f62f16d036c4"
+Path: /sitecore/templates/Branches/Foundation/JSS Experience Accelerator/Presentation/Presentation/$name/Page Designs
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190121T143816Z

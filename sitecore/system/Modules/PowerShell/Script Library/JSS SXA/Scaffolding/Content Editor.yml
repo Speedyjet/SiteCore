@@ -1,0 +1,14 @@
+---
+ID: "0cbaa29f-bdaf-4f50-892d-6ff013f2120e"
+Parent: "4f73349c-019a-4a5d-9e65-49cb79648235"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: /sitecore/system/Modules/PowerShell/Script Library/JSS SXA/Scaffolding/Content Editor
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20181113T120603Z

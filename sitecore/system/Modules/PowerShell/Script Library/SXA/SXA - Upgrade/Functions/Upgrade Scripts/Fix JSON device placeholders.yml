@@ -1,0 +1,124 @@
+---
+ID: "6c4195d0-dc6b-422c-b568-649de53f0df1"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Fix JSON device placeholders"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1402
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-AllSxaSite
+    Import-Function Get-ItemByIdSafe
+    
+    function Get-SitePagesWithLayout {
+    	[CmdletBinding(SupportsShouldProcess = $true)]
+    	param(
+    		[Parameter(Mandatory = $true,Position = 0)]
+    		[Item]$SiteItem
+    	)
+    
+    	begin {
+    		Write-Verbose "Get-SitePagesWithLayout - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Get-SitePagesWithLayout - Process"
+    
+    		if ($pscmdlet.ShouldProcess("$($SiteItem.Paths.Path)","Retrieve a list of site pages for processing")) {
+    			$db = Get-Database -Name "master"
+    			$path = $SiteItem.Paths.Path
+                $siteID = $SiteItem.ID
+                $db.DataManager.DataSource.SelectIDs($null, $null, [Sitecore.FieldIDs]::LayoutField, "*r*", $true) | % { Get-ItemByIdSafe $_ "*" } | ? { $_.Paths.LongID.Contains($siteID) }
+    		}
+    	}
+    
+    	end {
+    		Write-Verbose "Get-SitePagesWithLayout - End"
+    	}
+    }
+    
+    function ShouldRun () {
+    	$sites = Get-AllSxaSite
+    	$sites.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    
+    function Invoke-UpgradeStep {
+    	[CmdletBinding(SupportsShouldProcess = $true)]
+    	param(
+    		[Parameter(Mandatory = $true,Position = 0)]
+    		$arguments
+    	)
+    
+    	begin {
+    		Write-Verbose "Fix JSON Device placeholders - Begin"
+    	}
+    
+    	process {
+    		$result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+    		try {
+    			$updateJsonPlaceholderService = New-Object Sitecore.XA.Foundation.Upgrade.Services.Custom.UpdateJsonPlaceholderService
+    			
+    
+    			Get-AllSxaSite | % {
+    				Write-Verbose "Processing site $($_.Paths.Path)"
+    
+    				Write-Verbose "Getting pages for processing . . ."
+    				$pages = Get-SitePagesWithLayout $_
+    				Write-Verbose "Found $($pages.Count) pages."
+    
+    				if ($pscmdlet.ShouldProcess("$($_.Paths.Path)", "Fix JSON Device placeholders for all site pages")) {
+    					$pages | % {
+    						if ($updateJsonPlaceholderService.ShouldUpdate($_)) {
+    						    $currentItemPath = $($_.Paths.Path)
+    						    Write-Verbose "Processing '$currentItemPath' ($($_.Language.Name)) page [$($_.ID)]"
+    							$updateJsonPlaceholderService.Update($_) > $null
+    						}
+    					}
+    				}
+    			}
+    
+    			$result.Result = "Success"
+    		}
+    		catch {
+    			$result.Result = "Error"
+    			$result.Message = $Error[0]
+    			$result.ErrorObject = $Error[0]
+    		}
+    		finally {
+    			$result
+    		}
+    	}
+    
+    	end {
+    		Write-Verbose "Fix JSON Device placeholders - End"
+    	}
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1402
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170718T145901Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Fix JSON device placeholders
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Fix JSON device placeholder names

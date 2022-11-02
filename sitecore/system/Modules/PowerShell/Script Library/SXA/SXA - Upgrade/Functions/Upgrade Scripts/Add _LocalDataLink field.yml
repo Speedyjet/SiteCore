@@ -1,0 +1,163 @@
+---
+ID: "8692e1f6-0301-4cd0-9edd-f1a1bc10e598"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Add _LocalDataLink field"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1811
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-AllSxaTenant
+    Import-Function Get-AllSxaSite
+    Import-Function Get-BaseTenantTemplate
+    Import-Function Get-ItemByIdSafe
+    Import-Function Add-BaseTemplate
+    Import-Function Get-UniqueItem
+    Import-Function Select-SingleItemFromEachGroup
+    Import-Function Get-TenantItem
+    Import-Function Get-TenantTemplatesRoot
+    Import-Function Get-TenantTemplate
+    
+    
+    [Sitecore.Data.ID]$pageTemplateId = [Sitecore.XA.Foundation.Multisite.Templates+Page]::ID
+    [Sitecore.Data.ID]$LocalDataLinkTemplate = [Sitecore.XA.Foundation.LocalDatasources.Templates+_LocalDataLink]::ID
+    [Sitecore.Data.ID]$tenantActionID = "{CB9E63A4-7967-4D51-A7FC-D9B460D47D4F}"
+    
+    function ShouldRun () {
+        $outdatedTemplates = Get-AffectedTenant
+        $outdatedTemplates.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Test-LocalDataLinkBaseTemplateAdded {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0 )]
+            [Item]$TemplateItem
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Test-LocalDataLinkBaseTemplateAdded - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Test-LocalDataLinkBaseTemplateAdded - Process"
+            [Sitecore.Data.Managers.TemplateManager]::GetTemplate($TemplateItem.ID, $TemplateItem.Database).InheritsFrom($LocalDataLinkTemplate)
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Test-LocalDataLinkBaseTemplateAdded - End"
+        }
+    }
+    
+    function Get-AffectedTenant {
+        [CmdletBinding()]
+        param()
+    
+        begin {
+            Write-Verbose "Cmdlet Get-AffectedTenant - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-AffectedTenant - Process"
+            Get-AllSxaTenant | ? {
+                $tenant = $_
+                [Item[]]$templates = Get-BaseTenantTemplate $tenant $pageTemplateId | ? { (Test-LocalDataLinkBaseTemplateAdded $_) -eq $false }
+                $templates.Count -gt 0
+            }
+        }
+        end {
+            Write-Verbose "Cmdlet Get-AffectedTenant - End"
+        }   
+    }
+    
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $arguments
+        )
+    
+        process {
+            Write-Verbose "Getting affected tenants..."
+            $affectedTenants = Get-AffectedTenant
+            
+            Write-Verbose "Found $($affectedTenants.Count) projects with templates without '_LocalDataLink' field"
+    
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $tenantActionItem = Get-ItemByIdSafe $tenantActionID
+                [Sitecore.Data.Items.TemplateItem[]]$arguments = $tenantActionItem.Fields['Arguments'].Value.Split('|') | % { Get-ItemByIdSafe $_ }    
+                $affectedTenants | % { 
+                    $tenant = $_
+                    $currentItemPath = $($tenant.Paths.Path)
+                    Write-Verbose "Processing '$($tenant.Name)' tenant [$($tenant.ID)]"
+    
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Adding missing base template")) {
+                        [Sitecore.Data.Items.TemplateItem[]]$templates = Get-BaseTenantTemplate $tenant $pageTemplateId | ? { (Test-LocalDataLinkBaseTemplateAdded $_) -eq $false }
+                        $templates | % {
+                            $template = $_
+                            $arguments | % {
+                                Write-Verbose "Adding base template to $($template.InnerItem.Paths.Path) : $($tenantActionItem.Fields['Arguments'].Value)"
+                                Add-BaseTemplate $template $_
+                            }
+                        }
+                    }
+                }       
+                
+                $instance = [Sitecore.DependencyInjection.ServiceLocator]::ServiceProvider
+                $dataLinkService = $instance.GetType().GetMethod('GetService').Invoke($instance, [Sitecore.XA.Foundation.LocalDatasources.Services.IDataLinkService])
+                $affectedTenants | % { 
+                    $tenant = $_
+                    $currentItemPath = $($tenant.Paths.Path)
+                    Write-Verbose "Processing '$($tenant.Name)' tenant [$($tenant.ID)]"
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Adding '_LocalDataLink' field value to all pages")) {
+                        $site = Get-AllSxaSite | ? { $_.Paths.Path.StartsWith($currentItemPath) }
+                        $site.Axes.GetDescendants() | ? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_).InheritsFrom($LocalDataLinkTemplate) } | % {
+                            Write-Verbose "Processing page: $($_.Paths.path)"
+                            if ($pscmdlet.ShouldProcess($_.Paths.Path, "Adding '_LocalDataLink' field value")) {
+                                $dataLinkService.LinkLocalData($_)
+                            }
+                        }
+                    }
+                } 
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1811
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190405T073940Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Add _LocalDataLink field
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Ensures that every page tenant template contain _LocalDataLink field which is filled page relative data folder reference.

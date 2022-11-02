@@ -1,0 +1,143 @@
+---
+ID: "342f0506-43ca-4de5-a276-8cc4597ccbdb"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/New-SiteTheme Unit Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function New-Tenant
+    Import-Function New-Site
+    Import-Function Test-IsEditThemeModule
+    Import-Function Get-SiteDefinitions
+    Import-Function Remove-TenantFolder
+    Import-Function Get-ValidSiteSetupDefinition
+    Import-Function Clear-ContentTree
+    Import-Function Get-NewTestTenantModel
+    Import-Function Get-NewTestSiteModel
+    
+    function CheckMetaPartialDesignRendering ($renderingId, $expectedPh) {
+        Test-Path "$sitePath\Presentation\Partial Designs\Metadata" | Should BeExactly $true
+        $metadataPartialDesign = Get-Item -Path "$sitePath\Presentation\Partial Designs\Metadata"
+                
+        $deviceDefinition = [Sitecore.Layouts.LayoutDefinition]::Parse($metadataPartialDesign."__Renderings").Devices | ? { $_.ID -eq "{FE5D7FDF-89C0-4D99-9AA3-B5FBD009C9F3}" } | Select-Object -First 1
+        $rendering = $deviceDefinition.Renderings | ? { 
+            $idAttribtue = $_.DynamicProperties | ? { $_.ToString() -eq "id" } | Select-Object -First 1
+            $idAttribtue.Value -eq $renderingId 
+        }
+        $rendering | Should Not BeNullOrEmpty
+        $placeholder = $rendering.DynamicProperties | ? { $_.ToString() -eq "ph" } | Select-Object -First 1 | % { $_.Value }
+        $placeholder | Should BeExactly $expectedPh
+    }
+    
+    function CheckIfContainsJsonDevice($svPath) {
+        $standarValuesItem = Get-Item -Path $svPath
+        $standarValuesItem | Should Not BeNullOrEmpty
+        [Sitecore.Layouts.LayoutDefinition]::Parse($standarValuesItem."__Renderings").Devices | ? { $_.ID -eq "{0B4A31C9-712D-4578-A396-2DDC0F34B63A}" } | Select-Object -First 1 | Should Not BeNullOrEmpty
+    }
+    
+    function ValidateDependency($tenantSetup, $siteSetup) {
+        $SiteLocation = Get-Item -Path "$contentPath\$tenantName"
+        [Item[]]$allDefinitions = Get-SiteDefinitions "*"
+        $filteredlDefinitions = Get-ValidSiteSetupDefinition $SiteLocation $allDefinitions
+        
+        $tenantSetup.IsSystemModule | Should Be $false
+        $allDefinitions.ID -contains $siteSetup.Id | Should Be $true
+        $filteredlDefinitions.ID -contains $siteSetup.Id | Should Be $false
+    }
+    
+    Describe "New Site Theme" {
+        Mock Run-SiteManager {}
+        BeforeEach {
+            $tenantName = "T"
+            $siteName = "S"
+            $contentPath = "master:\content\Unit Tests"
+            $tenantPath = "$contentPath\$tenantName"
+            $sitePath = "$tenantPath\$siteName"
+            $mediaLibraryPath = "master:\media library\Project\Unit Tests"
+            $themesPath = "master:\media library\Themes\Unit Tests"
+            $templatesPath = "master:\templates\Project\Unit Tests"
+            $gridSetupPath = "master:\system\Settings\Feature\Experience Accelerator\Foundation\Grid Setup"        
+        }
+        Context "Create new site theme" {
+            It "clean the content tree" {
+                Clear-ContentTree $contentPath
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                
+                New-Tenant $model
+                Test-Path -Path "$contentPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$themesPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }
+            It "create site with all default settings" {
+                $model = Get-NewTestSiteModel $siteName "$contentPath\$tenantName" $gridSetupPath
+                New-Site $model            
+            }
+            It "check empty site theme" {
+                $siteItem = Get-Item -Path $sitePath
+    
+                $model = New-Object Sitecore.XA.Foundation.Scaffolding.Models.CreateNewSiteThemeModel
+                $model.ThemeName = "myEmptyTheme"
+                $model.SiteLocation = $siteItem
+                $model.ThemeLocation = $siteItem.Database.GetItem($siteItem.ThemesFolder)
+                $model.Language = [Sitecore.Context]::Language.Name
+                $siteTheme = New-SiteTheme $model
+                
+                # check if created
+                $siteTheme | Should Not BeNullOrEmpty
+                
+                # check base themes order and content
+                $siteTheme.BaseLayout | Should BeExactly "{05BFBCDF-4DA5-414A-8651-A221AB3F5F0F}|{9C1D66B3-6828-4759-9EEC-D68A7A2CE248}|{D889F096-AFAB-4539-9E73-4DD3E05FCEC9}"
+                
+                # check if present in availale themes
+                $settingsItem = Get-SettingsItem $siteItem
+                $settingsItem.Themes.Contains($siteTheme.ID) | Should Be $true
+            }          
+            It "check site theme with features" {
+                $siteItem = Get-Item -Path $sitePath
+    
+                [Item[]]$allDefinitions = Get-SiteDefinitions "*"
+                $definitionItems = $allDefinitions | ? { Test-IsEditThemeModule $_ }
+    
+                $model = New-Object Sitecore.XA.Foundation.Scaffolding.Models.CreateNewSiteThemeModel
+                $model.ThemeName = "myTheme"
+                $model.SiteLocation = $siteItem
+                $model.ThemeLocation = $siteItem.Database.GetItem($siteItem.ThemesFolder)
+                $model.DefinitionItems = Get-SortedSetupItemsCollection $definitionItems
+                $model.Language = [Sitecore.Context]::Language.Name
+                $siteTheme = New-SiteTheme $model
+                
+                # check if created
+                $siteTheme | Should Not BeNullOrEmpty
+                
+                # check base themes order and content
+                $siteTheme.BaseLayout | Should BeExactly "{05BFBCDF-4DA5-414A-8651-A221AB3F5F0F}|{9C1D66B3-6828-4759-9EEC-D68A7A2CE248}|{DF95EF99-4AFB-4E59-A341-2CC147120344}|{06401E9B-A3C5-4EB1-A8BA-A66658E157BC}|{1FF2E882-18C3-4FF3-8B1A-736ECA929C5F}|{C7F3C097-9A71-4701-B8A9-0C6740FBF84E}|{D889F096-AFAB-4539-9E73-4DD3E05FCEC9}"
+                
+                # check if present in availale themes
+                $settingsItem = Get-SettingsItem $siteItem
+                $settingsItem.Themes.Contains($siteTheme.ID) | Should Be $true
+            }
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170714T115610Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

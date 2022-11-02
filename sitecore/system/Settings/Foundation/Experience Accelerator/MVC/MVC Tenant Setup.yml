@@ -1,0 +1,26 @@
+---
+ID: "592e2cc0-e0c8-4fa7-ae7d-c8ddc1d37afe"
+Parent: "ea081aca-276c-4bd6-a683-59d9e750021d"
+Template: "141df88e-7156-4d2e-a004-c8c1a7c51e9d"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/MVC/MVC Tenant Setup
+DB: master
+SharedFields:
+- ID: "06d2c562-9229-4779-8807-e2a5fd2990d4"
+  Hint: IsSystemModule
+  Type: Checkbox
+  Value: 1
+- ID: "11488836-d40f-40d4-beb4-1d31da7b1470"
+  Hint: IncludeByDefault
+  Type: Checkbox
+  Value: 1
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180702T124746Z
+    - ID: "c202067e-7fab-4606-afb4-e76df2185ddc"
+      Hint: Name
+      Value: MVC

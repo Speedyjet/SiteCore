@@ -1,0 +1,40 @@
+---
+ID: "538c576c-a8d2-4912-acd5-5123876f91d1"
+Parent: "2d1f30df-3d70-4a99-be75-954d0adb81c2"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Cmdlets/Version/Get-CurrentSxaVersion"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-CurrentSxaVersion {
+    	[CmdletBinding()]
+        param()
+    
+    	begin {
+    		Write-Verbose "Cmdlet Get-CurrentSxaVersion - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Get-CurrentSxaVersion - Process"
+        	$versionItem = Get-Item master: -ID ([Sitecore.XA.Foundation.Upgrade.Items]::CurrentVersion.ToString())
+    		$versionItem._Version
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Get-CurrentSxaVersion - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170109T110842Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

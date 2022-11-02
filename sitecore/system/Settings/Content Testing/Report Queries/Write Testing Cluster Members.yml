@@ -1,0 +1,39 @@
+---
+ID: "da1dba36-423b-4aa2-80cd-2765789753ab"
+Parent: "696fac52-92b8-4ff0-9f9e-e8b997110469"
+Template: "a90f48c4-4d4f-41d7-8497-070a9a50304e"
+Path: /sitecore/system/Settings/Content Testing/Report Queries/Write Testing Cluster Members
+DB: master
+SharedFields:
+- ID: "72b1c86f-ae19-4534-abcf-0692378d41cf"
+  Hint: Data Source
+  Value: reporting
+- ID: "a61cc636-3272-4fb6-bcf9-762940047a78"
+  Hint: Query
+  Value: EXEC Add_TestingClusterMembers @Date,@TestId, @ContactId, @ClusterId
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20140602T234122
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "66a2837c-455c-4b9e-821d-33051b3f5b61"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20150907T041446:635771960864479946Z"

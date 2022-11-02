@@ -1,0 +1,14 @@
+---
+ID: "c39d2742-f3d2-4d66-bef7-fb7c2106bc8c"
+Parent: "a3591541-0782-4094-8228-56c5e5441493"
+Template: "0a92feee-0e15-4e81-b044-2ad901b88ddd"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Upgrade/Enums/Mode
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160520T104825Z

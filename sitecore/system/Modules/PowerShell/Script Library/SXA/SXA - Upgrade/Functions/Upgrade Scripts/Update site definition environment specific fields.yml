@@ -1,0 +1,99 @@
+---
+ID: "c8ac88e8-fa11-4214-a037-21fe7d58937a"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Update site definition environment specific fields"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1403
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-AllSxaSiteDefinition
+    
+    function Get-AffectedSiteDefinitions {
+        $siteDefinitions = Get-AllSxaSiteDefinition
+        $siteDefinitions | ? {
+            $definition = $_
+            (Test-InvalidSiteName $definition) -or (Test-InvalidEnvironment $definition)
+        }
+    }
+    
+    function Test-InvalidSiteName ($definition) {
+        $siteName = $definition.SiteName
+        [string]::IsNullOrWhiteSpace($siteName) -or ("`$name" -eq $siteName)
+    }
+    
+    function Test-InvalidEnvironment ($definition) {
+        [string]::IsNullOrWhiteSpace($definition.Environment)
+    }
+    
+    function ShouldRun () {
+        $items = Get-AffectedSiteDefinitions
+        $items.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            $arguments
+        )
+    
+        process {
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $siteDefinitions = Get-AffectedSiteDefinitions
+                Write-Verbose "Found $($siteDefinitions.Count) site definitions for processing.."
+                foreach ($definition in $siteDefinitions) {
+                    $siteDefinition = Wrap-Item -Item $definition
+                    $siteName = $siteDefinition.Name
+                    $path = $($siteDefinition.Paths.Path)
+                    if ($pscmdlet.ShouldProcess($path, "Update environment specific fields with default values")) {
+                        if (Test-InvalidSiteName $sidefinition) {
+                            $siteDefinition.SiteName = $siteName
+                        }
+    
+                        if (Test-InvalidEnvironment $sidefinition) {
+                            $siteDefinition.Environment = "*"
+                        }
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1403
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170718T145901Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Update site definition environment specific fields
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: This will update few environment specific fields in all site definitions

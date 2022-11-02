@@ -1,0 +1,21 @@
+---
+ID: "d0810f9d-734c-452d-bbb6-4730368d68f1"
+Parent: "58350cfb-7e3b-4f29-b78c-880744e6a299"
+Template: "f0d16eee-3a05-4e43-a082-795a32b873c0"
+Path: /sitecore/system/Settings/Rules/Definitions/Elements/Item Information/Item Base Template
+DB: master
+SharedFields:
+- ID: "ab51c8b2-f0e1-4471-9aae-cc080d774923"
+  Hint: Type
+  Value: Sitecore.XA.Foundation.SitecoreExtensions.Rules.ItemTemplateCondition,Sitecore.XA.Foundation.SitecoreExtensions
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20170410T071046:636274050468448044Z"
+    - ID: "af321234-4eb9-4ef5-9197-65903351939c"
+      Hint: Text
+      Value: "where the item template inherits from [templateid,Tree,root={3C1715FE-6A13-4FCF-845F-DE308BA9741D},specific] template"

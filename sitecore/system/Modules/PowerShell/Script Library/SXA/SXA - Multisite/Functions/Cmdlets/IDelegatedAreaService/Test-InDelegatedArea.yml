@@ -1,0 +1,39 @@
+---
+ID: "6e008494-0684-4497-9dc2-2dfaedfd1e76"
+Parent: "7ce41541-1411-4531-8c35-30346a995246"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Multisite/Functions/Cmdlets/IDelegatedAreaService/Test-InDelegatedArea"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Test-InDelegatedArea {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$Item
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Test-InDelegatedArea - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Test-InDelegatedArea - Process"
+            $instance = [Sitecore.DependencyInjection.ServiceLocator]::ServiceProvider
+            $instance.GetType().GetMethod('GetService').Invoke($instance, [Sitecore.XA.Foundation.Multisite.Services.IDelegatedAreaService]).CheckForDelegatedArea($Item)
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Test-InDelegatedArea - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160629T083907Z

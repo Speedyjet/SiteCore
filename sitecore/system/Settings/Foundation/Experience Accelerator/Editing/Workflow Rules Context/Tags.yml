@@ -1,0 +1,18 @@
+---
+ID: "796f41e6-11fe-4cac-b4c5-fc5520037502"
+Parent: "dd9d4ebb-ef1f-41de-b700-8f78f0966459"
+Template: "96c8e5dd-63c3-496b-a97c-a3e37e1dacba"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Editing/Workflow Rules Context/Tags
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20130905T174843
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

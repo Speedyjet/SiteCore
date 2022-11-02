@@ -1,0 +1,39 @@
+---
+ID: "cb713bad-af27-4478-9c96-8ddb76037b96"
+Parent: "13d7e7c6-aff4-4f6b-a4f5-d15ddc6c6021"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Cmdlets/Test-HasPostDeleteStep"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Test-HasPostDeleteStep {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, ValueFromPipeline = $true, Position = 0 )]
+            [Item]$Module
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Test-HasPostDeleteStep - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Test-HasPostDeleteStep - Process"   
+            $actions = Get-ChildItem -Path $Module.Paths.Path -Recurse | ? { $_.TemplateName -eq "PostDeleteStep" } 
+            $actions.Count -gt 0
+        } 
+    
+        end {
+            Write-Verbose "Cmdlet Test-HasPostDeleteStep - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160708T072240Z

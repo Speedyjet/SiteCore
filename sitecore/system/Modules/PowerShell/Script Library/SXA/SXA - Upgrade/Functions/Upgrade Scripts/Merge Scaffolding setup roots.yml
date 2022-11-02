@@ -1,0 +1,94 @@
+---
+ID: "73318421-635e-475c-bbcc-5f3944c896d6"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Merge Scaffolding setup roots"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1505
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ItemByIdSafe
+    
+    function ShouldRun () {
+        $true
+    }
+    
+    function Merge-SetupRoot ($templateToProcess) {
+        (Get-Database "master").DataManager.DataSource.SelectIDs([string]::Empty,$templateToProcess) | % { 
+            $tenantRoot = Get-ItemByIdSafe $_
+            $unmergedItem = $tenantRoot.Parent.Children | ? { $_.Name -eq $tenantRoot.Name -and $_.TemplateID -ne $templateToProcess }
+            if ($unmergedItem) {
+                Write-Host "`nFound unmerged item $($unmergedItem.Paths.Path)"
+                try {
+                    $unmergedItem.Children | % {
+                        Write-Host "`tMoving: '$($_.Name)'"
+                        $_.MoveTo($tenantRoot) > $null
+                    }
+                    $unmergedItem.Recycle() > $null
+                }
+                catch {
+                    $ErrorRecord = $Error[0]
+                    Write-Log -Log Error $ErrorRecord
+                }
+            }
+        }
+    }
+    
+     
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            $arguments
+        )
+    
+        process {
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                if ($pscmdlet.ShouldProcess("TenantSetupRoot", "Merge setup root item")) {
+                    Merge-SetupRoot "{141DF88E-7156-4D2E-A004-C8C1A7C51E9D}" #TenantSetupRoot
+                }
+                if ($pscmdlet.ShouldProcess("SiteSetupRoot", "Merge setup root item")) {
+                    Merge-SetupRoot "{292CCFCD-7790-4692-856B-76014B8038E7}" #SiteSetupRoot
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1505
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171218T100421Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Merge Scaffolding setup roots
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Merge `SiteSetupRoot` and `TenantSetupRoot` roots after package installation.

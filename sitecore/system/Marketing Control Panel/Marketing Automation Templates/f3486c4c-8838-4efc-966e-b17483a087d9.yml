@@ -1,0 +1,47 @@
+---
+ID: "f3486c4c-8838-4efc-966e-b17483a087d9"
+Parent: "c33ddd15-2016-4766-b54a-c150ee9b832e"
+Template: "d4d43c33-3661-4630-af63-0754cab7b110"
+Path: "/sitecore/system/Marketing Control Panel/Marketing Automation Templates/f3486c4c-8838-4efc-966e-b17483a087d9"
+DB: master
+SharedFields:
+- ID: "1766652d-080b-409c-abbf-3a90e0f801f5"
+  Hint: Start Date
+  Value: 00010101T000000
+- ID: "2c41a32f-86a9-4f43-8550-bf0af266e3f2"
+  Hint: End Date
+  Value: 00010101T000000
+- ID: "394d49b2-b579-43aa-ab32-b4010b18fd07"
+  Hint: Marketing Theme
+  Value: "{1EC7DD8D-B207-4015-AA41-5D79E3340F1C}"
+- ID: "3fb918c8-08ec-4879-8062-088bbf71ee72"
+  Hint: Plan Data
+  Value: |
+    {"ReentryMode":1,"ContextKeyFactoryType":null,"EntryActivityId":"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac","NewEnrollmentRegulatorType":null,"NewEnrollmentRegulatorParameters":null,"Alias":"f3486c4c-8838-4efc-966e-b17483a087d9","IgnoreIsActiveProperty":true,"Activities":{"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac":{"Paths":{"default":"99d11d1f-f350-ba52-833f-cd9eaec91987"},"Id":"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac","ActivityTypeId":"8c92d3c1-2c38-4e8a-92d1-9590e17cce89","Parameters":{"Condition":{"$type":"Sitecore.Marketing.Rules.Rule[], Sitecore.Marketing","$values":[{"Id":"5eb9742c-2f31-44b7-a5ea-3fcad865ff59","Name":" ","ConditionType":"Sitecore.Marketing.Rules.NotNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","_condition":{"$type":"Sitecore.Marketing.Rules.NotNode, Sitecore.Marketing","OperandType":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","_operand":{"$type":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing","Id":"d3716b20-89bd-470d-9c39-43ae23857036","DescriptorId":"bf7e95c3-9610-4fd2-8f4b-b8af3d7aec25","Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib","Number":"90","Unit":"Days"}}}}]},"UseCondition":true}},"99d11d1f-f350-ba52-833f-cd9eaec91987":{"Paths":{"default":"2cdf8f95-e116-a8bd-5877-3aee3a48af6a"},"Id":"99d11d1f-f350-ba52-833f-cd9eaec91987","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"2cdf8f95-e116-a8bd-5877-3aee3a48af6a":{"Paths":{"false":"c2b68382-f01c-e3ee-1d7b-07416641f6ab","true":"131c480f-a083-557b-065f-1b9bb48c0f76"},"Id":"2cdf8f95-e116-a8bd-5877-3aee3a48af6a","ActivityTypeId":"37d0918f-255a-417a-9205-100bbd1bdf0d","Parameters":{"ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"3.00:00:00","WaitUntil":null},"Name":"Visited Website"}},"c2b68382-f01c-e3ee-1d7b-07416641f6ab":{"Paths":{"default":"584189cd-573e-8957-ae4d-ffdfdb5eaf19"},"Id":"c2b68382-f01c-e3ee-1d7b-07416641f6ab","ActivityTypeId":"9046a4aa-07d9-4377-8a6e-1db27765b2ba","Parameters":{"Name":"Wait 2 days"}},"131c480f-a083-557b-065f-1b9bb48c0f76":{"Paths":{"default":"0640c357-33af-2c62-0f0b-af49acf46bb2"},"Id":"131c480f-a083-557b-065f-1b9bb48c0f76","ActivityTypeId":"743489a2-8bd0-49ed-b284-5534ac59685a","Parameters":{}},"0640c357-33af-2c62-0f0b-af49acf46bb2":{"Paths":{"default":"584189cd-573e-8957-ae4d-ffdfdb5eaf19"},"Id":"0640c357-33af-2c62-0f0b-af49acf46bb2","ActivityTypeId":"9046a4aa-07d9-4377-8a6e-1db27765b2ba","Parameters":{"Name":"Delay"}},"584189cd-573e-8957-ae4d-ffdfdb5eaf19":{"Paths":{"default":"a6a39353-3350-4137-3559-1e932fbe86d8"},"Id":"584189cd-573e-8957-ae4d-ffdfdb5eaf19","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"a6a39353-3350-4137-3559-1e932fbe86d8":{"Paths":{"false":"fcd53224-d768-81ed-ac86-330fb2de52af","true":"1c0ae355-43d4-e166-75eb-c7c120f2b5e4"},"Id":"a6a39353-3350-4137-3559-1e932fbe86d8","ActivityTypeId":"37d0918f-255a-417a-9205-100bbd1bdf0d","Parameters":{"ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"3.00:00:00","WaitUntil":null},"Name":"Visited Website"}},"fcd53224-d768-81ed-ac86-330fb2de52af":{"Paths":{"default":"8be8d2ca-6249-f3f6-7ff3-be1fd5e31012"},"Id":"fcd53224-d768-81ed-ac86-330fb2de52af","ActivityTypeId":"9046a4aa-07d9-4377-8a6e-1db27765b2ba","Parameters":{"Name":"Delay"}},"1c0ae355-43d4-e166-75eb-c7c120f2b5e4":{"Paths":{"default":"40be6fcf-b32c-9b86-9e3b-d66b3f4508d0"},"Id":"1c0ae355-43d4-e166-75eb-c7c120f2b5e4","ActivityTypeId":"743489a2-8bd0-49ed-b284-5534ac59685a","Parameters":{}},"40be6fcf-b32c-9b86-9e3b-d66b3f4508d0":{"Paths":{"default":"8be8d2ca-6249-f3f6-7ff3-be1fd5e31012"},"Id":"40be6fcf-b32c-9b86-9e3b-d66b3f4508d0","ActivityTypeId":"9046a4aa-07d9-4377-8a6e-1db27765b2ba","Parameters":{"Name":"Delay"}},"8be8d2ca-6249-f3f6-7ff3-be1fd5e31012":{"Paths":{"default":"911c5029-928f-39e0-c363-4e686705400b"},"Id":"8be8d2ca-6249-f3f6-7ff3-be1fd5e31012","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"911c5029-928f-39e0-c363-4e686705400b":{"Paths":{"false":"a1fc591b-cd14-d295-86a2-ea38e5877122","true":"32702e5b-63eb-af72-6332-3e191a641937"},"Id":"911c5029-928f-39e0-c363-4e686705400b","ActivityTypeId":"37d0918f-255a-417a-9205-100bbd1bdf0d","Parameters":{"ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"3.00:00:00","WaitUntil":null},"Name":"Visited Website"}},"a1fc591b-cd14-d295-86a2-ea38e5877122":{"Paths":{"false":"0a318304-225d-293b-bb72-8b15e7b28efd","true":"c69b287f-d955-ad32-a562-321d8bfcfbd8"},"Id":"a1fc591b-cd14-d295-86a2-ea38e5877122","ActivityTypeId":"7fca5e5b-4796-4d7e-abec-28f376e4d7e2","Parameters":{"Condition":{"$type":"Sitecore.Marketing.Rules.Rule[], Sitecore.Marketing","$values":[{"Id":"e7e96511-ad4b-4017-a367-3af66d3835a2","Name":" ","ConditionType":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","_condition":{"$type":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing","Id":"9dc0d2fa-7532-4a95-9430-9d27d375dac7","DescriptorId":"bf7e95c3-9610-4fd2-8f4b-b8af3d7aec25","Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib","Number":"15","Unit":"Days"}}}]},"ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"3.00:00:00","WaitUntil":null},"Name":"Has Clicked"}},"0a318304-225d-293b-bb72-8b15e7b28efd":{"Paths":{"default":"6ceb8152-2a07-b056-6841-a6d75df805be"},"Id":"0a318304-225d-293b-bb72-8b15e7b28efd","ActivityTypeId":"21eaf404-0763-4883-a0f8-fd9fb0facbcd","Parameters":{}},"6ceb8152-2a07-b056-6841-a6d75df805be":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"6ceb8152-2a07-b056-6841-a6d75df805be","ActivityTypeId":"fef847a8-540e-408d-9cf1-3d8a133c3de0","Parameters":{}},"c69b287f-d955-ad32-a562-321d8bfcfbd8":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"c69b287f-d955-ad32-a562-321d8bfcfbd8","ActivityTypeId":"07a0b752-bb0e-4ab8-92ed-ae9c03ba1301","Parameters":{}},"32702e5b-63eb-af72-6332-3e191a641937":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"32702e5b-63eb-af72-6332-3e191a641937","ActivityTypeId":"07a0b752-bb0e-4ab8-92ed-ae9c03ba1301","Parameters":{}},"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba":{"Paths":{},"Id":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba","ActivityTypeId":"a47371c2-8921-421f-8902-f3eccd229d56","Parameters":{}}},"UniversalActivities":{}}
+- ID: "621d7a1f-c6a3-4a2f-8fcd-7dd1fd893c9c"
+  Hint: Custom Values
+  Value: "{}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180816T203501Z
+    - ID: "365f1971-b028-4065-bc11-ce1f471452af"
+      Hint: Name
+      Value: Low Engagement
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "8060c6b5-37c7-4a0f-a4d6-094229a38342"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20181005T065954Z
+    - ID: "e259e500-b38e-41fe-82db-8b604bcf9e75"
+      Hint: Description
+      Value: "When a recipient has been inactive for a set amount of time without becoming active again, a winback email message is sent. This message may form part of a series, attempting to entice the recipient back to the brand. A winback email message may provide suggested content, product offers/discounts or use humor and conversational language to attempt to convince the recipient to re-engage. A winback campaign may involve a number of drip fed email messages over the course of a few days or weeks. If the recipient does not re-engage by the end of the winback campaign, that contact may then be considered lapsed, dormant, or lost, and some brands may choose to then scrub this record from their system as part of ongoing list hygiene."

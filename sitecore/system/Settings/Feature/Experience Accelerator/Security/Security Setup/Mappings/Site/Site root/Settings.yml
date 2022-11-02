@@ -1,0 +1,22 @@
+---
+ID: "a7e6087f-987c-4ca6-8afa-2b6225c33412"
+Parent: "b1a39f54-9708-4848-b885-0c75aa6bd01f"
+Template: "8517dbe7-68bc-4700-ad41-379c4ebb76a0"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/Mappings/Site/Site root/Settings
+DB: master
+SharedFields:
+- ID: "dec8d2d5-e3cf-48b6-a653-8e69e2716641"
+  Hint: __Security
+  Value: 
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170405T121900Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

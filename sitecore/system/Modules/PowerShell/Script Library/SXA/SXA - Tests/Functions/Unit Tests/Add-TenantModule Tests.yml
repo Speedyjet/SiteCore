@@ -1,0 +1,115 @@
+---
+ID: "f8830547-4fac-4c13-8788-fc2ead0e6fd6"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Add-TenantModule Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function New-Tenant
+    Import-Function Remove-TenantFolder
+    Import-Function Add-TenantModule
+    Import-Function Clear-ContentTree
+    Import-Function Get-NewTestTenantModel
+    
+    function GetTenantItem() {
+        Get-Item -Path $tenantPath
+    }
+    
+    function GetTenantTemplate ($name) {
+        Get-Item -Path "$templatesPath\$tenantName\$name"
+    }
+    
+    function InheritsFrom ($item, $template) {
+        [Sitecore.Data.Managers.TemplateManager]::GetTemplate($item).InheritsFrom($template)
+    }
+    
+    function GetBaseTemplate ($item) {
+        $item."__Base template".Split("|")
+    }
+    
+    Describe "Add-TenantModule" {
+        BeforeEach {
+            $tenantName = "T"
+            $contentPath = "master:\content\Unit Tests"
+            $tenantPath = "$contentPath\$tenantName"
+            $mediaLibraryPath = "master:\media library\Project\Unit Tests"
+            $themesPath = "master:\media library\Themes\Unit Tests"
+            $templatesPath = "master:\templates\Project\Unit Tests"
+        }
+        Context "Add tenant module to a tenant with default settings" {        
+            It "clean the content tree" {
+                Clear-ContentTree $contentPath
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                Test-Path -Path $contentPath | Should BeExactly $true
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "create tenant with system modules" {
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                $model.DefinitionItems = $model.DefinitionItems | ? { $_.IsSystemModule -eq '1' }
+                New-Tenant $model
+            }
+            It "check module is not installed" {
+                $tenantItem = GetTenantItem
+                $templateTenant = GetTenantTemplate "Tenant"
+                $templateSite = GetTenantTemplate "Site"
+                $RoleDomainFieldId = "{DCB42A80-68C9-46F9-B036-BC44A27D96FE}"
+                $SecurityTenantSetupId = "{EA084C63-A8A2-4759-9E6A-F8BB5561A37F}"
+                
+                # validate status before
+                InheritsFrom $tenantItem $RoleDomainFieldId | Should BeExactly $false
+                (GetBaseTemplate $templateTenant) -contains $RoleDomainFieldId | Should BeExactly $false #/sitecore/templates/Feature/Experience Accelerator/Security/Security/Base/_Role Domain
+                (GetBaseTemplate $templateSite) -contains $RoleDomainFieldId | Should BeExactly $false #/sitecore/templates/Feature/Experience Accelerator/Security/Security/Base/_Role Domain
+                (GetBaseTemplate $templateTenant).Count | Should BeExactly 2
+                (GetBaseTemplate $templateSite).Count | Should BeExactly 2
+                $tenantItem.Modules -contains $SecurityTenantSetupId | Should BeExactly $false
+            }  
+            It "check Add-TenantModule" {
+                $tenantItem = GetTenantItem
+                $SecurityTenantSetupId = "{EA084C63-A8A2-4759-9E6A-F8BB5561A37F}"
+    
+                # add security module
+                $definitionItems = New-Object System.Collections.ArrayList($null)
+                $SecurityTenantSetup = Get-Item . -ID $SecurityTenantSetupId
+                $definitionItems.Add($SecurityTenantSetup)
+                Add-TenantModule $tenantItem $definitionItems
+            } 
+            It "check module installed" {
+                $tenantItem = GetTenantItem
+                $templateTenant = GetTenantTemplate "Tenant"
+                $templateSite = GetTenantTemplate "Site"
+                $RoleDomainFieldId = "{DCB42A80-68C9-46F9-B036-BC44A27D96FE}"
+                $SecurityTenantSetupId = "{EA084C63-A8A2-4759-9E6A-F8BB5561A37F}"
+    
+                # validate status after
+                $tenantItem = GetTenantItem
+                $templateTenant = GetTenantTemplate "Tenant"
+                $templateSite = GetTenantTemplate "Site"
+                
+                InheritsFrom $tenantItem $RoleDomainFieldId | Should BeExactly $true
+                (GetBaseTemplate $templateTenant) -contains $RoleDomainFieldId | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/Security/Security/Base/_Role Domain
+                (GetBaseTemplate $templateSite) -contains $RoleDomainFieldId | Should BeExactly $true #/sitecore/templates/Feature/Experience Accelerator/Security/Security/Base/_Role Domain
+                (GetBaseTemplate $templateTenant).Count | Should BeExactly 3
+                (GetBaseTemplate $templateSite).Count | Should BeExactly 3
+                $tenantItem.Modules.Split("|") -contains $SecurityTenantSetupId | Should BeExactly $true
+            }       
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180125T101954Z

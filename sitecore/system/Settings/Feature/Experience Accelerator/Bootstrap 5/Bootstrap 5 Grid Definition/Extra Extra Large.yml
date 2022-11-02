@@ -1,0 +1,25 @@
+---
+ID: "fee64ee2-969b-45b3-899c-101bf91f651b"
+Parent: "2472cee0-fbb4-474b-8d1c-d8517199cc08"
+Template: "bca0e629-150f-41dd-893b-f4b65338c0b7"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Bootstrap 5/Bootstrap 5 Grid Definition/Extra Extra Large
+DB: master
+SharedFields:
+- ID: "3b2c405a-5a69-4ce9-a28a-0e72715f159a"
+  Hint: BreakpointMin
+  Value: 1400
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 400
+Languages:
+- Language: en
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: Large Desktops
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20210219T083621Z

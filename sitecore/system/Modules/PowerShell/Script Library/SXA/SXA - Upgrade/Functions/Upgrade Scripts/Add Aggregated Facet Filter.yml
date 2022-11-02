@@ -1,0 +1,126 @@
+---
+ID: "1c3acc76-0db3-46a2-a247-1e690d663fb3"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Add Aggregated Facet Filter"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1901
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-UniqueItem
+    Import-Function Select-SingleItemFromEachGroup
+    Import-Function Get-SitesWithoutRenderingVariant
+    Import-Function Get-AllSxaSite
+    Import-Function Get-ItemByIdSafe
+    Import-Function Invoke-SiteAction
+    Import-Function Add-IDToField
+    
+    function Get-ActionItem () {
+        Get-Item -Path . -ID "{DFBF98D0-19FB-4B1B-81DA-90AB6429C214}"
+    }
+    
+    function Get-RenderingItem () {
+        Get-Item -Path "/sitecore/layout/Renderings/Feature/Experience Accelerator/Search/Aggregated Facet Filter"
+    }
+    
+    function ShouldRun () {
+        $renderingItem = Get-RenderingItem
+        [Item[]]$sites = Get-SitesWithoutRenderingVariant $renderingItem
+        $availableRenderings = Get-AvailableRenderingsWithoutRendering
+        ($sites.Length -gt 0) -or ($availableRenderings -gt 0)
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    
+    function Get-AvailableRenderingsWithoutRendering() {
+        $db = Get-Database -Name "master"
+        $templateId = "{76DA0A8D-FC7E-42B2-AF1E-205B49E43F98}"
+        $db.DataManager.DataSource.SelectIDs('Search', $templateId) | % { Get-ItemByIdSafe $_ } | `
+            ? { $_.Paths.IsContentItem } | `
+            ? { $_.Renderings.Contains("{2B2EC80B-13E2-445D-BA1A-8B8F037DED66}") } | `
+            ? { !$_.Renderings.Contains("{8A3142A0-9688-461A-8C6F-5729BC064D35}") }
+    }
+    
+    function Get-SitesWithoutDataItem() {
+        Get-AllSxaSite | ? {
+            $siteItem = $_
+            (Test-Path "$($siteItem.Paths.Path)/Data/Search/Checklist Filter") -and !(Test-Path "$($siteItem.Paths.Path)/Data/Search/Checklist Filter/Default")
+        }
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            $arguments
+        )
+        
+        process {
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            $renderingItem = Get-RenderingItem
+            $actionItem = Get-ActionItem
+            try {
+                Get-SitesWithoutRenderingVariant $renderingItem | % {
+                    if ($pscmdlet.ShouldProcess("$($_.Name)","Add default rendering variant for '$($renderingItem.Name)' rendering")) {
+                        Write-Host "Adding default rendering variant for '$($renderingItem.Name)' rendering into $($_.Name) site"
+                        Invoke-SiteAction $_ $actionItem
+                    }
+                }
+                
+                Get-AvailableRenderingsWithoutRendering | % {
+                    if ($pscmdlet.ShouldProcess("$($_.ID)","Add Aggregated Facet Filter to available renderings")) {
+                        Write-Host "Adding Aggregated Facet Filter to available renderings [$($_.ID)]"
+                        Add-IDToField $_ "Renderings" "{8A3142A0-9688-461A-8C6F-5729BC064D35}"
+                    }                
+                }            
+    
+    
+                Get-SitesWithoutDataItem | % {
+                    if ($pscmdlet.ShouldProcess("$($_.Name)","Add default datasource for Aggregated Facet Filter")) {
+                        $siteItem = $_
+                        $actionItem = Get-ItemByIdSafe "{8359FEBC-4D0F-4C9D-9C37-BA8D4C37AA28}"
+                        $src = Get-ItemByIdSafe "{F0C519AE-BE32-4722-BCB1-E9E1449861E7}"
+                        if((Test-Path "$($siteItem.Paths.Path)/Data/Search/Checklist Filter") -and !(Test-Path "$($siteItem.Paths.Path)/Data/Search/Checklist Filter/Default")){
+                            $dst = "$($siteItem.Paths.Path)/Data/Search/Checklist Filter"
+                            Write-Host "Adding default datasource for Aggregated Facet Filter"
+                            Copy-Item -Path $src.Paths.Path -Destination "$($siteItem.Paths.Path)/Data/Search/Checklist Filter"
+                            Invoke-SiteAction $siteItem $actionItem
+                        }
+                    }
+                }
+    
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1901
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170608T134551Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Add Aggregated Facet Filter
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Adds Aggregated Facet Filter rendering to existing sites

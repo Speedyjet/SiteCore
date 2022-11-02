@@ -1,0 +1,47 @@
+---
+ID: "57586726-55e0-4704-b562-2c6fb2e288b9"
+Parent: "c33ddd15-2016-4766-b54a-c150ee9b832e"
+Template: "d4d43c33-3661-4630-af63-0754cab7b110"
+Path: "/sitecore/system/Marketing Control Panel/Marketing Automation Templates/57586726-55e0-4704-b562-2c6fb2e288b9"
+DB: master
+SharedFields:
+- ID: "1766652d-080b-409c-abbf-3a90e0f801f5"
+  Hint: Start Date
+  Value: 00010101T000000Z
+- ID: "2c41a32f-86a9-4f43-8550-bf0af266e3f2"
+  Hint: End Date
+  Value: 00010101T000000Z
+- ID: "394d49b2-b579-43aa-ab32-b4010b18fd07"
+  Hint: Marketing Theme
+  Value: "{85506484-7854-4B14-AB0C-DFC61CA65CC0}"
+- ID: "3fb918c8-08ec-4879-8062-088bbf71ee72"
+  Hint: Plan Data
+  Value: |
+    {"ReentryMode":1,"ContextKeyFactoryType":null,"EntryActivityId":"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac","NewEnrollmentRegulatorType":null,"NewEnrollmentRegulatorParameters":null,"Alias":"57586726-55e0-4704-b562-2c6fb2e288b9","IgnoreIsActiveProperty":true,"Activities":{"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac":{"Paths":{"default":"a6d3c8d7-cebb-a118-712b-47460204349a"},"Id":"162dd9c5-bf4c-d6e9-5c26-51602e27d9ac","ActivityTypeId":"8c92d3c1-2c38-4e8a-92d1-9590e17cce89","Parameters":{"Condition":{"$type":"Sitecore.Marketing.Rules.Rule[], Sitecore.Marketing","$values":[{"Id":"d3fa5812-4887-45af-936d-9b4d763f1840","Name":" ","ConditionType":"Sitecore.Marketing.Rules.AndNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","_condition":{"$type":"Sitecore.Marketing.Rules.AndNode, Sitecore.Marketing","LeftType":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","RightType":"Sitecore.Marketing.Rules.NotNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","_left":{"$type":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing","Id":"1f76947b-4f71-4c49-9ac9-f4e9bd25e233","DescriptorId":"c8c1f315-7a61-4829-9ab3-b7169fd68939","Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib","Unit":"Months","Number":"3"}},"_right":{"$type":"Sitecore.Marketing.Rules.NotNode, Sitecore.Marketing","OperandType":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing, Version=13.0.0.0, Culture=neutral, PublicKeyToken=null","_operand":{"$type":"Sitecore.Marketing.Rules.ConditionNode, Sitecore.Marketing","Id":"f5cbdbfe-9c45-4a98-9a2b-2a4a8b167100","DescriptorId":"f2797c1e-c6d5-40ac-8d80-cd06a10c7fb9","Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String, mscorlib]], mscorlib","DefinitionId":"{9016E456-95CB-42E9-AD58-997D6D77AE83}"}}}}}]},"UseCondition":true}},"a6d3c8d7-cebb-a118-712b-47460204349a":{"Paths":{"default":"cedc9341-8e4e-24f7-d334-cd4c55fef85b"},"Id":"a6d3c8d7-cebb-a118-712b-47460204349a","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{"MessageId":null}},"cedc9341-8e4e-24f7-d334-cd4c55fef85b":{"Paths":{"false":"00ecdf9b-2454-d995-ae66-af859ec9dc63","true":"45e32443-9569-76bf-9692-785a5c8909a8"},"Id":"cedc9341-8e4e-24f7-d334-cd4c55fef85b","ActivityTypeId":"1031590a-c964-4d5a-86d4-53658b356712","Parameters":{"ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"3.00:00:00","WaitUntil":null},"Outcomes":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["9016e456-95cb-42e9-ad58-997d6d77ae83"]},"MatchAll":false,"Name":"Completes Purchase"}},"45e32443-9569-76bf-9692-785a5c8909a8":{"Paths":{"default":"2d50e96a-8c59-4853-4176-3f7ab77da0a1"},"Id":"45e32443-9569-76bf-9692-785a5c8909a8","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"2d50e96a-8c59-4853-4176-3f7ab77da0a1":{"Paths":{"default":"00ecdf9b-2454-d995-ae66-af859ec9dc63"},"Id":"2d50e96a-8c59-4853-4176-3f7ab77da0a1","ActivityTypeId":"07a0b752-bb0e-4ab8-92ed-ae9c03ba1301","Parameters":{}},"00ecdf9b-2454-d995-ae66-af859ec9dc63":{"Paths":{"default":"3e09d82f-74ea-738f-4f0f-68ece4f32c88"},"Id":"00ecdf9b-2454-d995-ae66-af859ec9dc63","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{"MessageId":null}},"3e09d82f-74ea-738f-4f0f-68ece4f32c88":{"Paths":{"false":"16d99515-cb8d-4ae1-8cbe-dacd809b1a30","true":"e780ed40-f79c-0ec8-d7da-eca837195fe0"},"Id":"3e09d82f-74ea-738f-4f0f-68ece4f32c88","ActivityTypeId":"1031590a-c964-4d5a-86d4-53658b356712","Parameters":{"ListenerDelay":{"$type":"Sitecore.Marketing.Automation.Models.ListenerDelay, Sitecore.Marketing.Automation.Models","Delay":"3.00:00:00","WaitUntil":null},"Outcomes":{"$type":"System.Collections.Generic.List`1[[System.Guid, mscorlib]], mscorlib","$values":["9016e456-95cb-42e9-ad58-997d6d77ae83"]},"MatchAll":false,"Name":"Completes Purchase"}},"16d99515-cb8d-4ae1-8cbe-dacd809b1a30":{"Paths":{"default":"d54f8152-2c09-8b49-493f-fc05c918992a"},"Id":"16d99515-cb8d-4ae1-8cbe-dacd809b1a30","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"d54f8152-2c09-8b49-493f-fc05c918992a":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"d54f8152-2c09-8b49-493f-fc05c918992a","ActivityTypeId":"07a0b752-bb0e-4ab8-92ed-ae9c03ba1301","Parameters":{}},"e780ed40-f79c-0ec8-d7da-eca837195fe0":{"Paths":{"default":"ad535d9a-27b2-0138-e94e-8f57d6804e24"},"Id":"e780ed40-f79c-0ec8-d7da-eca837195fe0","ActivityTypeId":"51774db5-b90b-4189-9613-104039723a0b","Parameters":{}},"ad535d9a-27b2-0138-e94e-8f57d6804e24":{"Paths":{"default":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba"},"Id":"ad535d9a-27b2-0138-e94e-8f57d6804e24","ActivityTypeId":"07a0b752-bb0e-4ab8-92ed-ae9c03ba1301","Parameters":{}},"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba":{"Paths":{},"Id":"bcbd07ae-b1d2-a232-9b77-a9e3bb673eba","ActivityTypeId":"a47371c2-8921-421f-8902-f3eccd229d56","Parameters":{}}},"UniversalActivities":{}}
+- ID: "621d7a1f-c6a3-4a2f-8fcd-7dd1fd893c9c"
+  Hint: Custom Values
+  Value: "{}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180816T125258Z
+    - ID: "365f1971-b028-4065-bc11-ce1f471452af"
+      Hint: Name
+      Value: 1st Purchase
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "70a8c3ad-0fa4-44a5-b5e8-995b81b26f22"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20181005T065331Z
+    - ID: "e259e500-b38e-41fe-82db-8b604bcf9e75"
+      Hint: Description
+      Value: If a recipient has completed a Welcome Campaign but has yet to make a purchase with the brand, that recipient is eligible to be sent an ongoing series of first purchase email messages. The content of these messages is designed to encourage the recipient to make their first purchase and can include reference to bundles, introductory offers, discount codes, free shipping, or free trials. If recipients makes a purchase, they are then removed from the campaign. The suggested maximum enrollment is 1.

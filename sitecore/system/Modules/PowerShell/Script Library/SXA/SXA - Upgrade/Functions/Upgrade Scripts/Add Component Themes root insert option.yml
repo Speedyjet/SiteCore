@@ -1,0 +1,94 @@
+---
+ID: "4c585f5a-c6ef-43dc-b976-24c7b7c5c2fe"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Add Component Themes root insert option"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 11101
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-UniqueItem
+    Import-Function Select-SingleItemFromEachGroup
+    Import-Function Get-AllSxaSite
+    Import-Function Get-PresentationItem
+    Import-Function Get-ItemByIdSafe
+    Import-Function Invoke-SiteAction
+    
+    function ShouldRun () {
+        [Item[]]$sites = Get-SitesWithoutInsertOption
+        $sites.Length -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Get-SitesWithoutInsertOption() {
+        Get-AllSxaSite | ? {
+            $presentationItem = Get-PresentationItem $_
+            # /sitecore/templates/Foundation/Experience Accelerator/Theming/Component Themes/Component Themes Configuration
+            $presentationItem.__Masters.Contains("{6D39AFEB-15C9-4CDB-BD92-844265F8B77E}") -eq $false
+        }
+    }
+    
+    function Get-ActionItemConfigurationItem () {
+        # /sitecore/system/Settings/Foundation/Experience Accelerator/Theming/Theming Site Setup/Component Themes Insert Option
+        Get-ItemByIdSafe "{864982A6-8601-4896-88A0-5B2D79696537}"
+    }
+    
+    function Get-ActionItemInserOption () {
+        # /sitecore/system/Settings/Foundation/Experience Accelerator/Theming/Theming Site Setup/Add Component Themes Configuration
+        Get-ItemByIdSafe "{A53B3919-E6A4-46E2-9715-7F86D062AB42}"
+    }
+    
+    function Invoke-UpgradeStep {
+        [CmdletBinding(SupportsShouldProcess = $true)]
+        param(
+            [Parameter(Mandatory = $true, Position = 0)]
+            $arguments
+        )
+        
+        process {
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+                $actionItem1 = Get-ActionItemConfigurationItem
+                $actionItem2 = Get-ActionItemInserOption
+                Get-SitesWithoutInsertOption | % {
+                    if ($pscmdlet.ShouldProcess("$($_.Name)", "Add Component Themes root insert option")) {
+                        Write-Host "Adding Component Themes root insert option into $($_.Name) site"
+                        Invoke-SiteAction $_ $actionItem1
+                        Invoke-SiteAction $_ $actionItem2
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 11002
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20200909T063424Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: Add Component Themes root insert option
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Adds Component Themes to Insert Options of Presentation Template

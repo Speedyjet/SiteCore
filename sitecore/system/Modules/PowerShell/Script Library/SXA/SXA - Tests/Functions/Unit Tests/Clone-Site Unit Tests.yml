@@ -1,0 +1,183 @@
+---
+ID: "4f53099a-3137-4b6d-b05a-1462aab33e71"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Clone-Site Unit Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function New-Tenant
+    Import-Function New-Site
+    Import-Function Copy-Site
+    Import-Function Get-SettingsItem
+    Import-Function Get-ForbiddenSiteName
+    Import-Function Get-SiteDefinitionDialogKey
+    Import-Function Get-UniqueName
+    Import-Function Show-CloneSiteDialog
+    Import-Function Clear-ContentTree
+    Import-Function Get-NewTestTenantModel
+    Import-Function Get-NewTestSiteModel
+    
+    function SetReferences ($sitePath) {
+        Test-Path -Path "$sitePath\Home" | Should BeExactly $true
+        Test-Path -Path "$sitePath\Presentation\Page Designs\Default" | Should BeExactly $true
+        
+        $homePage = Get-Item "$sitePath\Home"
+        $defaultDesignItem = Get-Item "$sitePath\Presentation\Page Designs\Default"
+        $homePage."Page Design" = "$($defaultDesignItem.ID)"
+        $homePage."Content" = "$($homePage.Paths.Path)"
+    }
+    
+    function CloneSiteDialogMock {
+        
+        process {
+            Write-Verbose "Cmdlet Show-CloneSiteDialog - Process"
+            $forbiddenSiteNames = Get-ForbiddenSiteName $SourceSite.Parent
+    
+            $siteName = Get-UniqueName ($SourceSite.Name + " clone") $forbiddenSiteNames
+            
+            $dialogParameters = New-Object System.Collections.ArrayList
+            $dialogParameters.Add(@{ Name = "siteName"; Title = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Multisite.Texts]::SiteName); Tab = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Multisite.Texts]::CloneSiteDialogGeneralTab) })  > $null
+            
+            
+            $settingsItem = Get-SettingsItem $SourceSite
+            $sitegroupingItemTemplateId = "{11F57D7B-CBB2-4647-B98C-71457564BA4F}"
+            $siteItemTemplateId = "{EDA823FC-BC7E-4EF6-B498-CD09EC6FDAEF}"
+            
+            $sitesGroupingItem = $settingsItem.Children | ? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_).InheritsFrom($sitegroupingItemTemplateId) } | Select-Object -First 1
+            $siteDefinitionNames = Get-ChildItem -Path $sitesGroupingItem.Paths.Path -Recurse | ? { [Sitecore.Data.Managers.TemplateManager]::GetTemplate($_).InheritsFrom($siteItemTemplateId) } | % { $_.Name }
+            
+    
+            $siteDefinitionKeys = New-Object -TypeName "System.Collections.Hashtable"
+            $siteDefinitionNames | % {
+                $siteDefinitionKey = Get-SiteDefinitionDialogKey $_            
+                $siteDefinitionKeys.Add($_, $siteDefinitionKey)
+                $siteDefinitionDefaultValue = Get-UniqueName "$($_)_clone" $forbiddenSiteNames
+                
+                $dialogParameters.Add(@{ Name = $siteDefinitionKey; Title = "'$_' site definition"; Value = $siteDefinitionDefaultValue; Tab = [Sitecore.Globalization.Translate]::Text([Sitecore.XA.Foundation.Multisite.Texts]::CloneSiteDialogDefinitionsTab) }) > $null
+            }
+            
+            $mapping = New-Object -TypeName "System.Collections.Hashtable"
+            $siteDefinitionNames | ForEach-Object {
+                $siteDefinitionName = $_            
+                $key = Get-SiteDefinitionDialogKey $siteDefinitionName
+                $value = $(Get-Variable $key -ErrorAction SilentlyContinue).Value
+                $mapping.Add($siteDefinitionName, $siteName)
+            }        
+            
+            @{
+                siteName              = $siteName
+                siteDefinitionmapping = $mapping
+            }
+        }
+    }
+    
+    Describe "Clone-Site" {
+        Mock Run-SiteManager { }
+        BeforeEach {
+            $tenantName = "T"
+            $siteName = "S"
+            $copiedSiteName = "$siteName clone"
+            $contentPath = "master:\content\Unit Tests"
+            $tenantPath = "$contentPath\$tenantName"
+            $sitePath = "$tenantPath\$siteName"
+            $copiedSitePath = "$tenantPath\$copiedSiteName"
+            $mediaLibraryPath = "master:\media library\Project\Unit Tests"
+            $themesPath = "master:\media library\Themes\Unit Tests"
+            $templatesPath = "master:\templates\Project\Unit Tests"
+            $gridSetupPath = "master:\system\Settings\Feature\Experience Accelerator\Foundation\Grid Setup"        
+        }
+        Context "Clone site with default settings" {
+            It "clean the content tree" {
+                Clear-ContentTree $contentPath
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                
+                New-Tenant $model
+                Test-Path -Path "$contentPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$themesPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }
+            It "create site with all default settings" {
+                $model = Get-NewTestSiteModel $siteName "$contentPath\$tenantName" $gridSetupPath
+                New-Site $model            
+            }
+            It "clone the site with default parameters" {
+                    SetReferences $sitePath
+                    
+                    $ctx = Get-Item $sitePath
+                    $SourceSite = $ctx
+                    
+                    Mock Show-CloneSiteDialog { return CloneSiteDialogMock }
+                    
+                    $dialogResult = Show-CloneSiteDialog $ctx
+                    $cloneSiteName = $dialogResult.siteName
+                    $mapping = $dialogResult.siteDefinitionmapping
+                    Copy-Site $ctx $ctx.Parent $cloneSiteName $mapping > $null
+            }
+            It "check cloned content location" {
+                Test-Path $copiedSitePath | Should BeExactly $true
+            }
+            It "check cloned media library location" {
+                Test-Path "$mediaLibraryPath\$tenantName\$copiedSiteName" | Should BeExactly $true
+    
+                $siteItem = Get-Item -Path $copiedSitePath
+                $siteMediaLibraryItem = Get-Item -Path "$mediaLibraryPath\$tenantName\$copiedSiteName"
+                $siteMediaLibraryItem.ID | Should BeExactly $siteItem.SiteMediaLibrary
+            }
+            It "check cloned themes location" {
+                Test-Path "$themesPath\$tenantName\$copiedSiteName" | Should BeExactly $true
+    
+                $siteItem = Get-Item -Path $copiedSitePath
+                $themesRootItem = Get-Item -Path "$themesPath\$tenantName\$copiedSiteName"
+                $themesRootItem.ID | Should BeExactly $siteItem.ThemesFolder
+            }
+            It "check cloned site definition: name and start item" {
+                $homeItem = Get-Item -Path "$copiedSitePath\Home"
+                $siteDefinitionItem = Get-Item -Path "$copiedSitePath\Settings\Site Grouping\$copiedSiteName"
+                $siteDefinitionItem.StartItem | Should BeExactly $homeItem.ID
+            }
+            It "check cloned link references: by ID" {
+                $homePage = Get-Item "$copiedSitePath\Home"
+                $defaultDesignItem = Get-Item "$copiedSitePath\Presentation\Page Designs\Default"
+        
+                $designItemID = $homePage."Page Design"
+                $designItemID | Should BeExactly $defaultDesignItem.ID
+            }
+            It "check cloned link references: by Path" {
+                $homePage = Get-Item "$copiedSitePath\Home"
+                $fieldValue = $homePage."Content"
+                $fieldValue | Should BeExactly "$($homePage.Paths.Path)"
+            }
+            It "check cloned site settings: Сreative Exchange file storage folder" {
+                $fileStorageItem = Get-Item -Path "$copiedSitePath\Settings\Creative Exchange Storages\Folder on server"
+                $fileStorageItem."Destination Path" | Should BeExactly "`$(creativeExchangeFolder)/FileStorage/$copiedSiteName"
+            }
+            It "check cloned site settings: Default sorting facet" {
+                $titleAscSort = Get-Item -Path "$copiedSitePath\Data\Search\Sort Results\Default\Title Asc"
+                $titleFacet = Get-Item -Path "$copiedSitePath\Settings\Facets\Title"
+                $titleAscSort.Facet | Should BeExactly $titleFacet.ID
+            }
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170714T115610Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

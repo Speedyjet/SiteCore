@@ -1,0 +1,39 @@
+---
+ID: "04555e86-cc1f-4380-8839-ec7108a4997f"
+Parent: "9c439b03-37cc-45c3-99a1-cd02dea8f15a"
+Template: "292ccfcd-7790-4692-856b-76014b8038e7"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/SiteMetadata/SiteMetadata Site Setup
+DB: master
+SharedFields:
+- ID: "11488836-d40f-40d4-beb4-1d31da7b1470"
+  Hint: IncludeByDefault
+  Type: Checkbox
+  Value: 1
+- ID: "40deee2f-7595-40bd-b2c9-51f9e2346100"
+  Hint: Dependencies
+  Type: Treelist
+  Value: |
+    {69A6074B-4099-4FDA-8AA6-2AD048A28BD9}
+    {8374168B-EBAC-4346-97C9-E04854BB0A7F}
+    {B371B9FB-F67C-4709-B3A1-7EB56EEBEB78}
+    {E4E17C7B-81BE-42B8-8362-90398B13DE87}
+    {8071BE71-34B6-4AAC-AD61-BAB146070D63}
+    {BDF83718-907A-435B-B1BA-64139E07983F}
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1050
+Languages:
+- Language: en
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: SiteMetadata Site Setup
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160701T082904Z
+    - ID: "c202067e-7fab-4606-afb4-e76df2185ddc"
+      Hint: Name
+      Value: SiteMetadata

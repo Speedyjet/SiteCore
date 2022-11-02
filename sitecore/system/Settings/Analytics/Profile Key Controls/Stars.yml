@@ -1,0 +1,39 @@
+---
+ID: "73a85311-0125-4827-ab12-bbfc791130e7"
+Parent: "e5198681-d14b-459c-951a-916afab5184c"
+Template: "df12d9fa-cfaa-428e-bd51-7299a727fdab"
+Path: /sitecore/system/Settings/Analytics/Profile Key Controls/Stars
+DB: master
+SharedFields:
+- ID: "84e758f2-0298-46e6-8a45-b5b9a5718b5a"
+  Hint: Control
+  Value: Sitecore.Shell.Applications.Analytics.TrackingField.Stars,Sitecore.Marketing.Client
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "001dd393-96c5-490b-924a-b0f25cd9efd8"
+      Hint: __Lock
+      Value: <r />
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20081002T120255
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "0ed67e20-db5b-44d7-a037-89c86c8f09c5"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20151111T091137Z

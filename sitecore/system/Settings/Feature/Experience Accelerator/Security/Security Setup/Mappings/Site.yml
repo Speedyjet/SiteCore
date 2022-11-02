@@ -1,0 +1,14 @@
+---
+ID: "daa6ac5b-967d-4b41-8aa9-e9dc9525cbd5"
+Parent: "c0409abb-a2e1-4986-9828-5138c46c7745"
+Template: "a87a00b1-e6db-45ab-8b54-636fec3b5523"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Security/Security Setup/Mappings/Site
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170407T090448Z

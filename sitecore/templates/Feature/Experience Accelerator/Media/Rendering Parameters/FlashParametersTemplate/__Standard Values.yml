@@ -1,0 +1,21 @@
+---
+ID: "325a04a4-2ff7-47ba-928c-b00ee0f6f30c"
+Parent: "3b80d5a1-de55-45f5-ba30-3a567ef495c3"
+Template: "3b80d5a1-de55-45f5-ba30-3a567ef495c3"
+Path: /sitecore/templates/Feature/Experience Accelerator/Media/Rendering Parameters/FlashParametersTemplate/__Standard Values
+DB: master
+SharedFields:
+- ID: "3094d236-5985-4c4f-ae6a-e30740885532"
+  Hint: Caching
+  Value: 0|0|0|0|0|0|0
+- ID: "7ffc8b18-7413-4081-921a-8ec721fb1bb6"
+  Hint: Wmode
+  Value: transparent
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20111207T111100

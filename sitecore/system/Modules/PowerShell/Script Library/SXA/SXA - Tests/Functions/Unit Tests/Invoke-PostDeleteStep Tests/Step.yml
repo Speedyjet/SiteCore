@@ -1,0 +1,23 @@
+---
+ID: "7ad13133-a945-460b-badb-8c090cb3772e"
+Parent: "8fb0c01b-07ce-42c6-a30a-cf2f437e869d"
+Template: "22e0ece5-590b-49ac-b2bc-b61253f91c31"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Invoke-PostDeleteStep Tests/Step"
+DB: master
+SharedFields:
+- ID: "c0a5bd91-e658-46ce-b631-77ce337d8e6e"
+  Hint: Script
+  Type: Treelist
+  Value: "{C38B5A63-C26E-4943-B5F7-B695E2F0524F}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180904T135055Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

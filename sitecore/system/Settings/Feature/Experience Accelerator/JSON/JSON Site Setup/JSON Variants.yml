@@ -1,0 +1,14 @@
+---
+ID: "b4d0ac83-6f39-4ee1-85f1-e3de7a2c9025"
+Parent: "a2645eb7-6ccc-4d72-9ec1-a2509046bba2"
+Template: "a87a00b1-e6db-45ab-8b54-636fec3b5523"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/JSON/JSON Site Setup/JSON Variants
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170223T084210Z

@@ -1,0 +1,47 @@
+---
+ID: "1f306474-dcd5-4648-989f-948ed3ac40cc"
+Parent: "515fa3ce-65eb-4564-80c0-aa4a62eb2b60"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Site/Copy-Children"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Copy-Children {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$SourceRoot,
+        
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Item]$DestinationRoot
+        )
+        
+        begin {
+            Write-Verbose "Cmdlet Copy-Children - Begin"
+        }
+        
+        process {
+            Write-Verbose "Cmdlet Copy-Children - Process"
+            $SourceRoot.Children | ForEach-Object {
+                $_.CopyTo($DestinationRoot, $_.Name) > $null
+            }
+        }
+        
+        end {
+            Write-Verbose "Cmdlet Copy-Children - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170529T104011Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

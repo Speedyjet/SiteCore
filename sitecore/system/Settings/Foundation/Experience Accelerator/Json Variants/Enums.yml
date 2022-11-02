@@ -1,0 +1,14 @@
+---
+ID: "70876f0c-9eac-4cdf-92e0-45f4add486d5"
+Parent: "82292efc-16d5-42db-bf8d-05e2033228ee"
+Template: "a87a00b1-e6db-45ab-8b54-636fec3b5523"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Json Variants/Enums
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170302T070813Z

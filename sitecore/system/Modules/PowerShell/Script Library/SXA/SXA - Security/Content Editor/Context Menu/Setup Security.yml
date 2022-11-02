@@ -1,0 +1,149 @@
+---
+ID: "2f144328-6798-4d1d-82a7-234fdbcf4ee5"
+Parent: "308253dc-f7fe-4b2f-86b6-5d645a1d0f20"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Security/Content Editor/Context Menu/Setup Security"
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: Office/32x32/shield.png
+- ID: "1c76313e-3c8c-4807-a826-135d10c39299"
+  Hint: ShowRule
+  Type: Rules
+  Value: |
+    <ruleset>
+      <rule
+        uid="{1E02D513-9478-40EA-8F66-B93194AF4383}">
+        <conditions>
+          <and
+            uid="D16B8ADA2EBE4E87BDFDECBD16FE299C">
+            <condition
+              id="{D0810F9D-734C-452D-BBB6-4730368D68F1}"
+              uid="AFF41126D5C240D2A7441A414DEBFBF0"
+              templateid="{DCB42A80-68C9-46F9-B036-BC44A27D96FE}" />
+            <condition
+              id="{DA0D1AEA-0144-4A40-9AF0-3123526C9163}"
+              uid="A9CEC0E37BEA472E9AC05C37DCFA0D31"
+              fieldname="RoleDomain" />
+          </and>
+        </conditions>
+      </rule>
+    </ruleset>
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Set-SxaSecurity
+    Import-Function Set-TenantSecurity
+    Import-Function Set-SiteSecurity
+    Import-Function Set-ItemsSecurityMapping
+    Import-Function Get-ItemByIdSafe
+    
+    function Get-ItemById($id) {
+        (Get-Item .).Database.GetItem($id) | Wrap-Item
+    }
+    
+    function Set-SecurityForItemPointer($item,$ContextItem){
+        Write-Verbose "Setting security for item pointer: $($item.Paths.Path)"
+        $scriptId = $item["Script"]
+        if($scriptId){
+            $item.Database.GetItem($scriptId) | Wrap-Item | Invoke-Script
+            $targetItem = Invoke-ModuleScriptBody $ContextItem
+            if($targetItem){
+                Set-SecurityField $targetItem $item
+            }else{
+                Write-Log "Couln't set up security for item pointer: $($item.Paths.Path). Item not found"
+            }
+        }    
+    }
+    
+    Set-SxaSecurity
+    
+    $ContextItem = Get-Item .
+    $MappingsRootItem = $null
+    
+    [Sitecore.Data.ID]$siteTemplateID = [Sitecore.XA.Foundation.Multisite.Templates+Site]::ID
+    [Sitecore.Data.ID]$tenantTemplateID = [Sitecore.XA.Foundation.Multisite.Templates+Tenant]::ID
+    
+    if ([Sitecore.Data.Managers.TemplateManager]::GetTemplate($ContextItem).InheritsFrom($siteTemplateID)) {
+        Import-Function Get-TenantItem
+        $TenantItem = Get-TenantItem $ContextItem
+        if ($TenantItem.RoleDomain.Length -eq 0) {
+            Show-Alert ([Sitecore.Globalization.Translate]::Text([Sitecore.XA.Feature.Security.Texts]::SiteValidationSetupTenantFirst))
+            Close-Window
+            exit
+        }
+    
+        $global:ctx_RolesMapping = Set-SiteSecurity $ContextItem
+        $MappingsRootItem = Get-Item master: -ID "{B1A39F54-9708-4848-B885-0C75AA6BD01F}"
+    
+        if ($ContextItem.ThemesFolder -ne "") {
+            $id_SiteThemesFolder = "{C2925D9C-D948-4EB2-8ACB-FF171D6DEB56}"
+            $siteMediaThemesMapping = Get-ItemById $id_SiteThemesFolder
+            $siteThemesFolder = $ContextItem.Database.GetItem($ContextItem.ThemesFolder) | Wrap-Item
+            Set-SecurityField $siteThemesFolder $siteMediaThemesMapping
+        }
+    
+        if ($ContextItem.SiteMediaLibrary -ne "") {
+            $id_SiteMediaFolder = "{7284D25D-6543-493E-A801-D580CAD86E90}"
+            $siteMediaFolderMapping = Get-ItemById $id_SiteMediaFolder
+            $siteMediaFolder = $ContextItem.Database.GetItem($ContextItem.SiteMediaLibrary) | Wrap-Item
+            Set-SecurityField $siteMediaFolder $siteMediaFolderMapping
+        }
+        
+        $ContextItem.Database.DataManager.DataSource.SelectIDs([string]::Empty,"{7791AF96-E93F-4DA0-8565-2EE8D5EE90BA}") | % { Get-ItemByIdSafe $_ } | % {
+            Set-SecurityForItemPointer $_ $ContextItem
+        }
+        $global:ctx_SiteDomain = $ContextItem.RoleDomain
+    }
+    
+    if ([Sitecore.Data.Managers.TemplateManager]::GetTemplate($ContextItem).InheritsFrom($tenantTemplateID)) {
+        $global:ctx_TenantDomain = $ContextItem.RoleDomain
+        $global:ctx_RolesMapping = Set-TenantSecurity $ContextItem
+        $MappingsRootItem = Get-Item master: -ID "{7C4A362B-4813-40DB-8167-7AA5190726FF}"
+    
+        $id_TenantTemplates = "{77EF59CA-3186-4F36-8F59-6F951A450149}"
+        $id_TenantSharedMediaLibrary = "{B4375DF0-B59B-43A4-872D-199C7C917F59}"
+        $id_TenantMediaLibrary = "{52BF8F69-3778-4E64-962E-1AE9CABA3959}"
+        $id_ThemesFolder = "{44EEF80A-7021-44E3-A51C-5C2F11AFE706}"
+    
+        $tenantTemplatesItem = Get-ItemById $ContextItem.Templates
+        $tenantTemplatesItemMapping = Get-ItemById $id_TenantTemplates
+    
+        $tenantMediaLibraryItem = Get-ItemById $ContextItem.MediaLibrary
+        $tenantMediaLibraryItemMapping = Get-ItemById $id_TenantMediaLibrary
+    
+        $tenantSharedMediaLibraryItem = Get-ItemById $ContextItem.SharedMediaLibrary
+        $tenantSharedMediaLibraryItemMapping = Get-ItemById $id_TenantSharedMediaLibrary
+    
+        $tenantThemesFolderItem = Get-ItemById $ContextItem.Themes
+        $tenantThemesFolderItemMapping = Get-ItemById $id_ThemesFolder
+    
+        $global:ctx_TenantDomain = $ContextItem.RoleDomain
+    
+        Set-SecurityField $tenantTemplatesItem          $tenantTemplatesItemMapping
+        Set-SecurityField $tenantMediaLibraryItem       $tenantMediaLibraryItemMapping
+        Set-SecurityField $tenantSharedMediaLibraryItem $tenantSharedMediaLibraryItemMapping
+        Set-SecurityField $tenantThemesFolderItem       $tenantThemesFolderItemMapping
+        
+        $ContextItem.Database.DataManager.DataSource.SelectIDs([string]::Empty,"{F8F9A85E-95D5-4E81-AEC4-249B697A8626}") | % { Get-ItemByIdSafe $_ } | % {
+            Set-SecurityForItemPointer $_ $ContextItem
+        }
+    }
+    
+    if ($MappingsRootItem) {
+        Set-ItemsSecurityMapping $ContextItem $MappingsRootItem
+    }
+    
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170406T131230Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

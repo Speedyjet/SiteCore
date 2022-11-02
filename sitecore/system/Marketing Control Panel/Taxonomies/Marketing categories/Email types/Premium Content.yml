@@ -1,0 +1,28 @@
+---
+ID: "b5c4092d-4ddb-4c8a-9d27-9c5fc113f02a"
+Parent: "8df1eb92-ab86-436d-8644-36fdea56eaf6"
+Template: "803949f2-13a1-4731-a0fa-e435ea0d822e"
+Path: /sitecore/system/Marketing Control Panel/Taxonomies/Marketing categories/Email types/Premium Content
+DB: master
+Languages:
+- Language: en
+  Fields:
+  - ID: "870a6b2a-4cac-490b-8791-195b1fc464e5"
+    Hint: Description
+    Value: I want to learn about what’s new in the industry and receive tips on how to be better at my job. Please send me white papers, guides, ebooks, etc.
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180322T110045Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "30942200-e05f-4f5d-a92b-9eea0436530b"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20180322T110213Z

@@ -1,0 +1,31 @@
+---
+ID: "6de84aff-30f9-4b63-9a83-6951af070e54"
+Parent: "b9dda3c3-b652-4bf0-8949-973b2ae634f0"
+Template: "bca0e629-150f-41dd-893b-f4b65338c0b7"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/Foundation/Grid Definition/large
+DB: master
+SharedFields:
+- ID: "39d6d2c4-f31e-4310-ab2d-f6d5c9cb89fd"
+  Hint: BreakpointMax
+  Value: 
+- ID: "3b2c405a-5a69-4ce9-a28a-0e72715f159a"
+  Hint: BreakpointMin
+  Value: 64em
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 300
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20161216T080538Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin
+    - ID: "b55a9065-9589-41d8-997b-9b4592852134"
+      Hint: Tooltip
+      Value: Layout settings for large devices.

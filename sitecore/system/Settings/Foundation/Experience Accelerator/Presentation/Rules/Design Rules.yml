@@ -1,0 +1,14 @@
+---
+ID: "6dec8a66-3225-42d0-a9e7-2d08c594487b"
+Parent: "8f1a27fb-7daa-4d00-b722-2096c99f787e"
+Template: "dda66314-03f3-4c89-84a9-39dffb235b06"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Presentation/Rules/Design Rules
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190218T101902Z

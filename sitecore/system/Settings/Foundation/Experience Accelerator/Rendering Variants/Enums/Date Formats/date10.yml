@@ -1,0 +1,26 @@
+---
+ID: "6661bff7-029e-4c18-9288-10e143e436f2"
+Parent: "67ae84fe-e7b8-4bb1-a7e5-fb99e887d22b"
+Template: "d2923fee-da4e-49be-830c-e27764dfa269"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Rendering Variants/Enums/Date Formats/date10
+DB: master
+SharedFields:
+- ID: "f917c951-1f75-4d62-b14a-bc6888d7eeca"
+  Hint: Value
+  Value: "dd/MM/yyyy hh:mm tt"
+Languages:
+- Language: en
+  Fields:
+  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
+    Hint: __Display name
+    Value: dd/MM/yyyy tt
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170620T145756Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

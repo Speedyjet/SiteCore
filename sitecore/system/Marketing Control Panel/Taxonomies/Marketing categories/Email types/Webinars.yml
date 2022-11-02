@@ -1,0 +1,28 @@
+---
+ID: "1f2ec7cc-7b83-48aa-97d6-99000bb65fc9"
+Parent: "8df1eb92-ab86-436d-8644-36fdea56eaf6"
+Template: "803949f2-13a1-4731-a0fa-e435ea0d822e"
+Path: /sitecore/system/Marketing Control Panel/Taxonomies/Marketing categories/Email types/Webinars
+DB: master
+Languages:
+- Language: en
+  Fields:
+  - ID: "870a6b2a-4cac-490b-8791-195b1fc464e5"
+    Hint: Description
+    Value: I want to hear from experts in the industry and learn about trends and new research. Please send me invitations to your webinars.
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20180322T110133Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "b6f6f251-f3e5-4bfc-98be-d65008f5984a"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20180323T124458Z

@@ -1,0 +1,49 @@
+---
+ID: "5d1275d9-c16b-4bd2-8419-297cd2384f41"
+Parent: "59b831db-114c-47a7-ae5e-787d092c660f"
+Template: "b0bd1136-7f76-426c-8eae-4fb4998b4d2c"
+Path: /sitecore/system/Marketing Control Panel/Experience Analytics/Dimensions/Visits/By download
+DB: master
+SharedFields:
+- ID: "572b00c2-3d74-4d4f-976f-dcae76297a85"
+  Hint: Metrics
+  Type: Multilist
+  Value: |
+    {84C79DEA-BF76-47B0-A9A8-25B793DB4371}
+    {5D1B1338-8D13-4DAB-A5CF-D626541D587C}
+    {D0F260A7-4839-4C4D-94AA-745DC8BCDF13}
+    {4C0589F5-820E-4D63-B0EF-6B1A504B6585}
+    {001F2496-AEC7-4DDD-8289-E7CAC9BB3D2E}
+    {E3346D85-10C6-4471-AC06-8DD8E14A82A8}
+- ID: "632e369b-3c22-4dd4-b6e9-0c6648a97ec3"
+  Hint: MetricType
+  Value: DownloadEventMetrics
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170214T032742Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "e68eb912-5c9b-43cb-9db9-9ca4e136ea56"
+    - ID: "a6302f86-e82b-4bda-ab63-639395e1b614"
+      Hint: Name
+      Value: By download
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20170313T083539Z

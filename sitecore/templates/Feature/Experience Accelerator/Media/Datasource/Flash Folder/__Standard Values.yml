@@ -1,0 +1,25 @@
+---
+ID: "1cc438bb-116a-4d2c-a156-13cbcc455d9d"
+Parent: "df608f99-aaa5-428d-a4ef-ca92e5f291d3"
+Template: "df608f99-aaa5-428d-a4ef-ca92e5f291d3"
+Path: /sitecore/templates/Feature/Experience Accelerator/Media/Datasource/Flash Folder/__Standard Values
+DB: master
+SharedFields:
+- ID: "1172f251-dad4-4efb-a329-0c63500e4f1e"
+  Hint: __Masters
+  Type: TreelistEx
+  Value: |
+    {FA4FC270-D16A-4230-A7CE-A0F6B0D97DE7}
+    {DF608F99-AAA5-428D-A4EF-CA92E5F291D3}
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20121205T120000Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

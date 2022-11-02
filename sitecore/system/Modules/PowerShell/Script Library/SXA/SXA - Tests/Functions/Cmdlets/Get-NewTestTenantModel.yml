@@ -1,0 +1,51 @@
+---
+ID: "ed6b1575-7a2e-4db6-8251-eadb70296bc3"
+Parent: "0b506ced-7de2-44db-ab55-32408b644ea1"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Cmdlets/Get-NewTestTenantModel"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-NewTestTenantModel {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [string]$tenantName,
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [string]$contentPath
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-NewTestTenantModel - Begin"
+            Import-Function Get-ItemByIdSafe
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-NewTestTenantModel - Process"
+            $model = New-Object Sitecore.XA.Foundation.Scaffolding.Models.CreateNewTenantModel
+            $model.TenantName = $tenantName
+            $model.TenantLocation = Get-Item -Path $contentPath
+            $model.DefinitionItems = New-Object System.Collections.ArrayList($null)
+            $db = Get-Database "master"
+            $db.DataManager.DataSource.SelectIDs("","{141DF88E-7156-4D2E-A004-C8C1A7C51E9D}") `
+                | % { Get-ItemByIdSafe $_ } `
+                | ? { $_.Paths.LongID.Contains("{087E1EA5-6280-4575-9E70-85B588DB91B2}") } `
+                | ? { $_.IncludeByDefault -eq '1' } `
+                | % { $model.DefinitionItems.Add($_) } > $null
+            $model
+        } 
+    
+        end {
+            Write-Verbose "Cmdlet Get-NewTestTenantModel - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190710T064553Z

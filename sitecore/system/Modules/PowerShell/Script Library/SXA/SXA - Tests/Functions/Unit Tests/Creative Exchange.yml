@@ -1,0 +1,108 @@
+---
+ID: "c756ad22-ecc4-4fc5-899e-57e2620d3c82"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Creative Exchange"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function New-Tenant
+    Import-Function New-Site
+    Import-Function Remove-TenantFolder
+    Import-Function Clear-ContentTree
+    Import-Function Get-CreativeExchangeExportResponse
+    Import-Function Get-CreativeExchangeImportResponse
+    Import-Function Get-NewTestTenantModel
+    Import-Function Get-NewTestSiteModel
+    
+    $progressPreference = 'silentlyContinue'
+    
+    Describe "Creative Exchange" {
+        Mock Show-ListView {}
+        Mock Run-SiteManager {}
+        BeforeEach {
+            $tenantName = "T"
+            $siteName = "S"
+            $contentPath = "master:\content\Unit Tests"
+            $tenantPath = "$contentPath\$tenantName"
+            $sitePath = "$tenantPath\$siteName"
+            $mediaLibraryPath = "master:\media library\Project\Unit Tests"
+            $themesPath = "master:\media library\Themes\Unit Tests"
+            $templatesPath = "master:\templates\Project\Unit Tests"
+            $gridSetupPath = "master:\system\Settings\Feature\Experience Accelerator\Foundation\Grid Setup"      
+        }
+        Context "Export site - default settings" {
+            It "clean the content tree" {
+                Clear-ContentTree $contentPath
+                Test-Path -Path $contentPath | Should BeExactly $false
+                Test-Path -Path $mediaLibraryPath | Should BeExactly $false
+                Test-Path -Path $themesPath | Should BeExactly $false
+                Test-Path -Path $templatesPath | Should BeExactly $false
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                
+                New-Tenant $model
+                Test-Path -Path "$contentPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$themesPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }
+            It "create site with all default settings" {
+                $model = Get-NewTestSiteModel $siteName "$contentPath\$tenantName" $gridSetupPath
+                New-Site $model
+            }
+            It "check content location" {
+                Test-Path $sitePath | Should BeExactly $true
+            }
+            It "can export and folder is on the server" {
+                $item = Get-Item -Path "$sitePath\home"
+                $exportArgs = Get-CreativeExchangeExportResponse -CurrentItem $item
+                
+                $result = $exportArgs.CreativeExchangeExportStorage.GetResult()
+                $folderPath = $result.Result
+                Test-Path -Path $folderPath | Should BeExactly $true
+            }
+            It "can import and there are no changes" {
+                $item = Get-Item -Path "$sitePath\home"
+                $exportArgs = Get-CreativeExchangeImportResponse -CurrentItem $item
+                $msgs = $exportArgs.Messages
+                $msgs.Count | Should BeExactly 0
+            }
+            It "can import and there is 1 change" {
+                $item = Get-Item -Path "$sitePath\home"
+     
+                $folderPath = "$SitecorePackageFolder/CreativeExchange/FileStorage/$siteName"
+                $homeIndex = Get-ChildItem -Path $folderPath | ? { $_.Name -ne "-"} | ? { $_.Name -eq "index.html"} | Select-Object -First 1
+                $doc = New-Object "HtmlAgilityPack.HtmlDocument"
+                $doc.Load([string]$homeIndex.FullName)
+                $bodyNode = $doc.DocumentNode.SelectSingleNode("//body")
+                $bodyNode.Attributes["class"].Value = $bodyNode.Attributes["class"].Value + " abc"
+                $doc.Save($homeIndex.FullName)
+    
+                $exportArgs = Get-CreativeExchangeImportResponse -CurrentItem $item
+                $msg = $exportArgs.Messages
+                $msg | Should Not BeNullOrEmpty
+                $msg.Count | Should BeExactly 1
+                (Get-Item -Path "$sitePath\home")."Body Css Class"  | Should BeExactly "abc"
+            }        
+        }
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 150
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170719T083141Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin

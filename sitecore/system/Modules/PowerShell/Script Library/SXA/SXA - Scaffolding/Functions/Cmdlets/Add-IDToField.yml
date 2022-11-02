@@ -1,0 +1,62 @@
+---
+ID: "677fe523-5bf4-44c0-bdb6-a30fb8ed0fd7"
+Parent: "74ac6db3-58c5-4bf9-aa9f-26940029fd49"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Cmdlets/Add-IDToField"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Add-IDToField {
+    	[CmdletBinding()]
+        param(
+            [Parameter(Mandatory=$true, Position=0 )]
+            [Sitecore.Data.Items.Item]$CurrentItem,
+            
+            [Parameter(Mandatory=$true, Position=1)]
+            [string]$FieldName,
+    
+            [Parameter(Mandatory=$true, Position=2)]
+            [Sitecore.Data.ID]$ID
+            )
+    
+    	begin {
+    		Write-Verbose "Cmdlet Add-BaseTemplate - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Add-BaseTemplate - Process"
+    		try {
+    		    [Sitecore.Data.ID[]]$existingIds = New-Object  System.Collections.ArrayList
+    		    if(![string]::IsNullOrWhiteSpace($CurrentItem."$FieldName")) {
+    			    [Sitecore.Data.ID[]]$existingIds = $CurrentItem."$FieldName".Split('|') | ? { $_ -ne ""}
+    		    }
+    		
+    		    if($existingIds -contains $ID) {
+    		        Write-Verbose "Cmdlet Add-BaseTemplate - Base template $($ID) already present at $($CurrentItem.ID) template"
+    		        return
+    		    }
+    		    
+    		    $existingIds += $ID
+    			$newValue = $existingIds -join "|"
+    			$CurrentItem."$FieldName" = $newValue
+    		}
+    		catch [System.Exception] {
+    			Write-Error $_			
+    			return
+    		}
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Add-BaseTemplate - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190524T120238Z

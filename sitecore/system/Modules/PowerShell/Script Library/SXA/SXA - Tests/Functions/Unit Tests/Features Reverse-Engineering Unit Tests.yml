@@ -1,0 +1,110 @@
+---
+ID: "44c862a0-7bce-4bd4-980a-e3dbf800f2b5"
+Parent: "3a1777b1-ce3d-4086-8520-eb256bfcd5b6"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Tests/Functions/Unit Tests/Features Reverse-Engineering Unit Tests"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Remove-TenantFolder
+    Import-Function New-Tenant
+    Import-Function Get-PageDesignsItem
+    Import-Function New-Site
+    Import-Function Get-NewTestTenantModel
+    Import-Function Get-NewTestSiteModel
+    
+    Describe "New-Tenant - Invoked Tenant Features" {
+        BeforeEach {
+            $tenantName = "T"
+            $contentPath = "master:\content\Unit Tests"
+            $tenantPath = "$contentPath\$tenantName"
+            $mediaLibraryPath = "master:\media library\Project\Unit Tests"
+            $themesPath = "master:\media library\Themes\Unit Tests"
+            $templatesPath = "master:\templates\Project\Unit Tests"
+        }
+        Context "Create tenant with default settings and check Features field" {
+            It "clean the content tree" {
+                if (Test-Path $contentPath) {
+                    $tenantFolder = Get-Item -Path $contentPath
+                    Remove-TenantFolder $tenantFolder
+                }
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+            }
+            It "create tenant with all default settings" {
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                    
+                New-Tenant $model
+            }
+            It "check computed InvokedTenantFeature" {
+                Import-Function Get-InvokedTenantFeature
+                $tenantItem = Get-Item -Path $tenantPath
+                $tenantItem.Modules -ne $null  | Should BeExactly $true
+                $expeceted = ($tenantItem.Modules.Split('|') | Sort-Object) -join "|"
+                $actual = ((Get-InvokedTenantFeature $tenantItem).ID | Sort-Object) -join "|"
+                $actual  | Should BeExactly $expeceted
+            }
+        }
+    }
+    
+    Describe "New-Site - Invoked Site Features" {
+        Mock Run-SiteManager {}
+        BeforeEach {
+            $tenantName = "T"
+            $siteName = "S"
+            $contentPath = "master:\content\Unit Tests"
+            $tenantPath = "$contentPath\$tenantName"
+            $sitePath = "$tenantPath\$siteName"
+            $mediaLibraryPath = "master:\media library\Project\Unit Tests"
+            $themesPath = "master:\media library\Themes\Unit Tests"
+            $templatesPath = "master:\templates\Project\Unit Tests"
+            $gridSetupPath = "master:\system\Settings\Feature\Experience Accelerator\Foundation\Grid Setup"        
+        }
+        Context "Create site with default settings and check Features field" {
+            It "clean the content tree" {
+                if (Test-Path $contentPath) {
+                    $tenantFolder = Get-Item -Path $contentPath
+                    Remove-TenantFolder $tenantFolder
+                }
+            }
+            It "initialize content tree" {
+                New-Item -Path $contentPath -ItemType "/Foundation/Experience Accelerator/Multisite/Tenant Folder" > $null
+                $model = Get-NewTestTenantModel $tenantName $contentPath
+                
+                New-Tenant $model
+                Test-Path -Path "$contentPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$mediaLibraryPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$themesPath\$tenantName" | Should BeExactly $true
+                Test-Path -Path "$templatesPath\$tenantName" | Should BeExactly $true
+            }
+            It "create site with all default settings" {
+                $model = Get-NewTestSiteModel $siteName "$contentPath\$tenantName" $gridSetupPath
+                $model.DefinitionItems.Add($model.GridSetup)
+                New-Site $model
+                
+                #12176 | Fix 3 broken Pester tests
+                $siteItem = Get-Item -Path $sitePath
+                $pageDesigns = Get-PageDesignsItem $siteItem
+                $pageDesigns.Theme = "%7bFE5D7FDF-89C0-4D99-9AA3-B5FBD009C9F3%7d%3d%257BB43D07BD-61D5-448F-9323-8B6ACAD4F3C4%257D"
+            }
+            It "check computed InvokedSiteFeature" {
+                Import-Function Get-InvokedSiteFeature
+                $siteItem = Get-Item -Path $sitePath
+                $siteItem.Modules -ne $null  | Should BeExactly $true
+                $expeceted = ($siteItem.Modules.Split('|') | Sort-Object) -join "|"
+                $actual = ((Get-InvokedSiteFeature $siteItem).ID | Sort-Object) -join "|"
+                $actual  | Should BeExactly $expeceted
+            }
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: "20200526T102015:637260852153537343Z"

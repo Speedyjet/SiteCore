@@ -1,0 +1,39 @@
+---
+ID: "a64076ce-354a-4959-bf65-67551dc6c727"
+Parent: "13d7e7c6-aff4-4f6b-a4f5-d15ddc6c6021"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Scaffolding/Cmdlets/Test-ItemIsPartialDesign"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Test-ItemIsPartialDesign {
+    	[CmdletBinding()]
+        param(
+    		[Parameter(Mandatory=$true, ValueFromPipeline = $true, Position=0 )]
+    		[Item]$Item
+            )
+    
+    	begin {
+    		Write-Verbose "Cmdlet Test-ItemIsPartialDesign - Begin"
+    	}
+    
+    	process {
+    		Write-Verbose "Cmdlet Test-ItemIsPartialDesign - Process"   
+    		[Sitecore.Data.ID]$PartialDesignTemplateID = [Sitecore.XA.Foundation.Presentation.Templates+MetadataPartialDesign]::ID
+            [Sitecore.Data.Managers.TemplateManager]::GetTemplate($Item).InheritsFrom($PartialDesignTemplateID)
+    	} 
+    
+    	end {
+    		Write-Verbose "Cmdlet Test-ItemIsPartialDesign - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160708T072240Z

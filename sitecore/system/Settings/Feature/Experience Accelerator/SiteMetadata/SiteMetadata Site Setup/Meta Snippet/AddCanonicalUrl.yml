@@ -1,0 +1,23 @@
+---
+ID: "e3cbb11c-97b8-4a12-9ff1-862fdc5b4845"
+Parent: "9985f0e5-ca46-441e-bcdd-3f639aec4512"
+Template: "b06460c2-8b7b-47a5-9e2c-f966f689b6ca"
+Path: /sitecore/system/Settings/Feature/Experience Accelerator/SiteMetadata/SiteMetadata Site Setup/Meta Snippet/AddCanonicalUrl
+DB: master
+SharedFields:
+- ID: "ff1383bb-f095-4958-9b6d-e555db653c44"
+  Hint: Script
+  Type: Treelist
+  Value: "{479E004D-DB76-48DE-80FE-54C50A0A26DD}"
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160713T120421Z
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\admin

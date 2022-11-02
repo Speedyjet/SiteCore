@@ -1,0 +1,31 @@
+---
+ID: "5e25b717-0af0-46ca-9631-2a7d4bb24b1c"
+Parent: "eb443c0b-f923-409e-85f3-e7893c8c30c2"
+Template: "3baa73e5-6ba9-4462-bf72-c106f8801b11"
+Path: /sitecore/layout/Sublayouts/Email
+DB: master
+SharedFields:
+- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
+  Hint: __Icon
+  Value: applications/32x32/folder_delete.png
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 200
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20190626T085555Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "f45911d7-d363-41b4-88ac-d5d635759197"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20200401T103040Z

@@ -1,0 +1,14 @@
+---
+ID: "c61f0aca-fb15-43c8-9555-b5e1d53c7d14"
+Parent: "d925b00e-16df-4217-9950-a634ecb1baa2"
+Template: "b746d24c-8767-47e6-a092-aebea4ef647f"
+Path: /sitecore/media library/Feature/Experience Accelerator/Grid960/Grid960
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160429T112759Z

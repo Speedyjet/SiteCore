@@ -1,0 +1,42 @@
+---
+ID: "5835c691-b938-4f18-9199-26fc507e2806"
+Parent: "b57d8616-e3f3-470c-ad8f-5577accbfa2e"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Cmdlets/ThemingContext/Get-ThemeItem"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Get-ThemeItem {
+        [CmdletBinding()]
+        param(
+            [Parameter(Mandatory = $true, Position = 0 )]
+            [Item]$CurrentItem,
+    
+            [Parameter(Mandatory = $true, Position = 1 )]
+            [Sitecore.Data.Items.DeviceItem]$DeviceItem
+        )
+    
+        begin {
+            Write-Verbose "Cmdlet Get-ThemeItem - Begin"
+        }
+    
+        process {
+            Write-Verbose "Cmdlet Get-ThemeItem - Process"
+            $instance = [Sitecore.DependencyInjection.ServiceLocator]::ServiceProvider
+            $instance.GetType().GetMethod('GetService').Invoke($instance, [Sitecore.XA.Foundation.Theming.IThemingContext]).GetThemeItem($CurrentItem, $DeviceItem) | ? { $_ -ne $null} | Wrap-Item    
+        }
+    
+        end {
+            Write-Verbose "Cmdlet Get-ThemeItem - End"
+        }
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20171123T123231Z

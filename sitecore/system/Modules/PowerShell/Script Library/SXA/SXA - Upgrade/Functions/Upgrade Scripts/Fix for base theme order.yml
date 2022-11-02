@@ -1,0 +1,89 @@
+---
+ID: "76052591-b275-4aa3-9508-9ab6c9c37d36"
+Parent: "f12bdc94-438e-4ff2-ae41-4f10ebf88504"
+Template: "5205cd92-0242-45aa-bead-b5c6288f2138"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Upgrade/Functions/Upgrade Scripts/Fix for base theme order"
+DB: master
+SharedFields:
+- ID: "67223412-5752-426f-940f-f2f40df561f2"
+  Hint: TargetVersion
+  Value: 1202
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    Import-Function Get-ItemByIdSafe
+    
+    $searchThemeID = "{1FF2E882-18C3-4FF3-8B1A-736ECA929C5F}"
+    $themeTemplate = '{F7653F31-6F17-4DAA-9217-8E116BABC927}'
+    $baseLayoutFieldId = '{384C2D3C-3E34-4493-9CB2-ADE68CAF0DA2}'
+        
+    function Get-AffectedThemes(){
+        $db = Get-Database "master"
+        $db.DataManager.DataSource.SelectIDs($null, $themeTemplate, $baseLayoutFieldId, "*$searchThemeID*", $true) | `
+            % { Get-ItemByIdSafe $_} | ` 
+            ? { $_.Paths.IsMediaItem } | `
+            ? { $_.BaseLayout.StartsWith($searchThemeID) }
+    }
+    
+    function ShouldRun () {
+        $outdatedTemplates = Get-AffectedThemes
+        $outdatedTemplates.Count -gt 0
+    }
+    
+    function Get-DialogParameters () {
+    }
+    
+    function Set-ThemeOrder($themeItem){
+        $themeItem.BaseLayout = $themeItem.BaseLayout.Replace($searchThemeID,""),$searchThemeID -join '|'
+    }
+    
+    function Invoke-UpgradeStep {
+    	[CmdletBinding(SupportsShouldProcess=$true)]
+        param(
+    	    [Parameter(Mandatory=$true, Position=0 )]
+    		$arguments
+        )
+    
+    	process {
+            Write-Verbose "Getting affected themes . . ."
+    	    $affectedThemes = Get-AffectedThemes
+            Write-Verbose "Found $($affectedThemes.Count) themes."
+    
+            $result = New-Object Sitecore.XA.Foundation.Upgrade.Model.UpgradeStepResult
+            try {
+        	    $affectedThemes | % {
+                    Write-Verbose "Processing '$($_.Name)' theme [$($_.ID)]"
+                    $currentItemPath = $($_.Paths.Path)
+                    if ($pscmdlet.ShouldProcess($currentItemPath, "Moving Search base theme on the last position")){
+                        Set-ThemeOrder $_
+                    }
+                }
+                $result.Result = "Success"
+            }
+            catch {
+                $result.Result = "Error"
+                $result.Message = $Error[0]
+                $result.ErrorObject = $Error[0]
+            }
+            finally {
+                $result
+            }
+    	}
+    }
+- ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
+  Hint: __Sortorder
+  Value: 1202
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170203T091206Z
+    - ID: "6ed03045-4adb-40e9-9b88-19282b6e5c90"
+      Hint: Title
+      Value: The order of base themes
+    - ID: "82563bd5-de9b-4741-b79a-9bc9163e2086"
+      Hint: Description
+      Value: Ensures that the search base theme is listed as the last of the inherited base themes.

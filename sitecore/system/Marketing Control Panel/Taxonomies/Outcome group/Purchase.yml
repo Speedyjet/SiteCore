@@ -1,0 +1,24 @@
+---
+ID: "601d19b6-49d2-4461-8961-a96b4eea76ca"
+Parent: "03dac2cb-cac1-4621-81f8-e7b56490f1be"
+Template: "a4dc92d1-1fff-429b-a186-1a1b3f608217"
+Path: /sitecore/system/Marketing Control Panel/Taxonomies/Outcome group/Purchase
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20150506T143708Z
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "c1e998f4-2f4e-41b0-9a63-490cce6c6eb9"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: "20150506T143708:635665198285224819Z"

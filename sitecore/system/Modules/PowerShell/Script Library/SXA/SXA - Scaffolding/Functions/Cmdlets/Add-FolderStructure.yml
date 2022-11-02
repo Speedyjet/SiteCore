@@ -1,0 +1,51 @@
+---
+ID: "76dd896a-c072-4618-93e0-8bf0b9dd691b"
+Parent: "74ac6db3-58c5-4bf9-aa9f-26940029fd49"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Scaffolding/Functions/Cmdlets/Add-FolderStructure"
+DB: master
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    function Add-FolderStructure {
+    	[CmdletBinding()]
+        param(
+    	    [Parameter(Mandatory=$true, Position=0 )]
+            [string]$Path,
+    
+    	    [Parameter(Mandatory=$false, Position=1 )]
+            [string]$ItemType = "System/Media/Media folder"
+        )
+    
+    	begin {
+    		Write-Verbose "Cmdlet Add-FolderStructure - Begin"
+    	}
+    
+    	process {
+        	$Path = $Path.Replace("master:","")
+            $items = $Path.Split('/') | Where-Object{ $_ -ne ""}
+        	foreach($folder in $items)
+        	{
+        	    $temp = $curPath + "/" + $folder
+        	    if((Test-Path -Path $temp)){
+        	    }else{
+        	        New-Item -Path $curPath -Name $folder -ItemType $itemType > $null
+        	    }
+        	    $curPath = $curPath + "/" + $folder
+        	}
+        	Get-Item -Path $curPath		
+    	}
+    
+    	end {
+    		Write-Verbose "Cmdlet Add-FolderStructure - End"
+    	}
+    }
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160705T124336Z

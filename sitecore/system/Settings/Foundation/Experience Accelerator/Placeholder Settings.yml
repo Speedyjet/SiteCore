@@ -1,0 +1,14 @@
+---
+ID: "023d72d7-9e9b-464f-96ce-29441ef3c542"
+Parent: "f81fe8ae-47db-4ff6-9c62-a8567e821978"
+Template: "a87a00b1-e6db-45ab-8b54-636fec3b5523"
+Path: /sitecore/system/Settings/Foundation/Experience Accelerator/Placeholder Settings
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20170601T115550Z

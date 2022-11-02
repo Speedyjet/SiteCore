@@ -1,0 +1,14 @@
+---
+ID: "af0ad7a4-9033-4055-9bcc-9c3cf1f8ba74"
+Parent: "e4bd7e86-6b54-4ffb-85a3-97ec27aa17b5"
+Template: "ab154d3d-1126-4ab4-ac21-8b86e6bd70ea"
+Path: "/sitecore/system/Modules/PowerShell/Script Library/SXA/SXA - Geospatial/Functions"
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20160823T094858Z

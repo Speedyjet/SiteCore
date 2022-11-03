@@ -14001,4 +14001,6 @@
   <Item ItemPath="/sitecore/templates/System/Snippet" ItemIcon="/temp/iconcache/applications/16x16/form_blue.png" />
   <Item ItemPath="/sitecore/templates/System/Snippet/Data" ItemIcon="/temp/iconcache/applications/32x32/document.png" />
   <Item ItemPath="/sitecore/templates/System/Snippet/Data/Title" ItemIcon="/temp/iconcache/applications/32x32/document.png" />
+  <Item ItemPath="/sitecore/content/New Footer" ItemIcon="/temp/iconcache/applications/32x32/window_dialog.png" />
+  <Item ItemPath="/sitecore/content/New Site" ItemIcon="/temp/iconcache/applications/32x32/document.png" />
 </ItemIconCache>

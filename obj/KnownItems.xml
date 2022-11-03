@@ -13689,5 +13689,7 @@
     <Id Path="/sitecore/templates/Branches/Foundation/Experience Accelerator/Scaffolding/Tenant Folder/Tenant Folder/Tenant/Site Folder/Site/Presentation/Partial Designs/Metadata Partial Design">726da650-3a2b-41e0-a56a-1f2c0cdf77b9</Id>
     <Id Path="/sitecore/templates/Branches/Foundation/Experience Accelerator/Scaffolding/Tenant Folder/Tenant Folder/Tenant/Site Folder/Site/Presentation/Partial Designs/Partial Design">88b8fa9f-766e-4bd4-95c3-ab69fd598472</Id>
     <Id Path="/sitecore/templates/Branches/Foundation/Experience Accelerator/Scaffolding/Tenant Folder/Tenant Folder/Tenant/Site Folder/Site/Settings/Site Grouping/Site">54384f31-af5f-4417-9f5e-3e1319d4882f</Id>
+    <Id Path="/sitecore/content/New Footer">5244d32a-05b1-4fc8-aacd-79db9a19d745</Id>
+    <Id Path="/sitecore/content/New Site">0007dc51-0911-4281-96ea-d397037c1c1a</Id>
   </KnownItems>
 </KnownItemCache>

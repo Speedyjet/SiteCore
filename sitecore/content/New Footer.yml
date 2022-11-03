@@ -1,0 +1,40 @@
+---
+ID: "5244d32a-05b1-4fc8-aacd-79db9a19d745"
+Parent: "0de95ae4-41ab-4d01-9eb0-67441b7c2450"
+Template: "df14c6ce-760a-431d-b88e-3a99fcf2bed1"
+Path: /sitecore/content/New Footer
+DB: master
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "001dd393-96c5-490b-924a-b0f25cd9efd8"
+      Hint: __Lock
+      Value: |
+        <r owner="sitecore\Admin" date="20221103T123711Z" />
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20221103T122844Z
+    - ID: "32869b92-8e3d-438d-a687-b5bea42abb78"
+      Hint: Image
+      Value: |
+        <image mediaid="{4B48D87B-E463-42DD-B0F2-F45C382F6204}" />
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\Admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "ee54e6a2-35b2-44b9-be3c-924163db19d1"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\Admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20221103T123908Z
